@@ -204,34 +204,45 @@ html.light #root > div {
   color: #18181b !important;
 }
 
-/* Glassmorphism Cards & Panels (Inverted to Pure Frosted White with Subtle Shadow) */
+/* Glassmorphism Cards & Panels (Crisp Pure White with Tactile Internal Shadows) */
 html.light .glass-panel {
-  background: rgba(255, 255, 255, 0.9) !important;
-  border-color: rgba(0, 0, 0, 0.1) !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.035), inset 0 0 1px 1px rgba(0, 0, 0, 0.02), 0 4px 20px -2px rgba(0, 0, 0, 0.06) !important;
 }
 
 html.light .glass-card {
-  background: linear-gradient(180deg, #ffffff 0%, #f4f5f8 100%) !important;
-  border-color: rgba(0, 0, 0, 0.1) !important;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06) !important;
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.09) !important;
+  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.035), inset 0 0 1px 1px rgba(0, 0, 0, 0.02), 0 4px 20px -2px rgba(0, 0, 0, 0.06) !important;
 }
 
 html.light .glass-panel-hover:hover {
-  background: linear-gradient(180deg, #ffffff 0%, #edf0f5 100%) !important;
+  background: #ffffff !important;
   border-color: rgba(0, 0, 0, 0.22) !important;
-  box-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.12), 0 0 20px 2px rgba(0, 0, 0, 0.03) !important;
+  box-shadow: inset 0 2px 6px 0 rgba(0, 0, 0, 0.045), inset 0 0 1px 1px rgba(0, 0, 0, 0.025), 0 16px 36px -8px rgba(0, 0, 0, 0.1) !important;
+  transform: translateY(-3px) scale(1.008);
+}
+
+html.light .glass-panel-hover::before {
+  background: radial-gradient(
+    600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(0, 0, 0, 0.03),
+    transparent 40%
+  ) !important;
 }
 
 html.light .glass-input {
-  background: #ffffff !important;
-  border-color: rgba(0, 0, 0, 0.18) !important;
+  background: #f8f9fa !important;
+  border: 1px solid rgba(0, 0, 0, 0.16) !important;
   color: #18181b !important;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05) !important;
 }
 
 html.light .glass-input:focus {
-  border-color: rgba(0, 0, 0, 0.6) !important;
-  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.08), 0 0 16px rgba(0, 0, 0, 0.05) !important;
+  background: #ffffff !important;
+  border-color: rgba(0, 0, 0, 0.65) !important;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04), 0 0 0 2px rgba(0, 0, 0, 0.08), 0 0 16px rgba(0, 0, 0, 0.05) !important;
 }
 
 /* Typography Hierarchy (Inverted from White to Solid Obsidian Black) */
@@ -266,6 +277,22 @@ html.light .text-zinc-500 {
   color: #71717a !important;
 }
 
+html.light .text-zinc-600 {
+  color: #a1a1aa !important;
+}
+
+/* Hover typography in light mode */
+html.light .group:hover .group-hover\:text-white,
+html.light .group-hover\:text-white:hover,
+html.light .hover\:text-white:hover {
+  color: #09090b !important;
+}
+
+html.light .group:hover .group-hover\:text-zinc-100,
+html.light .group:hover .group-hover\:text-zinc-300 {
+  color: #09090b !important;
+}
+
 /* Header & Navigation Bar (Inverted) */
 html.light header {
   background: rgba(255, 255, 255, 0.94) !important;
@@ -275,7 +302,8 @@ html.light header {
 
 html.light header nav {
   background: rgba(238, 240, 244, 0.95) !important;
-  border-color: rgba(0, 0, 0, 0.08) !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.04) !important;
 }
 
 html.light header nav button {
@@ -291,45 +319,104 @@ html.light header nav button:hover {
 html.light header nav button.bg-white {
   background: #09090b !important;
   color: #ffffff !important;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2) !important;
 }
 
-/* Primary CTA Buttons (e.g. "Explore Work" - Inverted to Solid Black with White Text) */
+/* Primary CTA Buttons (e.g. "Explore Work", "Send Message" - Inverted to Solid Black with White Text) */
 html.light .btn-glow.bg-white,
-html.light button.bg-white {
+html.light button.bg-white,
+html.light a.bg-white,
+html.light button[type="submit"].bg-white {
   background: #09090b !important;
   color: #ffffff !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
 }
 
 html.light .btn-glow.bg-white:hover,
-html.light button.bg-white:hover {
+html.light button.bg-white:hover,
+html.light a.bg-white:hover,
+html.light button[type="submit"].bg-white:hover {
   background: #27272a !important;
   color: #ffffff !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.22) !important;
 }
 
-/* Secondary CTA Buttons & Badges (e.g. "Get in Touch", Inactive Tags) */
-html.light .btn-glow.bg-zinc-900\/90,
-html.light button.bg-zinc-900\/90 {
-  background: #ffffff !important;
+/* Secondary CTA Buttons & Badges (e.g. "Get in Touch", Inactive Filter Pills) */
+html.light button.bg-zinc-900\/90,
+html.light button.bg-zinc-900,
+html.light .btn-glow.bg-zinc-900\/90 {
+  background: #f4f5f8 !important;
   color: #18181b !important;
   border-color: rgba(0, 0, 0, 0.15) !important;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03) !important;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02), 0 2px 8px rgba(0, 0, 0, 0.03) !important;
 }
 
-html.light .btn-glow.bg-zinc-900\/90:hover,
-html.light button.bg-zinc-900\/90:hover {
-  background: #f4f5f8 !important;
+html.light button.bg-zinc-900\/90:hover,
+html.light button.bg-zinc-900:hover,
+html.light .btn-glow.bg-zinc-900\/90:hover {
+  background: #eaecee !important;
   color: #09090b !important;
   border-color: rgba(0, 0, 0, 0.3) !important;
 }
 
-/* Inner Badges & Tags */
-html.light .bg-zinc-900,
-html.light .bg-zinc-950,
-html.light .bg-black\/40 {
-  background-color: #f1f3f6 !important;
+/* Filter Tab Containers (Pill Wrappers) */
+html.light .bg-zinc-900\/90.p-1,
+html.light .bg-zinc-900.p-1 {
+  background: #eeeff2 !important;
   border-color: rgba(0, 0, 0, 0.08) !important;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* All Sub-Cards, Inner Tiles, Badges, Chips & Pills */
+html.light [class*="bg-zinc-900"],
+html.light [class*="bg-zinc-950"],
+html.light [class*="bg-black/"],
+html.light [class*="bg-[#121215]"] {
+  background-color: #f1f3f6 !important;
+  border-color: rgba(0, 0, 0, 0.09) !important;
+  color: #18181b;
+}
+
+/* Inner Tile Inset Depth (e.g. Metric Boxes, Direct Channel Items) */
+html.light [class*="bg-black/40"],
+html.light [class*="bg-black/50"],
+html.light [class*="bg-zinc-900/60"],
+html.light [class*="bg-zinc-900/80"],
+html.light [class*="bg-zinc-900/90"] {
+  background-color: #f3f5f8 !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.03) !important;
+}
+
+html.light a[class*="bg-zinc-900/60"]:hover,
+html.light div[class*="bg-black/40"]:hover {
+  background-color: #eaecee !important;
+  border-color: rgba(0, 0, 0, 0.22) !important;
+}
+
+/* Category Badges & Tech Stack Tags */
+html.light span[class*="bg-zinc-900"],
+html.light span[class*="bg-white/"] {
+  background-color: #f1f3f6 !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+  color: #27272a !important;
+}
+
+/* Project / Cert "Verify" and "Show Repository" Action Buttons */
+html.light a[class*="bg-zinc-900"] {
+  background-color: #f1f3f6 !important;
+  border-color: rgba(0, 0, 0, 0.14) !important;
+  color: #18181b !important;
+}
+
+html.light a[class*="bg-zinc-900"]:hover {
+  background-color: #e5e7eb !important;
+  border-color: rgba(0, 0, 0, 0.3) !important;
+  color: #09090b !important;
+}
+
+html.light a[class*="bg-zinc-900"] svg {
+  color: #18181b !important;
 }
 
 /* Distinct Section Header Separation Line */
@@ -338,20 +425,33 @@ html.light .border-b-2 {
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04) !important;
 }
 
+/* Border Subtlety Inversion */
+html.light [class*="border-white/"] {
+  border-color: rgba(0, 0, 0, 0.09) !important;
+}
+
+html.light [class*="border-t"][class*="border-white/"] {
+  border-top-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light [class*="border-l"][class*="border-zinc-800"] {
+  border-left-color: rgba(0, 0, 0, 0.15) !important;
+}
+
 /* Social Handle Buttons & Floating Dock */
 html.light .bg-\[\#111114\]\/95,
 html.light aside a {
   background: rgba(255, 255, 255, 0.96) !important;
   color: #18181b !important;
-  border-color: rgba(0, 0, 0, 0.14) !important;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06) !important;
+  border: 1px solid rgba(0, 0, 0, 0.14) !important;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02), 0 4px 15px rgba(0, 0, 0, 0.06) !important;
 }
 
 html.light .bg-\[\#111114\]\/95:hover,
 html.light aside a:hover {
   background: #ffffff !important;
   border-color: rgba(0, 0, 0, 0.35) !important;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15) !important;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02), 0 0 20px rgba(0, 0, 0, 0.15) !important;
 }
 
 html.light .bg-\[\#111114\]\/95 svg,
@@ -361,19 +461,26 @@ html.light aside a svg {
 
 /* Hero Orbit Profile Badge (Inverted) */
 html.light .animate-orbit-spin {
-  border-color: rgba(0, 0, 0, 0.65) !important;
+  border-color: rgba(0, 0, 0, 0.6) !important;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.08) !important;
 }
 
 html.light .animate-orbit-spin ~ div.rounded-full.bg-zinc-950\/60 {
-  background: rgba(255, 255, 255, 0.85) !important;
+  background: rgba(255, 255, 255, 0.9) !important;
   border-color: rgba(0, 0, 0, 0.12) !important;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08) !important;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.04), 0 10px 30px rgba(0, 0, 0, 0.08) !important;
 }
 
 html.light .animate-orbit-spin ~ div > .bg-white {
   background-color: #09090b !important;
   box-shadow: 0 0 16px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Profile Image Container in Light Mode */
+html.light .lg\:w-64.rounded-full {
+  background-color: #ffffff !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.05), 0 8px 24px rgba(0, 0, 0, 0.08) !important;
 }
 
 /* Name Glow Shimmer (Inverted) */
@@ -393,7 +500,36 @@ html.light .name-glow-bg {
   ) !important;
 }
 
-/* Footer (Inverted) */
+/* Timeline Track Indicator in Light Mode */
+html.light .border-zinc-800 > div > div.rounded-full.bg-\[\#0a0a0c\] {
+  background-color: #ffffff !important;
+  border-color: #71717a !important;
+}
+
+html.light .border-zinc-800 > div > div.rounded-full.bg-\[\#0a0a0c\] > div {
+  background-color: #27272a !important;
+}
+
+html.light .border-zinc-800 > div:hover > div.rounded-full.bg-\[\#0a0a0c\] {
+  border-color: #09090b !important;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.3) !important;
+}
+
+html.light .border-zinc-800 > div:hover > div.rounded-full.bg-\[\#0a0a0c\] > div {
+  background-color: #09090b !important;
+}
+
+/* Footer (Inverted to Frosted Clean Surface) */
 html.light footer {
-  border-color: rgba(0, 0, 0, 0.08) !important;
+  background-color: #f1f3f6 !important;
+  border-top-color: rgba(0, 0, 0, 0.09) !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02) !important;
+}
+
+html.light footer .text-zinc-400 {
+  color: #52525b !important;
+}
+
+html.light footer button:hover {
+  color: #09090b !important;
 }

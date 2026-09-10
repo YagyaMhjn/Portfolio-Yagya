@@ -74,14 +74,14 @@ export const Contact = () => {
               <div className="space-y-4">
                 <a
                   href={`mailto:${profile.email}`}
-                  className="flex items-center gap-3.5 p-3 rounded-xl bg-zinc-900/60 border border-white/[0.06] hover:bg-zinc-800/80 hover:border-white/20 transition-all group"
+                  className="flex items-center gap-3.5 p-3 rounded-xl bg-zinc-900/60 hover:bg-zinc-800/80 border border-white/[0.06] hover:border-white/20 transition-all group"
                 >
                   <div className="p-2.5 rounded-lg bg-black/50 text-zinc-300 group-hover:text-white border border-white/[0.06]">
                     <Mail size={16} />
                   </div>
                   <div>
                     <div className="text-[11px] font-mono text-zinc-400">Email Address</div>
-                    <div className="text-sm font-semibold text-white">{profile.email}</div>
+                    <div className="text-sm font-semibold text-zinc-100 group-hover:text-white transition-colors">{profile.email}</div>
                   </div>
                 </a>
 
@@ -91,7 +91,7 @@ export const Contact = () => {
                   </div>
                   <div>
                     <div className="text-[11px] font-mono text-zinc-400">Location</div>
-                    <div className="text-sm font-semibold text-white">{profile.location}</div>
+                    <div className="text-sm font-semibold text-zinc-100">{profile.location}</div>
                   </div>
                 </div>
 
@@ -100,14 +100,14 @@ export const Contact = () => {
                     href={profile.linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-3.5 p-3 rounded-xl bg-zinc-900/60 border border-white/[0.06] hover:bg-zinc-800/80 hover:border-white/20 transition-all group"
+                    className="flex items-center gap-3.5 p-3 rounded-xl bg-zinc-900/60 hover:bg-zinc-800/80 border border-white/[0.06] hover:border-white/20 transition-all group"
                   >
                     <div className="p-2.5 rounded-lg bg-black/50 text-zinc-300 group-hover:text-white border border-white/[0.06]">
                       <LinkedinIcon size={16} />
                     </div>
                     <div>
                       <div className="text-[11px] font-mono text-zinc-400">LinkedIn Profile</div>
-                      <div className="text-sm font-semibold text-white">linkedin.com/in/yagya-mahajan</div>
+                      <div className="text-sm font-semibold text-zinc-100 group-hover:text-white transition-colors">linkedin.com/in/yagya-mahajan</div>
                     </div>
                   </a>
                 )}
@@ -117,14 +117,14 @@ export const Contact = () => {
                     href={profile.github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-3.5 p-3 rounded-xl bg-zinc-900/60 border border-white/[0.06] hover:bg-zinc-800/80 hover:border-white/20 transition-all group"
+                    className="flex items-center gap-3.5 p-3 rounded-xl bg-zinc-900/60 hover:bg-zinc-800/80 border border-white/[0.06] hover:border-white/20 transition-all group"
                   >
                     <div className="p-2.5 rounded-lg bg-black/50 text-zinc-300 group-hover:text-white border border-white/[0.06]">
                       <GithubIcon size={16} />
                     </div>
                     <div>
                       <div className="text-[11px] font-mono text-zinc-400">GitHub Profile</div>
-                      <div className="text-sm font-semibold text-white">github.com/YagyaMhjn</div>
+                      <div className="text-sm font-semibold text-zinc-100 group-hover:text-white transition-colors">github.com/YagyaMhjn</div>
                     </div>
                   </a>
                 )}

@@ -71,7 +71,7 @@ export const Skillset = () => {
                   {skill.level || 'Expert'}
                 </span>
               </div>
-              <div className="text-sm font-semibold text-white group-hover:text-white group-hover:translate-x-0.5 transition-transform">
+              <div className="text-sm font-semibold text-zinc-100 group-hover:text-white group-hover:translate-x-0.5 transition-all">
                 {skill.name}
               </div>
             </div>

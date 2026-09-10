@@ -10,7 +10,7 @@ export const Footer = () => {
   };
 
   return (
-    <footer className="border-t border-white/[0.08] bg-[#08080a] py-12 relative z-10">
+    <footer className="border-t border-white/[0.08] dark:border-white/[0.08] bg-[#08080a] dark:bg-[#08080a] py-12 relative z-10 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
         
         {/* Left Info */}
