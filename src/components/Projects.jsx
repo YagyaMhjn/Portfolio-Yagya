@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
 import { FolderGit2, Star } from 'lucide-react';
 import { GithubIcon } from './Icons';
@@ -6,8 +6,6 @@ import { GithubIcon } from './Icons';
 export const Projects = () => {
   const { data } = usePortfolio();
   const { projects } = data;
-
-  const [selectedTag, setSelectedTag] = useState('All');
 
   const handleMouseMove = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -17,33 +15,13 @@ export const Projects = () => {
     e.currentTarget.style.setProperty('--mouse-y', `${y}px`);
   };
 
-  const allTags = useMemo(() => {
-    const tagsSet = new Set(['All']);
-    projects.forEach((p) => {
-      if (Array.isArray(p.tags)) {
-        p.tags.forEach((t) => tagsSet.add(t));
-      }
-    });
-    return Array.from(tagsSet);
-  }, [projects]);
-
-  const filteredProjects = useMemo(() => {
-    return projects.filter((project) => {
-      return (
-        selectedTag === 'All' ||
-        (Array.isArray(project.tags) && project.tags.includes(selectedTag)) ||
-        project.category === selectedTag
-      );
-    });
-  }, [projects, selectedTag]);
-
   return (
     <div className="pt-20 sm:pt-24 pb-16 relative animate-fadeIn">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Section Header with Broad Distinct Separation Line */}
-        <div className="mb-8 pb-6 border-b-[3px] border-zinc-900/40 dark:border-white/30 shadow-[0_3px_14px_rgba(0,0,0,0.08)] dark:shadow-[0_3px_14px_rgba(255,255,255,0.08)]">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-white/[0.08] text-[11px] font-mono tracking-widest uppercase text-zinc-400 mb-2.5 shadow-[0_0_12px_rgba(255,255,255,0.02)]">
+        {/* Section Header with Clean Separation Line (No shadow) */}
+        <div className="mb-8 pb-6 border-b-2 border-black/20 dark:border-white/20">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-white/[0.08] text-[11px] font-mono tracking-widest uppercase text-zinc-400 mb-2.5">
             <span>✦</span> CURATED PORTFOLIO <span>✦</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
@@ -54,38 +32,15 @@ export const Projects = () => {
           </p>
         </div>
 
-        {/* Category Filters Bar */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none mb-8">
-          {allTags.map((tag) => (
-            <button
-              key={tag}
-              onClick={() => setSelectedTag(tag)}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-mono whitespace-nowrap transition-all ${
-                selectedTag === tag
-                  ? 'bg-white text-black font-bold shadow-[0_0_15px_rgba(255,255,255,0.2)] scale-105'
-                  : 'bg-zinc-900/90 text-zinc-400 border border-white/[0.08] hover:text-white hover:border-white/30 hover:scale-105'
-              }`}
-            >
-              {tag}
-            </button>
-          ))}
-        </div>
-
         {/* Projects Grid */}
-        {filteredProjects.length === 0 ? (
+        {(!projects || projects.length === 0) ? (
           <div className="glass-card p-12 rounded-2xl text-center border border-white/[0.08]">
             <FolderGit2 size={36} className="mx-auto text-zinc-600 mb-3" />
-            <p className="text-zinc-400 text-sm">No projects matching the filter "{selectedTag}".</p>
-            <button
-              onClick={() => setSelectedTag('All')}
-              className="mt-4 px-4 py-2 rounded-lg bg-zinc-900 text-xs text-white border border-white/10 hover:bg-zinc-800"
-            >
-              Reset Filters
-            </button>
+            <p className="text-zinc-400 text-sm">No projects currently available.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
-            {filteredProjects.map((project) => (
+            {projects.map((project) => (
               <div
                 key={project.id}
                 onMouseMove={handleMouseMove}

@@ -419,13 +419,13 @@ html.light a[class*="bg-zinc-900"] svg {
   color: #18181b !important;
 }
 
-/* Distinct Section Header Separation Line (Bold, Broad & Darker in Tone) */
+/* Distinct Section Header Separation Line (Clean, Flat, No Shadow) */
 html.light .border-b-2,
 html.light .border-b-\[3px\],
 html.light [class*="border-b-2"],
 html.light [class*="border-b-\[3px\]"] {
-  border-bottom: 3px solid rgba(0, 0, 0, 0.45) !important;
-  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.09) !important;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.22) !important;
+  box-shadow: none !important;
 }
 
 /* Border Subtlety Inversion with High Contrast Tone */

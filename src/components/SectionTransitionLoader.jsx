@@ -248,13 +248,33 @@ export const SectionTransitionLoader = () => {
   const [activePhrase, setActivePhrase] = useState(MOTIVATIONAL_PHRASES[0]);
   
   const previousPageRef = useRef(null);
+  const isInitialMountRef = useRef(true);
+  const pageEnteredTimeRef = useRef(Date.now());
   const lastIndexRef = useRef(0);
   const lastPhraseRef = useRef(0);
 
   useEffect(() => {
-    // Only trigger loader when changing between different pages
+    // 1. Never show loader when the user enters the site for the first time
+    if (isInitialMountRef.current) {
+      isInitialMountRef.current = false;
+      previousPageRef.current = activePage;
+      pageEnteredTimeRef.current = Date.now();
+      return;
+    }
+
+    // Ignore redundant triggers for the same page
     if (previousPageRef.current === activePage) return;
+
+    // 2. Check how long the user spent on the previous page
+    const dwellTimeOnPreviousPage = Date.now() - pageEnteredTimeRef.current;
+    pageEnteredTimeRef.current = Date.now();
     previousPageRef.current = activePage;
+
+    // If user switched pages under 2.5 seconds, switch immediately without loading screen
+    if (dwellTimeOnPreviousPage < 2500) {
+      setLoading(false);
+      return;
+    }
 
     // Pick a random visualizer (different from the last one)
     let nextIndex = Math.floor(Math.random() * 4);

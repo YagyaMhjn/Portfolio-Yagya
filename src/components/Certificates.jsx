@@ -18,9 +18,9 @@ export const Certificates = () => {
     <div className="pt-20 sm:pt-24 pb-16 relative animate-fadeIn">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Section Header with Broad Distinct Separation Line */}
-        <div className="mb-8 pb-6 border-b-[3px] border-zinc-900/40 dark:border-white/30 shadow-[0_3px_14px_rgba(0,0,0,0.08)] dark:shadow-[0_3px_14px_rgba(255,255,255,0.08)]">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-white/[0.08] text-[11px] font-mono tracking-widest uppercase text-zinc-400 mb-2.5 shadow-[0_0_12px_rgba(255,255,255,0.02)]">
+        {/* Section Header with Clean Separation Line (No shadow) */}
+        <div className="mb-8 pb-6 border-b-2 border-black/20 dark:border-white/20">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-white/[0.08] text-[11px] font-mono tracking-widest uppercase text-zinc-400 mb-2.5">
             <span>✦</span> VERIFIED CREDENTIALS <span>✦</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
