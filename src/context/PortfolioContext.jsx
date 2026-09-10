@@ -98,6 +98,32 @@ export const PortfolioProvider = ({ children }) => {
     setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
   };
 
+  // Section Transition Loader Management (Enabled / Disabled via Admin)
+  const [enableLoader, setEnableLoaderState] = useState(() => {
+    try {
+      const saved = localStorage.getItem('yagya_portfolio_enable_loader');
+      if (saved !== null) return saved === 'true';
+    } catch (e) {}
+    return true;
+  });
+
+  const toggleLoaderEnabled = () => {
+    setEnableLoaderState((prev) => {
+      const next = !prev;
+      try {
+        localStorage.setItem('yagya_portfolio_enable_loader', String(next));
+      } catch (e) {}
+      return next;
+    });
+  };
+
+  const setEnableLoader = (val) => {
+    setEnableLoaderState(val);
+    try {
+      localStorage.setItem('yagya_portfolio_enable_loader', String(val));
+    } catch (e) {}
+  };
+
   useEffect(() => {
     try {
       localStorage.setItem('yagya_portfolio_theme', theme);
@@ -395,6 +421,9 @@ export const PortfolioProvider = ({ children }) => {
         data,
         theme,
         toggleTheme,
+        enableLoader,
+        toggleLoaderEnabled,
+        setEnableLoader,
         isAdmin,
         currentView,
         setCurrentView,

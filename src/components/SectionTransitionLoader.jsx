@@ -240,7 +240,7 @@ const RadialRadarVisualizer = ({ progress, isLight }) => {
 };
 
 export const SectionTransitionLoader = () => {
-  const { activePage, theme } = usePortfolio();
+  const { activePage, theme, enableLoader } = usePortfolio();
   const isLight = theme === 'light';
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -249,32 +249,55 @@ export const SectionTransitionLoader = () => {
   
   const previousPageRef = useRef(null);
   const isInitialMountRef = useRef(true);
-  const pageEnteredTimeRef = useRef(Date.now());
+  const pageLoadedTimeRef = useRef(Date.now());
+  const isLoadingRef = useRef(false);
   const lastIndexRef = useRef(0);
   const lastPhraseRef = useRef(0);
 
   useEffect(() => {
-    // 1. Never show loader when the user enters the site for the first time
+    // 1. If loader is disabled in Admin settings, never show it
+    if (enableLoader === false) {
+      setLoading(false);
+      isLoadingRef.current = false;
+      previousPageRef.current = activePage;
+      pageLoadedTimeRef.current = Date.now();
+      return;
+    }
+
+    // 2. Never show loader when the user enters the site for the first time
     if (isInitialMountRef.current) {
       isInitialMountRef.current = false;
       previousPageRef.current = activePage;
-      pageEnteredTimeRef.current = Date.now();
+      pageLoadedTimeRef.current = Date.now();
       return;
     }
 
     // Ignore redundant triggers for the same page
     if (previousPageRef.current === activePage) return;
 
-    // 2. Check how long the user spent on the previous page
-    const dwellTimeOnPreviousPage = Date.now() - pageEnteredTimeRef.current;
-    pageEnteredTimeRef.current = Date.now();
+    const wasLoading = isLoadingRef.current;
     previousPageRef.current = activePage;
 
-    // If user switched pages under 2.5 seconds, switch immediately without loading screen
-    if (dwellTimeOnPreviousPage < 2500) {
-      setLoading(false);
-      return;
+    // 3. If a loading screen is ALREADY in progress and user clicks another page:
+    // "No other page can appear directly without loading if loading of some other page is going on.
+    // Yes, the loading of the newly requested page will start on the spot."
+    if (!wasLoading) {
+      // Check time spent on the ALREADY LOADED page
+      const timeSincePageLoaded = Date.now() - pageLoadedTimeRef.current;
+      
+      // If user switches pages under 2 seconds after page was loaded, switch immediately without loading screen
+      if (timeSincePageLoaded < 2000) {
+        setLoading(false);
+        isLoadingRef.current = false;
+        pageLoadedTimeRef.current = Date.now();
+        return;
+      }
     }
+
+    // 4. Start/Restart loading sequence on the spot for the newly requested page
+    isLoadingRef.current = true;
+    setLoading(true);
+    setProgress(5);
 
     // Pick a random visualizer (different from the last one)
     let nextIndex = Math.floor(Math.random() * 4);
@@ -292,12 +315,8 @@ export const SectionTransitionLoader = () => {
     lastPhraseRef.current = phraseIdx;
     setActivePhrase(MOTIVATIONAL_PHRASES[phraseIdx]);
 
-    // Start loading sequence
-    setLoading(true);
-    setProgress(5);
-
     const startTime = Date.now();
-    const duration = 2600; // 2.6 seconds so user clearly sees and enjoys the data visualization
+    const duration = 2400; // 2.4 seconds data-visualization display
 
     const interval = setInterval(() => {
       const elapsed = Date.now() - startTime;
@@ -308,13 +327,15 @@ export const SectionTransitionLoader = () => {
         clearInterval(interval);
         setTimeout(() => {
           setLoading(false);
+          isLoadingRef.current = false;
+          pageLoadedTimeRef.current = Date.now(); // Record exact timestamp when page finished loading
           setProgress(0);
-        }, 220);
+        }, 180);
       }
     }, 20);
 
     return () => clearInterval(interval);
-  }, [activePage]);
+  }, [activePage, enableLoader]);
 
   if (!loading) return null;
 
