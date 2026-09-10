@@ -106,5 +106,5 @@ export const AmbientCanvas = () => {
     };
   }, []);
 
-  return <canvas ref={canvasRef} id="ambient-canvas" />;
+  return <canvas ref={canvasRef} id="ambient-canvas" className="pointer-events-none fixed inset-0 z-0 w-full h-full" />;
 };
