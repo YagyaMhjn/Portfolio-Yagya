@@ -38,10 +38,10 @@ export const Hero = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Main Hero Header */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center mb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-center mb-12">
           
           {/* Left Text */}
-          <div className="lg:col-span-8 flex flex-col items-start">
+          <div className="lg:col-span-7 flex flex-col items-start">
             {/* Kicker badge with subtle glow */}
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-zinc-900/80 border border-white/[0.12] text-[11px] uppercase tracking-widest text-zinc-300 font-mono mb-5 shadow-[0_0_15px_rgba(255,255,255,0.03)] hover:border-white/30 transition-all cursor-default">
               <span className="text-white animate-pulse">✦</span>
@@ -89,21 +89,21 @@ export const Hero = () => {
             </div>
           </div>
 
-          {/* Right Visual Orbit Badge with Subtle Float & Expanding Hover */}
-          <div className="lg:col-span-4 flex justify-center lg:justify-end">
+          {/* Right Visual Orbit Badge - Enlarged & Positioned Towards Left */}
+          <div className="lg:col-span-5 flex justify-center lg:justify-start lg:pl-4">
             <div className="animate-subtle-float flex items-center justify-center">
-              <div className="relative w-56 h-56 sm:w-64 sm:h-64 flex items-center justify-center group cursor-pointer transition-all duration-500 ease-out hover:scale-105 sm:hover:scale-110">
+              <div className="relative w-64 h-64 sm:w-72 sm:h-72 lg:w-80 lg:h-80 flex items-center justify-center group cursor-pointer transition-all duration-500 ease-out hover:scale-105 sm:hover:scale-108">
                 {/* Outer rotating ring with glow on hover */}
                 <div className="absolute inset-0 rounded-full border border-dashed border-white/20 group-hover:border-white/40 animate-orbit-spin transition-colors" />
                 
                 {/* Middle glowing glass ring */}
-                <div className="absolute inset-2.5 rounded-full border border-white/10 group-hover:border-white/30 bg-zinc-950/60 backdrop-blur-md shadow-2xl group-hover:shadow-[0_0_35px_rgba(255,255,255,0.12)] transition-all overflow-hidden" />
+                <div className="absolute inset-3 sm:inset-3.5 rounded-full border border-white/10 group-hover:border-white/30 bg-zinc-950/60 backdrop-blur-md shadow-2xl group-hover:shadow-[0_0_40px_rgba(255,255,255,0.14)] transition-all overflow-hidden" />
                 
                 {/* Satellite node */}
-                <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-white shadow-[0_0_16px_rgba(255,255,255,0.9)] group-hover:scale-125 transition-transform duration-300" />
+                <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-white shadow-[0_0_18px_rgba(255,255,255,0.95)] group-hover:scale-125 transition-transform duration-300" />
 
-                {/* Enriched Internal Profile Picture Circle */}
-                <div className="relative z-10 w-44 h-44 sm:w-52 sm:h-52 rounded-full overflow-hidden flex items-center justify-center border border-white/10 group-hover:border-white/30 transition-all shadow-[0_0_30px_rgba(0,0,0,0.85)] bg-zinc-950">
+                {/* Enriched Large Internal Profile Picture Circle */}
+                <div className="relative z-10 w-52 h-52 sm:w-60 sm:h-60 lg:w-64 lg:h-64 rounded-full overflow-hidden flex items-center justify-center border border-white/10 group-hover:border-white/30 transition-all shadow-[0_0_35px_rgba(0,0,0,0.9)] bg-zinc-950">
                   <img
                     src={profile.avatar || "/profile-avatar.png"}
                     alt={profile.name || "Yagya Mahajan"}
