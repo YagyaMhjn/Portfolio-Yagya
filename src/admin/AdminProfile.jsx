@@ -169,6 +169,44 @@ export const AdminProfile = ({ triggerToast }) => {
             </div>
           </div>
 
+          {/* Profile Picture / Avatar Field */}
+          <div>
+            <label className="block text-xs font-mono text-zinc-400 mb-1">Profile Picture / Avatar</label>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-3.5 rounded-xl bg-black/40 border border-white/[0.06]">
+              <div className="w-14 h-14 rounded-full overflow-hidden border border-white/20 shrink-0 bg-zinc-900 flex items-center justify-center shadow-md">
+                {profileForm.avatar ? (
+                  <img src={profileForm.avatar} alt="Avatar" className="w-full h-full object-cover" />
+                ) : (
+                  <span className="text-xl text-zinc-500">✦</span>
+                )}
+              </div>
+              <div className="flex-1 space-y-2 w-full">
+                <input
+                  type="text"
+                  placeholder="Image URL or upload file..."
+                  value={profileForm.avatar || ''}
+                  onChange={(e) => setProfileForm({ ...profileForm, avatar: e.target.value })}
+                  className="glass-input w-full px-3.5 py-1.5 text-xs"
+                />
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onloadend = () => {
+                        setProfileForm((prev) => ({ ...prev, avatar: reader.result }));
+                      };
+                      reader.readAsDataURL(file);
+                    }
+                  }}
+                  className="text-xs text-zinc-400 file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-mono file:bg-zinc-800 file:text-zinc-200 hover:file:bg-zinc-700 cursor-pointer"
+                />
+              </div>
+            </div>
+          </div>
+
           <button
             type="submit"
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-black font-bold text-xs hover:bg-zinc-200 transition-all"

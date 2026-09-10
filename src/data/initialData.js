@@ -8,6 +8,7 @@ export const initialPortfolioData = {
     statusSub: "Specializing in Full-Stack Engineering, Generative AI, and Distributed Cloud Systems.",
     location: "Punjab, India",
     email: "yagyamahajan16@gmail.com",
+    avatar: "/profile-avatar.png",
     linkedin: "https://linkedin.com/in/yagya-mahajan",
     github: "https://github.com/YagyaMhjn",
     resumeUrl: "#",

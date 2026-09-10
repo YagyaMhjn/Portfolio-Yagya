@@ -79,6 +79,20 @@ body {
   }
 }
 
+/* Subtle Continuous Levitating Float Animation */
+@keyframes subtle-float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(0.4deg);
+  }
+}
+
+.animate-subtle-float {
+  animation: subtle-float 5.5s ease-in-out infinite;
+}
+
 /* Glassmorphism & Interactive Cards */
 .glass-panel {
   background: rgba(18, 18, 20, 0.7);
