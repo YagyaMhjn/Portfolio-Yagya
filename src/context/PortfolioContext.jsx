@@ -85,7 +85,7 @@ export const PortfolioProvider = ({ children }) => {
   });
 
   // URL routing synchronization (Popstate and Hashchange)
-  // Theme Management (Dark / Light Mode)
+  // Theme Management (Dark / Light Mode) - Default is Dark Mode
   const [theme, setTheme] = useState(() => {
     try {
       const savedTheme = localStorage.getItem('yagya_portfolio_theme');
@@ -94,14 +94,25 @@ export const PortfolioProvider = ({ children }) => {
     return 'dark';
   });
 
+  const [themeTransitioning, setThemeTransitioning] = useState(false);
+  const [transitionTarget, setTransitionTarget] = useState(null);
+
   const toggleTheme = () => {
-    if (!document.startViewTransition) {
-      setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
-      return;
-    }
-    document.startViewTransition(() => {
-      setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
-    });
+    if (themeTransitioning) return;
+    const nextTheme = theme === 'dark' ? 'light' : 'dark';
+    setTransitionTarget(nextTheme);
+    setThemeTransitioning(true);
+
+    // Halfway through the diagonal sweep (260ms), flip the theme class
+    setTimeout(() => {
+      setTheme(nextTheme);
+    }, 260);
+
+    // Conclude the sweep after 620ms
+    setTimeout(() => {
+      setThemeTransitioning(false);
+      setTransitionTarget(null);
+    }, 620);
   };
 
   // Section Transition Loader Management (Enabled / Disabled via Admin)
@@ -427,6 +438,8 @@ export const PortfolioProvider = ({ children }) => {
         data,
         theme,
         toggleTheme,
+        themeTransitioning,
+        transitionTarget,
         enableLoader,
         toggleLoaderEnabled,
         setEnableLoader,

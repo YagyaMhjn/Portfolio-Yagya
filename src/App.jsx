@@ -13,6 +13,7 @@ import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
 import { VerticalSocialDock } from './components/SocialHandleButton';
 import { SectionTransitionLoader } from './components/SectionTransitionLoader';
+import { ThemeTransitionCurtain } from './components/ThemeTransitionCurtain';
 import { AdminAuthModal } from './admin/AdminAuthModal';
 import { AdminLayout } from './admin/AdminLayout';
 
@@ -31,7 +32,10 @@ function App() {
       {/* Background canvas particles & interactive dark blooms */}
       <AmbientCanvas />
 
-      {/* Interactive Cursor Glow Orb */}
+      {/* Smooth Slant Moving Fade Theme Transition Overlay */}
+      <ThemeTransitionCurtain />
+
+      {/* Interactive Cursor Glow Orb (Hardware accelerated) */}
       <CursorGlow />
 
       {/* Dynamic Data-Visualization Section Transition Loader */}

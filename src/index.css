@@ -533,42 +533,93 @@ html.light footer button:hover {
 
 /* ==========================================================================
    Smooth Slant Moving Fade Transition (Lower-Left to Upper-Right)
+   Hardware-Composited, Zero Frame-Drops, Zero GPU Readback Stall
    ========================================================================== */
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation-duration: 0.7s;
-  animation-timing-function: cubic-bezier(0.25, 1, 0.35, 1);
+.theme-slant-curtain {
+  position: absolute;
+  width: 280vmax;
+  height: 280vmax;
+  left: 50%;
+  top: 50%;
+  margin-left: -140vmax;
+  margin-top: -140vmax;
+  pointer-events: none;
+  will-change: transform;
+  animation: theme-slant-sweep 0.62s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-::view-transition-old(root) {
-  z-index: 1;
-  animation-name: slant-fade-out;
-}
-
-::view-transition-new(root) {
-  z-index: 9999;
-  animation-name: slant-sweep-in;
-  mix-blend-mode: normal;
-}
-
-@keyframes slant-sweep-in {
+@keyframes theme-slant-sweep {
   0% {
-    clip-path: polygon(0% 100%, 0% 100%, 0% 100%, 0% 100%);
-    opacity: 0.75;
-    filter: brightness(1.04);
+    transform: rotate(-45deg) translate3d(-135%, 0, 0);
   }
   100% {
-    clip-path: polygon(-30% 130%, 130% -30%, 200% -30%, -30% 200%);
-    opacity: 1;
-    filter: brightness(1);
+    transform: rotate(-45deg) translate3d(135%, 0, 0);
   }
 }
 
-@keyframes slant-fade-out {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0.9;
-  }
+.curtain-to-light {
+  background: linear-gradient(
+    90deg,
+    rgba(248, 249, 250, 0) 0%,
+    rgba(248, 249, 250, 0.88) 14%,
+    #f8f9fa 30%,
+    #f8f9fa 70%,
+    rgba(248, 249, 250, 0.88) 86%,
+    rgba(248, 249, 250, 0) 100%
+  );
+}
+
+.curtain-to-dark {
+  background: linear-gradient(
+    90deg,
+    rgba(7, 7, 7, 0) 0%,
+    rgba(7, 7, 7, 0.9) 14%,
+    #070707 30%,
+    #070707 70%,
+    rgba(7, 7, 7, 0.9) 86%,
+    rgba(7, 7, 7, 0) 100%
+  );
+}
+
+/* Subtle leading beam along slant wavefront */
+.curtain-to-light::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 14%;
+  width: 2px;
+  background: linear-gradient(to bottom, transparent, rgba(160, 185, 220, 0.55), transparent);
+  box-shadow: 0 0 24px rgba(180, 205, 245, 0.6);
+}
+
+.curtain-to-dark::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 14%;
+  width: 2px;
+  background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.45), transparent);
+  box-shadow: 0 0 24px rgba(255, 255, 255, 0.35);
+}
+
+/* ==========================================================================
+   Universal Smooth Element & Theme Transitions
+   ========================================================================== */
+body,
+#root > div,
+.glass-panel,
+.glass-card,
+header,
+footer,
+nav,
+button,
+a,
+input,
+textarea {
+  transition: background-color 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+              color 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.32s cubic-bezier(0.16, 1, 0.3, 1);
 }
