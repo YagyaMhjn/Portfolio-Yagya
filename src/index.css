@@ -186,3 +186,125 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #3f3f46;
 }
+
+/* ==========================================================================
+   Light Mode Theme System
+   ========================================================================== */
+html.light {
+  color-scheme: light;
+}
+
+html.light body {
+  background-color: #f4f4f6;
+  color: #18181b;
+}
+
+html.light #root > div {
+  background-color: #f4f4f6 !important;
+  color: #18181b !important;
+}
+
+html.light .glass-panel {
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(0, 0, 0, 0.09);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+html.light .glass-card {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(245, 245, 247, 0.92) 100%);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+}
+
+html.light .glass-panel-hover:hover {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(240, 240, 245, 0.98) 100%);
+  border-color: rgba(0, 0, 0, 0.2);
+  box-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.12), 0 0 20px 2px rgba(0, 0, 0, 0.03);
+}
+
+html.light .glass-input {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(0, 0, 0, 0.16);
+  color: #18181b;
+}
+
+html.light .glass-input:focus {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.08), 0 0 16px rgba(0, 0, 0, 0.06);
+}
+
+html.light .name-glow-text {
+  background: linear-gradient(135deg, #09090b 0%, #18181b 40%, #27272a 75%, #3f3f46 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 35px rgba(0, 0, 0, 0.15);
+}
+
+html.light .name-glow-bg {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 0, 0, 0.1) 0%,
+    rgba(0, 0, 0, 0.04) 40%,
+    transparent 70%
+  );
+}
+
+html.light header {
+  background: rgba(255, 255, 255, 0.94) !important;
+  border-color: rgba(0, 0, 0, 0.09) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
+}
+
+html.light header button {
+  color: #18181b !important;
+}
+
+html.light header nav {
+  background: rgba(240, 240, 244, 0.95) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light header nav button {
+  color: #52525b !important;
+}
+
+html.light header nav button:hover {
+  color: #09090b !important;
+}
+
+html.light .text-white {
+  color: #09090b;
+}
+
+html.light .text-zinc-100,
+html.light .text-zinc-200,
+html.light .text-zinc-300 {
+  color: #18181b;
+}
+
+html.light .text-zinc-400 {
+  color: #52525b;
+}
+
+html.light .text-zinc-500 {
+  color: #71717a;
+}
+
+html.light .bg-zinc-900,
+html.light .bg-zinc-950,
+html.light .bg-black {
+  background-color: #ffffff;
+}
+
+html.light .border-white\/\[0\.08\],
+html.light .border-white\/\[0\.06\],
+html.light .border-white\/10,
+html.light .border-white\/20,
+html.light .border-white\/25 {
+  border-color: rgba(0, 0, 0, 0.12);
+}
+
+html.light footer {
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}

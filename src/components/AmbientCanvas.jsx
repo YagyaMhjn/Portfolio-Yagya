@@ -55,6 +55,7 @@ export const AmbientCanvas = () => {
 
     const render = () => {
       ctx.clearRect(0, 0, width, height);
+      const isLight = document.documentElement.classList.contains('light');
 
       // 1. Update Grid Organic Direction & Offset
       angleChangeTimer++;
@@ -72,9 +73,9 @@ export const AmbientCanvas = () => {
       const startX = ((gridOffset.x % gridSize) - gridSize);
       const startY = ((gridOffset.y % gridSize) - gridSize);
 
-      // 2. Render Moving Grid Lines
+      // 2. Render Moving Grid Lines (adaptive for light / dark)
       ctx.beginPath();
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.045)';
+      ctx.strokeStyle = isLight ? 'rgba(0, 0, 0, 0.065)' : 'rgba(255, 255, 255, 0.048)';
       ctx.lineWidth = 1;
 
       // Vertical grid lines
@@ -90,19 +91,22 @@ export const AmbientCanvas = () => {
       }
       ctx.stroke();
 
-      // 3. Render Subtle Grid Intersection Nodes (with mouse reactivity)
+      // 3. Render Subtle Grid Intersection Nodes
+      const baseNodeAlpha = isLight ? 0.09 : 0.065;
       for (let x = startX; x < width + gridSize; x += gridSize) {
         for (let y = startY; y < height + gridSize; y += gridSize) {
-          let nodeAlpha = 0.065;
+          let nodeAlpha = baseNodeAlpha;
           if (mouse.active) {
             const dx = mouse.x - x;
             const dy = mouse.y - y;
             const dist = Math.sqrt(dx * dx + dy * dy);
             if (dist < 160) {
-              nodeAlpha = 0.065 + (1 - dist / 160) * 0.18;
+              nodeAlpha = baseNodeAlpha + (1 - dist / 160) * (isLight ? 0.22 : 0.18);
             }
           }
-          ctx.fillStyle = `rgba(255, 255, 255, ${nodeAlpha})`;
+          ctx.fillStyle = isLight
+            ? `rgba(0, 0, 0, ${nodeAlpha})`
+            : `rgba(255, 255, 255, ${nodeAlpha})`;
           ctx.fillRect(Math.round(x) - 1, Math.round(y) - 1, 2, 2);
         }
       }
@@ -119,9 +123,15 @@ export const AmbientCanvas = () => {
         gradY,
         Math.max(width, height) * 0.6
       );
-      gradient.addColorStop(0, 'rgba(45, 45, 55, 0.25)');
-      gradient.addColorStop(0.5, 'rgba(18, 18, 22, 0.12)');
-      gradient.addColorStop(1, 'rgba(7, 7, 7, 0)');
+      if (isLight) {
+        gradient.addColorStop(0, 'rgba(215, 225, 240, 0.35)');
+        gradient.addColorStop(0.5, 'rgba(235, 240, 248, 0.15)');
+        gradient.addColorStop(1, 'rgba(248, 250, 252, 0)');
+      } else {
+        gradient.addColorStop(0, 'rgba(45, 45, 55, 0.25)');
+        gradient.addColorStop(0.5, 'rgba(18, 18, 22, 0.12)');
+        gradient.addColorStop(1, 'rgba(7, 7, 7, 0)');
+      }
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, width, height);
 
@@ -148,7 +158,9 @@ export const AmbientCanvas = () => {
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255, 255, 255, ${p.alpha})`;
+        ctx.fillStyle = isLight
+          ? `rgba(0, 0, 0, ${p.alpha * 0.6})`
+          : `rgba(255, 255, 255, ${p.alpha})`;
         ctx.fill();
       });
 

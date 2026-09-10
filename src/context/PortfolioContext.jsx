@@ -85,6 +85,33 @@ export const PortfolioProvider = ({ children }) => {
   });
 
   // URL routing synchronization (Popstate and Hashchange)
+  // Theme Management (Dark / Light Mode)
+  const [theme, setTheme] = useState(() => {
+    try {
+      const savedTheme = localStorage.getItem('yagya_portfolio_theme');
+      if (savedTheme === 'light' || savedTheme === 'dark') return savedTheme;
+    } catch (e) {}
+    return 'dark';
+  });
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  };
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('yagya_portfolio_theme', theme);
+    } catch (e) {}
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+      document.documentElement.classList.remove('light');
+    } else {
+      document.documentElement.classList.add('light');
+      document.documentElement.classList.remove('dark');
+    }
+  }, [theme]);
+
+  // URL routing synchronization (Popstate and Hashchange)
   useEffect(() => {
     const handleLocationChange = () => {
       const pathname = window.location.pathname.toLowerCase();
@@ -366,6 +393,8 @@ export const PortfolioProvider = ({ children }) => {
     <PortfolioContext.Provider
       value={{
         data,
+        theme,
+        toggleTheme,
         isAdmin,
         currentView,
         setCurrentView,

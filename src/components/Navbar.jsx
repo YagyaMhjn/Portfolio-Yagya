@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
 import { Menu, X } from 'lucide-react';
+import { ThemeToggleButton } from './ThemeToggle';
 
 export const Navbar = () => {
   const { data, activePage, setActivePage } = usePortfolio();
@@ -17,7 +18,7 @@ export const Navbar = () => {
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0c]/90 backdrop-blur-md border-b border-white/[0.08] shadow-2xl shadow-black/60 py-3.5">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0c]/90 dark:bg-[#0a0a0c]/90 backdrop-blur-md border-b border-white/[0.08] dark:border-white/[0.08] shadow-2xl shadow-black/60 py-3.5 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         {/* Brand */}
         <button
@@ -30,25 +31,31 @@ export const Navbar = () => {
           </span>
         </button>
 
-        {/* Desktop Multi-Page Switcher Navigation */}
-        <nav className="hidden lg:flex items-center gap-1 bg-[#121215]/90 border border-white/[0.08] rounded-full p-1 backdrop-blur-md shadow-inner">
-          {navLinks.map((link) => (
-            <button
-              key={link.id}
-              onClick={() => setActivePage(link.id)}
-              className={`px-4 py-1.5 text-xs font-medium rounded-full transition-all duration-200 ${
-                activePage === link.id
-                  ? 'bg-white text-black font-bold shadow-[0_0_15px_rgba(255,255,255,0.25)]'
-                  : 'text-zinc-400 hover:text-white hover:bg-white/[0.06]'
-              }`}
-            >
-              {link.name}
-            </button>
-          ))}
-        </nav>
+        {/* Desktop Multi-Page Switcher Navigation & Theme Toggle */}
+        <div className="hidden lg:flex items-center gap-3">
+          <nav className="flex items-center gap-1 bg-[#121215]/90 border border-white/[0.08] rounded-full p-1 backdrop-blur-md shadow-inner">
+            {navLinks.map((link) => (
+              <button
+                key={link.id}
+                onClick={() => setActivePage(link.id)}
+                className={`px-4 py-1.5 text-xs font-medium rounded-full transition-all duration-200 ${
+                  activePage === link.id
+                    ? 'bg-white text-black font-bold shadow-[0_0_15px_rgba(255,255,255,0.25)]'
+                    : 'text-zinc-400 hover:text-white hover:bg-white/[0.06]'
+                }`}
+              >
+                {link.name}
+              </button>
+            ))}
+          </nav>
 
-        {/* Mobile Menu Button */}
-        <div className="lg:hidden flex items-center">
+          {/* Theme Toggle Button */}
+          <ThemeToggleButton />
+        </div>
+
+        {/* Mobile Controls (Theme Toggle + Menu Button) */}
+        <div className="lg:hidden flex items-center gap-2">
+          <ThemeToggleButton />
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="p-2 rounded-lg bg-zinc-900 border border-white/10 text-zinc-300 hover:text-white"
