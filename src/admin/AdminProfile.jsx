@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { Save, Plus, Trash2, ArrowUp, ArrowDown, Link2 } from 'lucide-react';
+import { Save, Plus, Trash2, ArrowUp, ArrowDown, Link2, ZoomIn, ZoomOut, Move, RotateCcw, Upload, Image as ImageIcon } from 'lucide-react';
 import { SocialHandleButton, getSocialIcon } from '../components/SocialHandleButton';
 
 const PLATFORM_OPTIONS = [
@@ -22,7 +22,52 @@ export const AdminProfile = ({ triggerToast }) => {
     socials: data.profile.socials || []
   }));
 
-  // New social handle form state
+  // Dragging state for interactive circle avatar positioning
+  const [isDragging, setIsDragging] = useState(false);
+  const dragStartRef = useRef({ x: 0, y: 0, initialX: 0, initialY: 0 });
+
+  const handleMouseDown = (e) => {
+    setIsDragging(true);
+    dragStartRef.current = {
+      x: e.clientX,
+      y: e.clientY,
+      initialX: profileForm.avatarX || 0,
+      initialY: profileForm.avatarY || 0,
+    };
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging) return;
+    const deltaX = (e.clientX - dragStartRef.current.x) * 0.35;
+    const deltaY = (e.clientY - dragStartRef.current.y) * 0.35;
+    const newX = Math.min(60, Math.max(-60, Math.round(dragStartRef.current.initialX + deltaX)));
+    const newY = Math.min(60, Math.max(-60, Math.round(dragStartRef.current.initialY + deltaY)));
+    setProfileForm((prev) => ({ ...prev, avatarX: newX, avatarY: newY }));
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  useEffect(() => {
+    if (isDragging) {
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mouseup', handleMouseUp);
+      return () => {
+        window.removeEventListener('mousemove', handleMouseMove);
+        window.removeEventListener('mouseup', handleMouseUp);
+      };
+    }
+  }, [isDragging]);
+
+  const handleResetAvatarAlignment = () => {
+    setProfileForm((prev) => ({
+      ...prev,
+      avatarScale: 100,
+      avatarX: 0,
+      avatarY: 0
+    }));
+  };
   const [newPlatform, setNewPlatform] = useState('LinkedIn');
   const [newUrl, setNewUrl] = useState('');
   const [newLabel, setNewLabel] = useState('LinkedIn');
@@ -169,40 +214,185 @@ export const AdminProfile = ({ triggerToast }) => {
             </div>
           </div>
 
-          {/* Profile Picture / Avatar Field */}
-          <div>
-            <label className="block text-xs font-mono text-zinc-400 mb-1">Profile Picture / Avatar</label>
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-3.5 rounded-xl bg-black/40 border border-white/[0.06]">
-              <div className="w-14 h-14 rounded-full overflow-hidden border border-white/20 shrink-0 bg-zinc-900 flex items-center justify-center shadow-md">
-                {profileForm.avatar ? (
-                  <img src={profileForm.avatar} alt="Avatar" className="w-full h-full object-cover" />
-                ) : (
-                  <span className="text-xl text-zinc-500">✦</span>
-                )}
+          {/* Profile Picture & Circle Alignment Studio */}
+          <div className="pt-2 border-t border-white/[0.06]">
+            <div className="flex items-center justify-between mb-3">
+              <div>
+                <label className="block text-xs font-mono font-bold text-white uppercase tracking-wider">
+                  Profile Picture & Circle Alignment Studio
+                </label>
+                <p className="text-[11px] text-zinc-400">
+                  Preview exactly how your avatar appears in the hero orbit circle. Click and drag the circle or use the sliders to zoom and position.
+                </p>
               </div>
-              <div className="flex-1 space-y-2 w-full">
-                <input
-                  type="text"
-                  placeholder="Image URL or upload file..."
-                  value={profileForm.avatar || ''}
-                  onChange={(e) => setProfileForm({ ...profileForm, avatar: e.target.value })}
-                  className="glass-input w-full px-3.5 py-1.5 text-xs"
-                />
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      const reader = new FileReader();
-                      reader.onloadend = () => {
-                        setProfileForm((prev) => ({ ...prev, avatar: reader.result }));
-                      };
-                      reader.readAsDataURL(file);
-                    }
-                  }}
-                  className="text-xs text-zinc-400 file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-mono file:bg-zinc-800 file:text-zinc-200 hover:file:bg-zinc-700 cursor-pointer"
-                />
+              <button
+                type="button"
+                onClick={handleResetAvatarAlignment}
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-white/10 text-[11px] font-mono transition-all"
+                title="Reset Zoom & Alignment to Center"
+              >
+                <RotateCcw size={12} />
+                <span>Reset Center</span>
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 p-4 sm:p-6 rounded-xl bg-black/40 border border-white/[0.08] items-center">
+              {/* Interactive Live Circular Orbit Preview */}
+              <div className="lg:col-span-5 flex flex-col items-center justify-center">
+                <div className="text-[10px] font-mono text-zinc-500 mb-2 uppercase tracking-widest flex items-center gap-1.5">
+                  <Move size={11} />
+                  <span>Click & Drag to Reposition</span>
+                </div>
+                
+                {/* Visual Orbit Badge Container */}
+                <div
+                  onMouseDown={handleMouseDown}
+                  className={`relative w-44 h-44 sm:w-48 sm:h-48 flex items-center justify-center select-none ${
+                    isDragging ? 'cursor-grabbing scale-105' : 'cursor-grab hover:scale-105'
+                  } transition-transform duration-200`}
+                >
+                  {/* Outer rotating dashed ring */}
+                  <div className="absolute inset-0 rounded-full border border-dashed border-white/20 animate-orbit-spin pointer-events-none" />
+                  
+                  {/* Middle glowing glass ring */}
+                  <div className="absolute inset-2.5 rounded-full border border-white/10 bg-zinc-950/60 backdrop-blur-md shadow-2xl pointer-events-none" />
+                  
+                  {/* Satellite node */}
+                  <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-white shadow-[0_0_12px_rgba(255,255,255,0.9)] pointer-events-none" />
+
+                  {/* Internal Circle Clip */}
+                  <div className="relative z-10 w-36 h-36 sm:w-40 sm:h-40 rounded-full overflow-hidden flex items-center justify-center border border-white/20 shadow-[0_0_25px_rgba(0,0,0,0.9)] bg-zinc-950 pointer-events-none">
+                    {profileForm.avatar ? (
+                      <img
+                        src={profileForm.avatar}
+                        alt="Preview"
+                        style={{
+                          transform: `scale(${((profileForm.avatarScale || 100) / 100)}) translate(${profileForm.avatarX || 0}%, ${profileForm.avatarY || 0}%)`,
+                          transformOrigin: 'center center'
+                        }}
+                        className="w-full h-full object-cover transition-transform duration-75 select-none pointer-events-none"
+                        draggable={false}
+                      />
+                    ) : (
+                      <span className="text-2xl text-zinc-500 font-mono">✦</span>
+                    )}
+                    {/* Subtle glass overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-30 pointer-events-none" />
+                  </div>
+                </div>
+
+                <div className="mt-2 text-[10px] font-mono text-zinc-400">
+                  X: <span className="text-white">{profileForm.avatarX || 0}%</span> | Y: <span className="text-white">{profileForm.avatarY || 0}%</span> | Zoom: <span className="text-white">{profileForm.avatarScale || 100}%</span>
+                </div>
+              </div>
+
+              {/* Adjustment Sliders & File Upload Controls */}
+              <div className="lg:col-span-7 space-y-4">
+                {/* 1. Zoom / Scale Slider */}
+                <div>
+                  <div className="flex items-center justify-between text-xs font-mono text-zinc-300 mb-1">
+                    <span className="flex items-center gap-1.5">
+                      <ZoomIn size={13} className="text-zinc-400" />
+                      <span>Zoom / Scale:</span>
+                    </span>
+                    <span className="text-white font-bold">{profileForm.avatarScale || 100}%</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setProfileForm((prev) => ({ ...prev, avatarScale: Math.max(50, (prev.avatarScale || 100) - 5) }))}
+                      className="p-1.5 rounded-lg bg-zinc-900 border border-white/10 hover:bg-zinc-800 text-zinc-300"
+                    >
+                      <ZoomOut size={12} />
+                    </button>
+                    <input
+                      type="range"
+                      min="50"
+                      max="250"
+                      step="1"
+                      value={profileForm.avatarScale || 100}
+                      onChange={(e) => setProfileForm({ ...profileForm, avatarScale: Number(e.target.value) })}
+                      className="flex-1 accent-white h-1.5 bg-zinc-800 rounded-lg cursor-pointer"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setProfileForm((prev) => ({ ...prev, avatarScale: Math.min(250, (prev.avatarScale || 100) + 5) }))}
+                      className="p-1.5 rounded-lg bg-zinc-900 border border-white/10 hover:bg-zinc-800 text-zinc-300"
+                    >
+                      <ZoomIn size={12} />
+                    </button>
+                  </div>
+                </div>
+
+                {/* 2. Horizontal (X) Offset Slider */}
+                <div>
+                  <div className="flex items-center justify-between text-xs font-mono text-zinc-300 mb-1">
+                    <span>Horizontal Offset (X):</span>
+                    <span className="text-white font-bold">{profileForm.avatarX || 0}%</span>
+                  </div>
+                  <input
+                    type="range"
+                    min="-60"
+                    max="60"
+                    step="1"
+                    value={profileForm.avatarX || 0}
+                    onChange={(e) => setProfileForm({ ...profileForm, avatarX: Number(e.target.value) })}
+                    className="w-full accent-white h-1.5 bg-zinc-800 rounded-lg cursor-pointer"
+                  />
+                  <div className="flex justify-between text-[9px] font-mono text-zinc-500">
+                    <span>◀ Left (-60%)</span>
+                    <span>Center (0%)</span>
+                    <span>Right (+60%) ▶</span>
+                  </div>
+                </div>
+
+                {/* 3. Vertical (Y) Offset Slider */}
+                <div>
+                  <div className="flex items-center justify-between text-xs font-mono text-zinc-300 mb-1">
+                    <span>Vertical Offset (Y):</span>
+                    <span className="text-white font-bold">{profileForm.avatarY || 0}%</span>
+                  </div>
+                  <input
+                    type="range"
+                    min="-60"
+                    max="60"
+                    step="1"
+                    value={profileForm.avatarY || 0}
+                    onChange={(e) => setProfileForm({ ...profileForm, avatarY: Number(e.target.value) })}
+                    className="w-full accent-white h-1.5 bg-zinc-800 rounded-lg cursor-pointer"
+                  />
+                  <div className="flex justify-between text-[9px] font-mono text-zinc-500">
+                    <span>▲ Up (-60%)</span>
+                    <span>Center (0%)</span>
+                    <span>Down (+60%) ▼</span>
+                  </div>
+                </div>
+
+                {/* 4. Image URL / File Upload */}
+                <div className="pt-2 border-t border-white/[0.06] space-y-2">
+                  <input
+                    type="text"
+                    placeholder="Image URL or upload below..."
+                    value={profileForm.avatar || ''}
+                    onChange={(e) => setProfileForm({ ...profileForm, avatar: e.target.value })}
+                    className="glass-input w-full px-3 py-1.5 text-xs"
+                  />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                          setProfileForm((prev) => ({ ...prev, avatar: reader.result }));
+                        };
+                        reader.readAsDataURL(file);
+                      }
+                    }}
+                    className="text-xs text-zinc-400 file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-mono file:bg-zinc-800 file:text-zinc-200 hover:file:bg-zinc-700 cursor-pointer w-full"
+                  />
+                </div>
               </div>
             </div>
           </div>

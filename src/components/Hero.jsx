@@ -92,26 +92,30 @@ export const Hero = () => {
           {/* Right Visual Orbit Badge with Subtle Float & Expanding Hover */}
           <div className="lg:col-span-4 flex justify-center lg:justify-end">
             <div className="animate-subtle-float flex items-center justify-center">
-              <div className="relative w-48 h-48 sm:w-60 sm:h-60 flex items-center justify-center group cursor-pointer transition-all duration-500 ease-out hover:scale-110 sm:hover:scale-115">
+              <div className="relative w-56 h-56 sm:w-64 sm:h-64 flex items-center justify-center group cursor-pointer transition-all duration-500 ease-out hover:scale-105 sm:hover:scale-110">
                 {/* Outer rotating ring with glow on hover */}
                 <div className="absolute inset-0 rounded-full border border-dashed border-white/20 group-hover:border-white/40 animate-orbit-spin transition-colors" />
                 
                 {/* Middle glowing glass ring */}
-                <div className="absolute inset-3 rounded-full border border-white/10 group-hover:border-white/30 bg-zinc-950/60 backdrop-blur-md shadow-2xl group-hover:shadow-[0_0_35px_rgba(255,255,255,0.12)] transition-all overflow-hidden" />
+                <div className="absolute inset-2.5 rounded-full border border-white/10 group-hover:border-white/30 bg-zinc-950/60 backdrop-blur-md shadow-2xl group-hover:shadow-[0_0_35px_rgba(255,255,255,0.12)] transition-all overflow-hidden" />
                 
                 {/* Satellite node */}
                 <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-white shadow-[0_0_16px_rgba(255,255,255,0.9)] group-hover:scale-125 transition-transform duration-300" />
 
-                {/* Profile Picture Image inside the circle */}
-                <div className="relative z-10 w-36 h-36 sm:w-44 sm:h-44 rounded-full overflow-hidden flex items-center justify-center border border-white/10 group-hover:border-white/30 transition-all shadow-[0_0_25px_rgba(0,0,0,0.8)] bg-zinc-950">
+                {/* Enriched Internal Profile Picture Circle */}
+                <div className="relative z-10 w-44 h-44 sm:w-52 sm:h-52 rounded-full overflow-hidden flex items-center justify-center border border-white/10 group-hover:border-white/30 transition-all shadow-[0_0_30px_rgba(0,0,0,0.85)] bg-zinc-950">
                   <img
                     src={profile.avatar || "/profile-avatar.png"}
                     alt={profile.name || "Yagya Mahajan"}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out select-none"
+                    style={{
+                      transform: `scale(${((profile.avatarScale || 100) / 100)}) translate(${profile.avatarX || 0}%, ${profile.avatarY || 0}%)`,
+                      transformOrigin: 'center center'
+                    }}
+                    className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500 ease-out select-none"
                     loading="eager"
                   />
                   {/* Subtle glass gradient overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-40 group-hover:opacity-20 transition-opacity" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-30 group-hover:opacity-10 transition-opacity pointer-events-none" />
                 </div>
               </div>
             </div>
