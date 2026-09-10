@@ -1,11 +1,19 @@
 import React, { useState } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { Sparkles, Trophy, Users, Megaphone, GitPullRequest, Bookmark } from 'lucide-react';
+import { Trophy, Users, Megaphone, GitPullRequest, Bookmark } from 'lucide-react';
 
 export const BeyondData = () => {
   const { data } = usePortfolio();
   const { beyondData } = data;
   const [activeCategory, setActiveCategory] = useState('All');
+
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    e.currentTarget.style.setProperty('--mouse-x', `${x}px`);
+    e.currentTarget.style.setProperty('--mouse-y', `${y}px`);
+  };
 
   const categories = ['All', ...new Set(beyondData.map((b) => b.category).filter(Boolean))];
 
@@ -35,7 +43,7 @@ export const BeyondData = () => {
         
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-white/[0.08] text-[11px] font-mono tracking-widest uppercase text-zinc-400 mb-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-white/[0.08] text-[11px] font-mono tracking-widest uppercase text-zinc-400 mb-4 shadow-[0_0_12px_rgba(255,255,255,0.02)]">
             <span>✦</span> CO-CURRICULAR & LEADERSHIP <span>✦</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
@@ -54,8 +62,8 @@ export const BeyondData = () => {
                   onClick={() => setActiveCategory(cat)}
                   className={`px-3.5 py-1.5 rounded-xl text-xs font-mono transition-all ${
                     activeCategory === cat
-                      ? 'bg-white text-black font-bold shadow-md'
-                      : 'bg-zinc-900/90 text-zinc-400 border border-white/[0.08] hover:text-white hover:border-white/20'
+                      ? 'bg-white text-black font-bold shadow-[0_0_15px_rgba(255,255,255,0.2)] scale-105'
+                      : 'bg-zinc-900/90 text-zinc-400 border border-white/[0.08] hover:text-white hover:border-white/30 hover:scale-105'
                   }`}
                 >
                   {cat}
@@ -70,11 +78,12 @@ export const BeyondData = () => {
           {filteredItems.map((item) => (
             <div
               key={item.id}
-              className="glass-card glass-panel-hover p-6 sm:p-8 rounded-2xl border border-white/[0.08] flex flex-col justify-between group"
+              onMouseMove={handleMouseMove}
+              className="glass-card glass-panel-hover p-6 sm:p-8 rounded-2xl border border-white/[0.08] flex flex-col justify-between group cursor-default"
             >
               <div>
                 <div className="flex items-center justify-between gap-2 mb-3">
-                  <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg bg-zinc-900 border border-white/[0.06] text-[11px] font-mono text-zinc-300">
+                  <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg bg-zinc-900 border border-white/[0.06] text-[11px] font-mono text-zinc-300 group-hover:border-white/20 transition-colors">
                     {getCategoryIcon(item.category)}
                     <span>{item.category || 'Co-Curricular'}</span>
                   </div>
@@ -82,7 +91,7 @@ export const BeyondData = () => {
                   <span className="text-xs font-mono text-zinc-400">{item.period}</span>
                 </div>
 
-                <h3 className="text-lg font-bold text-white mb-1.5 group-hover:text-zinc-200 transition-colors">
+                <h3 className="text-lg font-bold text-white mb-1.5 group-hover:text-zinc-100 transition-colors">
                   {item.title}
                 </h3>
 
@@ -98,7 +107,7 @@ export const BeyondData = () => {
               {item.highlight && (
                 <div className="pt-4 border-t border-white/[0.06] flex items-center justify-between">
                   <span className="text-[11px] font-mono text-zinc-400 uppercase tracking-wider">Key Impact</span>
-                  <span className="text-xs font-bold font-mono text-white px-2.5 py-1 rounded bg-black/40 border border-white/10">
+                  <span className="text-xs font-bold font-mono text-white px-2.5 py-1 rounded bg-black/40 border border-white/10 group-hover:border-white/30 group-hover:shadow-[0_0_12px_rgba(255,255,255,0.08)] transition-all">
                     {item.highlight}
                   </span>
                 </div>

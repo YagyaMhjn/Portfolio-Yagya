@@ -1,11 +1,19 @@
 import React, { useState } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { Award, ExternalLink, Search, CheckCircle2, Shield } from 'lucide-react';
+import { ExternalLink, Search, Shield } from 'lucide-react';
 
 export const Certificates = () => {
   const { data } = usePortfolio();
   const { certificates } = data;
   const [searchQuery, setSearchQuery] = useState('');
+
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    e.currentTarget.style.setProperty('--mouse-x', `${x}px`);
+    e.currentTarget.style.setProperty('--mouse-y', `${y}px`);
+  };
 
   const filteredCerts = certificates.filter((cert) => {
     const query = searchQuery.toLowerCase().trim();
@@ -22,7 +30,7 @@ export const Certificates = () => {
         
         {/* Section Header */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-white/[0.08] text-[11px] font-mono tracking-widest uppercase text-zinc-400 mb-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-white/[0.08] text-[11px] font-mono tracking-widest uppercase text-zinc-400 mb-4 shadow-[0_0_12px_rgba(255,255,255,0.02)]">
             <span>✦</span> VERIFIED CREDENTIALS <span>✦</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
@@ -46,11 +54,12 @@ export const Certificates = () => {
         </div>
 
         {/* Certificates Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {filteredCerts.map((cert) => (
             <div
               key={cert.id}
-              className="glass-card glass-panel-hover p-6 sm:p-7 rounded-2xl border border-white/[0.08] flex flex-col justify-between group"
+              onMouseMove={handleMouseMove}
+              className="glass-card glass-panel-hover p-6 sm:p-7 rounded-2xl border border-white/[0.08] flex flex-col justify-between group cursor-default"
             >
               <div>
                 <div className="flex items-center justify-between gap-3 mb-4">
@@ -66,7 +75,7 @@ export const Certificates = () => {
                       href={cert.credentialUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-1.5 rounded-lg bg-zinc-900/80 text-zinc-400 hover:text-white hover:bg-zinc-800 border border-white/[0.08] transition-colors flex items-center gap-1 text-[11px] font-mono"
+                      className="p-1.5 px-2.5 rounded-lg bg-zinc-900/80 text-zinc-400 hover:text-white hover:bg-zinc-800 hover:border-white/30 hover:scale-105 border border-white/[0.08] transition-all flex items-center gap-1 text-[11px] font-mono"
                       title="Verify Certificate"
                     >
                       <span>Verify</span>
@@ -75,7 +84,7 @@ export const Certificates = () => {
                   )}
                 </div>
 
-                <h3 className="text-lg font-bold text-white mb-3 group-hover:text-zinc-200 transition-colors">
+                <h3 className="text-lg font-bold text-white mb-3 group-hover:text-zinc-100 transition-colors">
                   {cert.title}
                 </h3>
               </div>
@@ -86,7 +95,7 @@ export const Certificates = () => {
                   {cert.skills.map((skill, idx) => (
                     <span
                       key={idx}
-                      className="px-2.5 py-0.5 rounded-md bg-zinc-900/90 text-zinc-300 text-[10px] font-mono border border-white/[0.05]"
+                      className="px-2.5 py-0.5 rounded-md bg-zinc-900/90 text-zinc-300 text-[10px] font-mono border border-white/[0.05] group-hover:border-white/20 transition-colors"
                     >
                       {skill}
                     </span>

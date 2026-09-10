@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { ExternalLink, Search, FolderGit2, Star } from 'lucide-react';
+import { ExternalLink, Search, FolderGit2, Star, ArrowUpRight } from 'lucide-react';
 import { GithubIcon } from './Icons';
 
 export const Projects = () => {
@@ -9,6 +9,14 @@ export const Projects = () => {
 
   const [selectedTag, setSelectedTag] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
+
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    e.currentTarget.style.setProperty('--mouse-x', `${x}px`);
+    e.currentTarget.style.setProperty('--mouse-y', `${y}px`);
+  };
 
   const allTags = useMemo(() => {
     const tagsSet = new Set(['All']);
@@ -44,7 +52,7 @@ export const Projects = () => {
         
         {/* Section Header */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-white/[0.08] text-[11px] font-mono tracking-widest uppercase text-zinc-400 mb-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-white/[0.08] text-[11px] font-mono tracking-widest uppercase text-zinc-400 mb-4 shadow-[0_0_12px_rgba(255,255,255,0.02)]">
             <span>✦</span> CURATED PORTFOLIO <span>✦</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
@@ -64,8 +72,8 @@ export const Projects = () => {
                 onClick={() => setSelectedTag(tag)}
                 className={`px-3.5 py-1.5 rounded-xl text-xs font-mono whitespace-nowrap transition-all ${
                   selectedTag === tag
-                    ? 'bg-white text-black font-bold shadow-md'
-                    : 'bg-zinc-900/90 text-zinc-400 border border-white/[0.08] hover:text-white hover:border-white/20'
+                    ? 'bg-white text-black font-bold shadow-[0_0_15px_rgba(255,255,255,0.2)] scale-105'
+                    : 'bg-zinc-900/90 text-zinc-400 border border-white/[0.08] hover:text-white hover:border-white/30 hover:scale-105'
                 }`}
               >
                 {tag}
@@ -105,11 +113,12 @@ export const Projects = () => {
             {filteredProjects.map((project) => (
               <div
                 key={project.id}
-                className="glass-card glass-panel-hover rounded-2xl p-6 border border-white/[0.08] flex flex-col justify-between group relative"
+                onMouseMove={handleMouseMove}
+                className="glass-card glass-panel-hover rounded-2xl p-6 border border-white/[0.08] flex flex-col justify-between group relative cursor-default"
               >
                 <div>
                   <div className="flex items-center justify-between gap-2 mb-4">
-                    <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 px-2 py-0.5 rounded bg-zinc-900 border border-white/[0.06]">
+                    <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 px-2 py-0.5 rounded bg-zinc-900 border border-white/[0.06] group-hover:border-white/20 transition-colors">
                       {project.category || 'Engineering'}
                     </span>
                     <div className="flex items-center gap-2">
@@ -118,7 +127,7 @@ export const Projects = () => {
                           href={project.github}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="p-1.5 rounded-lg bg-zinc-900/80 text-zinc-400 hover:text-white hover:bg-zinc-800 border border-white/[0.08] transition-colors"
+                          className="p-1.5 rounded-lg bg-zinc-900/80 text-zinc-400 hover:text-white hover:bg-zinc-800 hover:scale-110 border border-white/[0.08] hover:border-white/30 transition-all"
                           title="View GitHub Repository"
                         >
                           <GithubIcon size={14} />
@@ -129,7 +138,7 @@ export const Projects = () => {
                           href={project.live}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="p-1.5 rounded-lg bg-zinc-900/80 text-zinc-400 hover:text-white hover:bg-zinc-800 border border-white/[0.08] transition-colors"
+                          className="p-1.5 rounded-lg bg-zinc-900/80 text-zinc-400 hover:text-white hover:bg-zinc-800 hover:scale-110 border border-white/[0.08] hover:border-white/30 transition-all"
                           title="View Live Demo"
                         >
                           <ExternalLink size={13} />
@@ -138,9 +147,9 @@ export const Projects = () => {
                     </div>
                   </div>
 
-                  <h3 className="text-lg font-bold text-white mb-2 group-hover:text-zinc-200 transition-colors flex items-center gap-1.5">
+                  <h3 className="text-lg font-bold text-white mb-2 group-hover:text-zinc-100 transition-colors flex items-center gap-1.5">
                     <span>{project.title}</span>
-                    {project.featured && <Star size={13} className="text-zinc-300 fill-zinc-300" />}
+                    {project.featured && <Star size={13} className="text-zinc-300 fill-zinc-300 animate-pulse" />}
                   </h3>
 
                   <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed font-light mb-6">
@@ -154,7 +163,7 @@ export const Projects = () => {
                       project.tags.map((t, idx) => (
                         <span
                           key={idx}
-                          className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-zinc-900/90 text-zinc-300 border border-white/[0.05]"
+                          className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-zinc-900/90 text-zinc-300 border border-white/[0.05] group-hover:border-white/15 transition-colors"
                         >
                           {t}
                         </span>

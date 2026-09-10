@@ -1,6 +1,6 @@
 @echo off
 set msg=%*
-if "%msg%"=="" set msg=Update portfolio codebase
+if "%msg%"=="" set msg=Update portfolio
 git add .
 git commit -m "%msg%"
-git push -u origin main
+git push origin main

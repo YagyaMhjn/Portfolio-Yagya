@@ -1,6 +1,7 @@
 import React from 'react';
 import { usePortfolio } from './context/PortfolioContext';
 import { AmbientCanvas } from './components/AmbientCanvas';
+import { CursorGlow } from './components/CursorGlow';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { Journey } from './components/Journey';
@@ -22,8 +23,11 @@ function App() {
 
   return (
     <div className="relative min-h-screen bg-[#070707] text-[#e4e4e7] overflow-x-hidden selection:bg-white selection:text-black">
-      {/* Background canvas particles & dark glow */}
+      {/* Background canvas particles & interactive dark blooms */}
       <AmbientCanvas />
+
+      {/* Interactive Cursor Glow Orb */}
+      <CursorGlow />
 
       {/* Main Navbar with 7 sections */}
       <Navbar />

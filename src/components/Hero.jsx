@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { ArrowDown, ExternalLink, Send, Sparkles, Code2, Layers, Clock, Quote } from 'lucide-react';
+import { Send, Clock, Quote, Sparkles, ArrowUpRight } from 'lucide-react';
 
 export const Hero = () => {
   const { data } = usePortfolio();
@@ -34,6 +34,15 @@ export const Hero = () => {
     return () => clearInterval(interval);
   }, [profile.principles]);
 
+  // Card mouse position tracking for spotlight glint
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    e.currentTarget.style.setProperty('--mouse-x', `${x}px`);
+    e.currentTarget.style.setProperty('--mouse-y', `${y}px`);
+  };
+
   return (
     <section id="home" className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -43,16 +52,24 @@ export const Hero = () => {
           
           {/* Left Text */}
           <div className="lg:col-span-8 flex flex-col items-start">
-            {/* Kicker badge */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-zinc-900/80 border border-white/[0.09] text-[11px] uppercase tracking-widest text-zinc-300 font-mono mb-6">
-              <span className="text-white">✦</span>
+            {/* Kicker badge with subtle glow */}
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-zinc-900/80 border border-white/[0.12] text-[11px] uppercase tracking-widest text-zinc-300 font-mono mb-6 shadow-[0_0_15px_rgba(255,255,255,0.03)] hover:border-white/30 hover:shadow-[0_0_20px_rgba(255,255,255,0.08)] transition-all cursor-default">
+              <span className="text-white animate-pulse">✦</span>
               <span>{profile.role || 'FULL-STACK & AI SYSTEMS ARCHITECTURE'}</span>
-              <span className="text-white">✦</span>
+              <span className="text-white animate-pulse">✦</span>
             </div>
 
-            {/* Name Heading */}
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white mb-6 leading-[1.08]">
-              Hi, I'm <span className="underline decoration-zinc-700 decoration-2 underline-offset-8">{profile.name}</span>
+            {/* Name Heading with Background Glow Effect */}
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white mb-6 leading-[1.12]">
+              Hi, I'm{' '}
+              <span className="name-glow-wrapper group cursor-default">
+                {/* Background Glow Aura */}
+                <span className="name-glow-bg" />
+                {/* Crisp Shimmer Text */}
+                <span className="name-glow-text">
+                  {profile.name}
+                </span>
+              </span>
             </h1>
 
             {/* Bio Paragraph */}
@@ -60,51 +77,54 @@ export const Hero = () => {
               {profile.bio}
             </p>
 
-            {/* CTA Buttons */}
+            {/* Interactive CTA Buttons */}
             <div className="flex flex-wrap items-center gap-4">
               <a
                 href="#projects"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-black font-semibold text-sm hover:bg-zinc-200 transition-all shadow-lg hover:shadow-white/10 transform hover:-translate-y-0.5"
+                className="btn-glow inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-black font-semibold text-sm hover:bg-zinc-100 transition-all shadow-[0_4px_20px_rgba(255,255,255,0.15)] group"
               >
                 <span>Explore Work</span>
-                <span className="text-xs">↗</span>
+                <ArrowUpRight size={15} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </a>
               <a
                 href="#contact"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-zinc-900/90 text-zinc-200 border border-white/10 font-medium text-sm hover:bg-zinc-800 hover:text-white transition-all transform hover:-translate-y-0.5"
+                className="btn-glow inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-zinc-900/90 text-zinc-200 border border-white/10 font-medium text-sm hover:bg-zinc-800 hover:text-white hover:border-white/25 transition-all group"
               >
-                <Send size={14} className="text-zinc-400" />
+                <Send size={14} className="text-zinc-400 group-hover:text-white group-hover:translate-x-0.5 transition-all" />
                 <span>Get in Touch</span>
               </a>
             </div>
           </div>
 
-          {/* Right Visual Orbit Badge */}
+          {/* Right Visual Orbit Badge with Interactive Hover */}
           <div className="lg:col-span-4 flex justify-center lg:justify-end">
-            <div className="relative w-56 h-56 sm:w-64 sm:h-64 flex items-center justify-center">
-              {/* Subtle outer rotating ring */}
-              <div className="absolute inset-0 rounded-full border border-dashed border-white/20 animate-orbit-spin" />
+            <div className="relative w-56 h-56 sm:w-64 sm:h-64 flex items-center justify-center group cursor-pointer">
+              {/* Outer rotating ring with glow on hover */}
+              <div className="absolute inset-0 rounded-full border border-dashed border-white/20 group-hover:border-white/40 animate-orbit-spin transition-colors" />
               {/* Middle glowing glass ring */}
-              <div className="absolute inset-3 rounded-full border border-white/10 bg-zinc-950/60 backdrop-blur-md shadow-2xl" />
+              <div className="absolute inset-3 rounded-full border border-white/10 group-hover:border-white/30 bg-zinc-950/60 backdrop-blur-md shadow-2xl group-hover:shadow-[0_0_30px_rgba(255,255,255,0.08)] transition-all" />
               
               {/* Satellite node */}
-              <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-white shadow-[0_0_12px_rgba(255,255,255,0.8)]" />
+              <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-white shadow-[0_0_16px_rgba(255,255,255,0.9)]" />
 
               {/* Center Celestial Icon */}
-              <div className="relative z-10 flex flex-col items-center justify-center text-center p-6">
-                <span className="text-3xl sm:text-4xl text-white mb-2">✦</span>
-                <span className="text-xs font-mono uppercase tracking-widest text-zinc-400">YAGYA.DEV</span>
+              <div className="relative z-10 flex flex-col items-center justify-center text-center p-6 group-hover:scale-105 transition-transform">
+                <span className="text-3xl sm:text-4xl text-white mb-2 group-hover:rotate-12 transition-transform duration-300">✦</span>
+                <span className="text-xs font-mono uppercase tracking-widest text-zinc-300 group-hover:text-white transition-colors">YAGYA.DEV</span>
                 <span className="text-[10px] text-zinc-500 font-mono mt-1">EST. 2026</span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Hero Bento Grid */}
+        {/* Hero Bento Grid with Mouse Position Spotlight Glow */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-16">
           
           {/* Bento Tile 1: Status & Live Clock */}
-          <div className="glass-card glass-panel-hover p-6 rounded-2xl flex flex-col justify-between">
+          <div
+            onMouseMove={handleMouseMove}
+            className="glass-card glass-panel-hover p-6 rounded-2xl flex flex-col justify-between cursor-default"
+          >
             <div>
               <div className="flex items-center justify-between mb-3">
                 <span className="text-[11px] font-mono tracking-widest uppercase text-zinc-400">AVAILABILITY STATUS</span>
@@ -125,30 +145,36 @@ export const Hero = () => {
           </div>
 
           {/* Bento Tile 2: Metrics */}
-          <div className="glass-card glass-panel-hover p-6 rounded-2xl flex flex-col justify-between">
+          <div
+            onMouseMove={handleMouseMove}
+            className="glass-card glass-panel-hover p-6 rounded-2xl flex flex-col justify-between cursor-default"
+          >
             <div>
               <div className="text-[11px] font-mono tracking-widest uppercase text-zinc-400 mb-4">
                 ENGINEERING METRICS
               </div>
               <div className="grid grid-cols-2 gap-4">
-                <div className="bg-black/30 p-3.5 rounded-xl border border-white/[0.05]">
+                <div className="bg-black/40 p-3.5 rounded-xl border border-white/[0.06] hover:border-white/20 transition-colors">
                   <div className="text-3xl font-extrabold text-white font-mono">{projects?.length || 6}+</div>
                   <div className="text-xs text-zinc-400 mt-1">Projects Engineered</div>
                 </div>
-                <div className="bg-black/30 p-3.5 rounded-xl border border-white/[0.05]">
+                <div className="bg-black/40 p-3.5 rounded-xl border border-white/[0.06] hover:border-white/20 transition-colors">
                   <div className="text-3xl font-extrabold text-white font-mono">{skills?.length || 20}+</div>
                   <div className="text-xs text-zinc-400 mt-1">Core Technologies</div>
                 </div>
               </div>
             </div>
             <div className="mt-6 pt-4 border-t border-white/[0.06] flex items-center justify-between text-xs text-zinc-400">
-              <span>Code Base Cleanliness</span>
-              <span className="font-mono text-zinc-200">100% Type-Safe</span>
+              <span>Code Base Architecture</span>
+              <span className="font-mono text-zinc-200">100% Modular</span>
             </div>
           </div>
 
-          {/* Bento Tile 3: Primary Tech Cloud */}
-          <div className="glass-card glass-panel-hover p-6 rounded-2xl flex flex-col justify-between">
+          {/* Bento Tile 3: Primary Tech Cloud with Interactive Badge Hover */}
+          <div
+            onMouseMove={handleMouseMove}
+            className="glass-card glass-panel-hover p-6 rounded-2xl flex flex-col justify-between cursor-default"
+          >
             <div>
               <div className="text-[11px] font-mono tracking-widest uppercase text-zinc-400 mb-3">
                 PRIMARY STACK
@@ -157,7 +183,7 @@ export const Hero = () => {
                 {profile.primaryTech?.map((t, idx) => (
                   <span
                     key={idx}
-                    className="px-2.5 py-1 text-xs font-mono rounded-lg bg-zinc-900 border border-white/[0.08] text-zinc-300 hover:border-white/20 transition-colors"
+                    className="px-2.5 py-1 text-xs font-mono rounded-lg bg-zinc-900 border border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/30 hover:bg-zinc-800 hover:scale-105 transition-all cursor-pointer"
                   >
                     {t}
                   </span>
@@ -166,7 +192,7 @@ export const Hero = () => {
             </div>
             <div className="mt-6 pt-4 border-t border-white/[0.06] flex items-center justify-between text-xs text-zinc-400">
               <span>Architecture</span>
-              <span className="font-mono text-zinc-200">Scalable & Modular</span>
+              <span className="font-mono text-zinc-200">Zero Latency</span>
             </div>
           </div>
 
@@ -174,7 +200,10 @@ export const Hero = () => {
 
         {/* Guiding Principles Slider */}
         {profile.principles && profile.principles.length > 0 && (
-          <div className="glass-card p-6 sm:p-8 rounded-2xl border border-white/[0.08]">
+          <div
+            onMouseMove={handleMouseMove}
+            className="glass-card glass-panel-hover p-6 sm:p-8 rounded-2xl border border-white/[0.08]"
+          >
             <div className="flex items-center justify-between mb-4">
               <span className="text-[11px] font-mono uppercase tracking-widest text-zinc-400 flex items-center gap-2">
                 <Quote size={13} className="text-zinc-400" /> Guiding Engineering Principles
@@ -185,7 +214,7 @@ export const Hero = () => {
                     key={idx}
                     onClick={() => setActiveSlide(idx)}
                     className={`h-1.5 rounded-full transition-all duration-300 ${
-                      activeSlide === idx ? 'w-6 bg-white' : 'w-2 bg-zinc-700 hover:bg-zinc-500'
+                      activeSlide === idx ? 'w-6 bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)]' : 'w-2 bg-zinc-700 hover:bg-zinc-500'
                     }`}
                     aria-label={`Slide ${idx + 1}`}
                   />
