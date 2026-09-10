@@ -188,89 +188,64 @@ body {
 }
 
 /* ==========================================================================
-   Light Mode Theme System
+   Full Contrast-Inverted Light Mode Theme System
    ========================================================================== */
 html.light {
   color-scheme: light;
 }
 
 html.light body {
-  background-color: #f4f4f6;
+  background-color: #f8f9fa;
   color: #18181b;
 }
 
 html.light #root > div {
-  background-color: #f4f4f6 !important;
+  background-color: #f8f9fa !important;
   color: #18181b !important;
 }
 
+/* Glassmorphism Cards & Panels (Inverted to Pure Frosted White with Subtle Shadow) */
 html.light .glass-panel {
-  background: rgba(255, 255, 255, 0.88);
-  border: 1px solid rgba(0, 0, 0, 0.09);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-}
-
-html.light .glass-card {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(245, 245, 247, 0.92) 100%);
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
-}
-
-html.light .glass-panel-hover:hover {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(240, 240, 245, 0.98) 100%);
-  border-color: rgba(0, 0, 0, 0.2);
-  box-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.12), 0 0 20px 2px rgba(0, 0, 0, 0.03);
-}
-
-html.light .glass-input {
-  background: rgba(255, 255, 255, 0.95);
-  border: 1px solid rgba(0, 0, 0, 0.16);
-  color: #18181b;
-}
-
-html.light .glass-input:focus {
-  background: #ffffff;
-  border-color: rgba(0, 0, 0, 0.5);
-  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.08), 0 0 16px rgba(0, 0, 0, 0.06);
-}
-
-html.light .name-glow-text {
-  background: linear-gradient(135deg, #09090b 0%, #18181b 40%, #27272a 75%, #3f3f46 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 35px rgba(0, 0, 0, 0.15);
-}
-
-html.light .name-glow-bg {
-  background: radial-gradient(
-    ellipse at center,
-    rgba(0, 0, 0, 0.1) 0%,
-    rgba(0, 0, 0, 0.04) 40%,
-    transparent 70%
-  );
-}
-
-html.light header {
-  background: rgba(255, 255, 255, 0.94) !important;
-  border-color: rgba(0, 0, 0, 0.09) !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
 }
 
-html.light header button {
+html.light .glass-card {
+  background: linear-gradient(180deg, #ffffff 0%, #f4f5f8 100%) !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06) !important;
+}
+
+html.light .glass-panel-hover:hover {
+  background: linear-gradient(180deg, #ffffff 0%, #edf0f5 100%) !important;
+  border-color: rgba(0, 0, 0, 0.22) !important;
+  box-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.12), 0 0 20px 2px rgba(0, 0, 0, 0.03) !important;
+}
+
+html.light .glass-input {
+  background: #ffffff !important;
+  border-color: rgba(0, 0, 0, 0.18) !important;
   color: #18181b !important;
 }
 
-html.light header nav {
-  background: rgba(240, 240, 244, 0.95) !important;
-  border-color: rgba(0, 0, 0, 0.08) !important;
+html.light .glass-input:focus {
+  border-color: rgba(0, 0, 0, 0.6) !important;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.08), 0 0 16px rgba(0, 0, 0, 0.05) !important;
 }
 
-html.light header nav button {
-  color: #52525b !important;
-}
-
-html.light header nav button:hover {
+/* Typography Hierarchy (Inverted from White to Solid Obsidian Black) */
+html.light h1,
+html.light h2,
+html.light h3,
+html.light h4,
+html.light h5,
+html.light h6 {
   color: #09090b !important;
+}
+
+html.light p {
+  color: #3f3f46 !important;
 }
 
 html.light .text-white {
@@ -280,31 +255,145 @@ html.light .text-white {
 html.light .text-zinc-100,
 html.light .text-zinc-200,
 html.light .text-zinc-300 {
-  color: #18181b;
+  color: #18181b !important;
 }
 
 html.light .text-zinc-400 {
-  color: #52525b;
+  color: #52525b !important;
 }
 
 html.light .text-zinc-500 {
-  color: #71717a;
+  color: #71717a !important;
 }
 
+/* Header & Navigation Bar (Inverted) */
+html.light header {
+  background: rgba(255, 255, 255, 0.94) !important;
+  border-color: rgba(0, 0, 0, 0.09) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
+}
+
+html.light header nav {
+  background: rgba(238, 240, 244, 0.95) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light header nav button {
+  color: #52525b !important;
+}
+
+html.light header nav button:hover {
+  color: #09090b !important;
+  background-color: rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Active Nav Pill: Inverted to Deep Black Background with Pure White Text */
+html.light header nav button.bg-white {
+  background: #09090b !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Primary CTA Buttons (e.g. "Explore Work" - Inverted to Solid Black with White Text) */
+html.light .btn-glow.bg-white,
+html.light button.bg-white {
+  background: #09090b !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+}
+
+html.light .btn-glow.bg-white:hover,
+html.light button.bg-white:hover {
+  background: #27272a !important;
+  color: #ffffff !important;
+}
+
+/* Secondary CTA Buttons & Badges (e.g. "Get in Touch", Inactive Tags) */
+html.light .btn-glow.bg-zinc-900\/90,
+html.light button.bg-zinc-900\/90 {
+  background: #ffffff !important;
+  color: #18181b !important;
+  border-color: rgba(0, 0, 0, 0.15) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03) !important;
+}
+
+html.light .btn-glow.bg-zinc-900\/90:hover,
+html.light button.bg-zinc-900\/90:hover {
+  background: #f4f5f8 !important;
+  color: #09090b !important;
+  border-color: rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Inner Badges & Tags */
 html.light .bg-zinc-900,
 html.light .bg-zinc-950,
-html.light .bg-black {
-  background-color: #ffffff;
+html.light .bg-black\/40 {
+  background-color: #f1f3f6 !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
 }
 
-html.light .border-white\/\[0\.08\],
-html.light .border-white\/\[0\.06\],
-html.light .border-white\/10,
-html.light .border-white\/20,
-html.light .border-white\/25 {
-  border-color: rgba(0, 0, 0, 0.12);
+/* Distinct Section Header Separation Line */
+html.light .border-b-2 {
+  border-color: rgba(0, 0, 0, 0.16) !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04) !important;
 }
 
+/* Social Handle Buttons & Floating Dock */
+html.light .bg-\[\#111114\]\/95,
+html.light aside a {
+  background: rgba(255, 255, 255, 0.96) !important;
+  color: #18181b !important;
+  border-color: rgba(0, 0, 0, 0.14) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06) !important;
+}
+
+html.light .bg-\[\#111114\]\/95:hover,
+html.light aside a:hover {
+  background: #ffffff !important;
+  border-color: rgba(0, 0, 0, 0.35) !important;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15) !important;
+}
+
+html.light .bg-\[\#111114\]\/95 svg,
+html.light aside a svg {
+  color: #18181b !important;
+}
+
+/* Hero Orbit Profile Badge (Inverted) */
+html.light .animate-orbit-spin {
+  border-color: rgba(0, 0, 0, 0.65) !important;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light .animate-orbit-spin ~ div.rounded-full.bg-zinc-950\/60 {
+  background: rgba(255, 255, 255, 0.85) !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light .animate-orbit-spin ~ div > .bg-white {
+  background-color: #09090b !important;
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Name Glow Shimmer (Inverted) */
+html.light .name-glow-text {
+  background: linear-gradient(135deg, #09090b 0%, #18181b 40%, #27272a 75%, #3f3f46 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  text-shadow: 0 0 35px rgba(0, 0, 0, 0.15) !important;
+}
+
+html.light .name-glow-bg {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 0, 0, 0.1) 0%,
+    rgba(0, 0, 0, 0.04) 40%,
+    transparent 70%
+  ) !important;
+}
+
+/* Footer (Inverted) */
 html.light footer {
   border-color: rgba(0, 0, 0, 0.08) !important;
 }
