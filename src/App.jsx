@@ -11,11 +11,12 @@ import { Certificates } from './components/Certificates';
 import { BeyondData } from './components/BeyondData';
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
+import { VerticalSocialDock } from './components/SocialHandleButton';
 import { AdminAuthModal } from './admin/AdminAuthModal';
 import { AdminLayout } from './admin/AdminLayout';
 
 function App() {
-  const { currentView, isAdmin, activePage } = usePortfolio();
+  const { currentView, isAdmin, activePage, data } = usePortfolio();
 
   if (currentView === 'admin') {
     if (!isAdmin) {
@@ -45,6 +46,11 @@ function App() {
         {activePage === 'beyond-data' && <BeyondData key="beyond-data" />}
         {activePage === 'contact' && <Contact key="contact" />}
       </main>
+
+      {/* Fixed Vertical Social Handles Dock in Lower Right Corner (For all sections except Home) */}
+      {activePage !== 'home' && (
+        <VerticalSocialDock socials={data.profile?.socials} />
+      )}
 
       {/* Footer (No public admin button) */}
       <Footer />
