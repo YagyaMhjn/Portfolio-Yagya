@@ -12,6 +12,7 @@ import { BeyondData } from './components/BeyondData';
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
 import { VerticalSocialDock } from './components/SocialHandleButton';
+import { SectionTransitionLoader } from './components/SectionTransitionLoader';
 import { AdminAuthModal } from './admin/AdminAuthModal';
 import { AdminLayout } from './admin/AdminLayout';
 
@@ -32,6 +33,9 @@ function App() {
 
       {/* Interactive Cursor Glow Orb */}
       <CursorGlow />
+
+      {/* Dynamic Data-Visualization Section Transition Loader */}
+      <SectionTransitionLoader />
 
       {/* Main Navbar with 7 sections (No public admin badges) */}
       <Navbar />

@@ -40,9 +40,9 @@ export const Certificates = () => {
               className="glass-card glass-panel-hover rounded-2xl border border-white/[0.08] hover:border-white/30 overflow-hidden flex flex-col justify-between group cursor-default transition-all duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.85)] relative"
             >
               <div>
-                {/* Revealed Top Certificate Media on Hover */}
+                {/* Revealed Top Certificate Media on Hover with smooth wave delay */}
                 {cert.media && (
-                  <div className="max-h-0 opacity-0 group-hover:max-h-48 sm:group-hover:max-h-52 group-hover:opacity-100 transition-all duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] overflow-hidden relative bg-zinc-950">
+                  <div className="max-h-0 opacity-0 group-hover:max-h-48 sm:group-hover:max-h-52 group-hover:opacity-100 transition-all duration-500 delay-1000 group-hover:duration-300 group-hover:delay-0 ease-[cubic-bezier(0.25,1,0.5,1)] overflow-hidden relative bg-zinc-950">
                     <img
                       src={cert.media}
                       alt={cert.title}
