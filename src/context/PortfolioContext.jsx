@@ -85,14 +85,40 @@ export const PortfolioProvider = ({ children }) => {
   });
 
   // URL routing synchronization (Popstate and Hashchange)
-  // Theme Management (Dark / Light Mode) - Default is Dark Mode
+  // Default Site Theme (Configured via Admin -> Settings & Display, defaults to 'dark')
+  const [defaultTheme, setDefaultThemeState] = useState(() => {
+    try {
+      const savedDefault = localStorage.getItem('yagya_portfolio_default_theme');
+      if (savedDefault === 'light' || savedDefault === 'dark') return savedDefault;
+    } catch (e) {}
+    return 'dark'; // Dark mode is fixed as default
+  });
+
+  // Active Session Theme (Falls back to defaultTheme)
   const [theme, setTheme] = useState(() => {
     try {
       const savedTheme = localStorage.getItem('yagya_portfolio_theme');
       if (savedTheme === 'light' || savedTheme === 'dark') return savedTheme;
     } catch (e) {}
+    try {
+      const savedDefault = localStorage.getItem('yagya_portfolio_default_theme');
+      if (savedDefault === 'light' || savedDefault === 'dark') return savedDefault;
+    } catch (e) {}
     return 'dark';
   });
+
+  const updateDefaultTheme = (newDefault) => {
+    if (newDefault !== 'dark' && newDefault !== 'light') return;
+    setDefaultThemeState(newDefault);
+    try {
+      localStorage.setItem('yagya_portfolio_default_theme', newDefault);
+    } catch (e) {}
+    // Also apply to current session theme
+    setTheme(newDefault);
+    try {
+      localStorage.setItem('yagya_portfolio_theme', newDefault);
+    } catch (e) {}
+  };
 
   const [themeTransitioning, setThemeTransitioning] = useState(false);
   const [transitionTarget, setTransitionTarget] = useState(null);
@@ -103,16 +129,16 @@ export const PortfolioProvider = ({ children }) => {
     setTransitionTarget(nextTheme);
     setThemeTransitioning(true);
 
-    // Halfway through the diagonal sweep (260ms), flip the theme class
+    // Halfway through the 0.95s diagonal sweep (440ms), flip the theme class under 100% solid curtain coverage
     setTimeout(() => {
       setTheme(nextTheme);
-    }, 260);
+    }, 440);
 
-    // Conclude the sweep after 620ms
+    // Conclude the 0.95s sweep after 950ms
     setTimeout(() => {
       setThemeTransitioning(false);
       setTransitionTarget(null);
-    }, 620);
+    }, 950);
   };
 
   // Section Transition Loader Management (Enabled / Disabled via Admin)
@@ -437,6 +463,8 @@ export const PortfolioProvider = ({ children }) => {
       value={{
         data,
         theme,
+        defaultTheme,
+        updateDefaultTheme,
         toggleTheme,
         themeTransitioning,
         transitionTarget,
