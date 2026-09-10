@@ -47,40 +47,11 @@ export const Navbar = () => {
           ))}
         </nav>
 
-        {/* Admin Lock / Action Button */}
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => {
-              if (isAdmin) {
-                setCurrentView('admin');
-              } else {
-                setShowAdminModal(true);
-              }
-            }}
-            title={isAdmin ? "Open Admin Dashboard" : "Admin Login"}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${
-              isAdmin
-                ? 'bg-zinc-800/80 border-white/20 text-zinc-200 hover:bg-zinc-700'
-                : 'bg-black/40 border-white/[0.08] text-zinc-400 hover:text-white hover:border-white/20'
-            }`}
-          >
-            {isAdmin ? (
-              <>
-                <ShieldCheck size={13} className="text-emerald-400" />
-                <span className="hidden sm:inline">Admin Mode</span>
-              </>
-            ) : (
-              <>
-                <Lock size={12} className="text-zinc-400" />
-                <span className="hidden sm:inline">Admin</span>
-              </>
-            )}
-          </button>
-
-          {/* Mobile Menu Button */}
+        {/* Mobile Menu Button */}
+        <div className="lg:hidden flex items-center">
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 rounded-lg bg-zinc-900 border border-white/10 text-zinc-300 hover:text-white"
+            className="p-2 rounded-lg bg-zinc-900 border border-white/10 text-zinc-300 hover:text-white"
             aria-label="Toggle menu"
           >
             {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}

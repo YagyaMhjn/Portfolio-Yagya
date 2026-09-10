@@ -1,47 +1,51 @@
 import React, { useState } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { Lock, KeyRound, AlertCircle, X, ShieldCheck, Eye, EyeOff } from 'lucide-react';
+import { Lock, KeyRound, AlertCircle, ArrowLeft, ShieldCheck, Eye, EyeOff } from 'lucide-react';
 
 export const AdminAuthModal = () => {
-  const { showAdminModal, setShowAdminModal, loginAdmin } = usePortfolio();
+  const { loginAdmin, setCurrentView } = usePortfolio();
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
 
-  if (!showAdminModal) return null;
+  const returnToPortfolio = () => {
+    try {
+      window.history.pushState(null, '', '/');
+    } catch (e) {}
+    setCurrentView('portfolio');
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setError('');
 
-    if (!password) {
+    if (!password.trim()) {
       setError('Please enter your administrator password.');
       return;
     }
 
-    const result = loginAdmin(password);
+    const result = loginAdmin(password.trim());
     if (result.success) {
       setPassword('');
       setError('');
-      setShowAdminModal(false);
     } else {
       setError(result.error || 'Access denied. Incorrect security passphrase.');
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fadeIn">
-      <div className="glass-card max-w-md w-full p-6 sm:p-8 rounded-2xl border border-white/20 shadow-2xl relative">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#070709] text-[#e4e4e7]">
+      {/* Background ambient decorative glow */}
+      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.03)_0%,transparent_70%)]" />
+
+      <div className="glass-card max-w-md w-full p-6 sm:p-8 rounded-2xl border border-white/20 shadow-2xl relative z-10 animate-fadeIn">
+        {/* Top return button */}
         <button
-          onClick={() => {
-            setShowAdminModal(false);
-            setError('');
-            setPassword('');
-          }}
-          className="absolute top-4 right-4 p-1.5 rounded-lg bg-zinc-900 border border-white/10 text-zinc-400 hover:text-white transition-colors"
-          title="Close modal"
+          onClick={returnToPortfolio}
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-900 border border-white/10 text-xs text-zinc-400 hover:text-white transition-colors mb-6"
         >
-          <X size={15} />
+          <ArrowLeft size={13} />
+          <span>Return to Portfolio</span>
         </button>
 
         <div className="text-center mb-6">
@@ -50,7 +54,7 @@ export const AdminAuthModal = () => {
           </div>
           <h3 className="text-xl font-bold text-white tracking-tight">Security Access Control</h3>
           <p className="text-xs text-zinc-400 mt-1">
-            Authenticate with administrator passphrase to modify portfolio data.
+            Authenticate with administrator passphrase to access the control panel.
           </p>
         </div>
 
@@ -99,7 +103,7 @@ export const AdminAuthModal = () => {
 
         <div className="mt-6 pt-4 border-t border-white/[0.06] text-center">
           <span className="text-[10px] font-mono text-zinc-600">
-            SECURE ACCESS ENCLAVE • LOCALSTORAGE SYNC
+            SECURE ACCESS ENCLAVE • CONTROL PANEL GATEWAY
           </span>
         </div>
       </div>

@@ -22,22 +22,6 @@ export const Footer = () => {
         {/* Center / Right actions */}
         <div className="flex items-center gap-4">
           <button
-            onClick={() => {
-              if (isAdmin) {
-                setCurrentView('admin');
-              } else {
-                setShowAdminModal(true);
-              }
-            }}
-            className="flex items-center gap-1.5 text-xs text-zinc-400 hover:text-white transition-colors"
-          >
-            {isAdmin ? <ShieldCheck size={12} className="text-emerald-400" /> : <Lock size={11} />}
-            <span>{isAdmin ? 'Admin Console' : 'Admin Login'}</span>
-          </button>
-
-          <span className="text-zinc-700">•</span>
-
-          <button
             onClick={scrollToTop}
             className="flex items-center gap-1.5 text-xs text-zinc-400 hover:text-white transition-colors group"
           >

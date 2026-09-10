@@ -44,8 +44,12 @@ export const PortfolioProvider = ({ children }) => {
     }
   });
 
-  const [showAdminModal, setShowAdminModal] = useState(false);
-  const [currentView, setCurrentView] = useState('portfolio'); // 'portfolio' | 'admin'
+  const [currentView, setCurrentView] = useState(() => {
+    const pathname = window.location.pathname.toLowerCase();
+    const hash = window.location.hash.toLowerCase();
+    const search = window.location.search.toLowerCase();
+    return (pathname.startsWith('/admin') || hash.startsWith('#admin') || search.includes('admin')) ? 'admin' : 'portfolio';
+  });
 
   // Dedicated Active Page State: 'home' | 'journey' | 'skillset' | 'projects' | 'certificates' | 'beyond-data' | 'contact'
   const [activePage, setActivePage] = useState(() => {
@@ -54,37 +58,39 @@ export const PortfolioProvider = ({ children }) => {
     return validPages.includes(hash) ? hash : 'home';
   });
 
+  // URL routing synchronization (Popstate and Hashchange)
   useEffect(() => {
-    const handleHashChange = () => {
-      const hash = window.location.hash.replace('#', '');
-      const validPages = ['home', 'journey', 'skillset', 'projects', 'certificates', 'beyond-data', 'contact'];
-      if (validPages.includes(hash)) {
-        setActivePage(hash);
+    const handleLocationChange = () => {
+      const pathname = window.location.pathname.toLowerCase();
+      const hash = window.location.hash.toLowerCase();
+      const search = window.location.search.toLowerCase();
+
+      if (pathname.startsWith('/admin') || hash.startsWith('#admin') || search.includes('admin')) {
+        setCurrentView('admin');
+      } else {
+        setCurrentView('portfolio');
+        const cleanHash = window.location.hash.replace('#', '');
+        const validPages = ['home', 'journey', 'skillset', 'projects', 'certificates', 'beyond-data', 'contact'];
+        if (validPages.includes(cleanHash)) {
+          setActivePage(cleanHash);
+        }
       }
     };
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+
+    window.addEventListener('popstate', handleLocationChange);
+    window.addEventListener('hashchange', handleLocationChange);
+    return () => {
+      window.removeEventListener('popstate', handleLocationChange);
+      window.removeEventListener('hashchange', handleLocationChange);
+    };
   }, []);
 
   useEffect(() => {
-    window.location.hash = activePage;
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [activePage]);
-
-  // Admin routing check
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const hasAdminQuery = urlParams.has('admin');
-    const isAdminPath = window.location.pathname.startsWith('/admin');
-
-    if (hasAdminQuery || isAdminPath) {
-      if (isAdmin) {
-        setCurrentView('admin');
-      } else {
-        setShowAdminModal(true);
-      }
+    if (currentView === 'portfolio') {
+      window.location.hash = activePage;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-  }, [isAdmin]);
+  }, [activePage, currentView]);
 
   const saveData = (updater) => {
     setData((prev) => {
@@ -103,7 +109,6 @@ export const PortfolioProvider = ({ children }) => {
     if (password === expectedPassword) {
       setIsAdmin(true);
       sessionStorage.setItem(AUTH_KEY, 'true');
-      setShowAdminModal(false);
       setCurrentView('admin');
       return { success: true };
     }
@@ -132,7 +137,6 @@ export const PortfolioProvider = ({ children }) => {
   const logoutAdmin = () => {
     setIsAdmin(false);
     sessionStorage.removeItem(AUTH_KEY);
-    setCurrentView('portfolio');
   };
 
   // Profile

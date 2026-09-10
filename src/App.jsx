@@ -15,9 +15,12 @@ import { AdminAuthModal } from './admin/AdminAuthModal';
 import { AdminLayout } from './admin/AdminLayout';
 
 function App() {
-  const { currentView, activePage } = usePortfolio();
+  const { currentView, isAdmin, activePage } = usePortfolio();
 
   if (currentView === 'admin') {
+    if (!isAdmin) {
+      return <AdminAuthModal />;
+    }
     return <AdminLayout />;
   }
 
@@ -29,7 +32,7 @@ function App() {
       {/* Interactive Cursor Glow Orb */}
       <CursorGlow />
 
-      {/* Main Navbar with 7 sections */}
+      {/* Main Navbar with 7 sections (No public admin badges) */}
       <Navbar />
 
       {/* Discrete 7 Main Pages */}
@@ -43,11 +46,8 @@ function App() {
         {activePage === 'contact' && <Contact key="contact" />}
       </main>
 
-      {/* Footer */}
+      {/* Footer (No public admin button) */}
       <Footer />
-
-      {/* Protected Admin Authentication Modal */}
-      <AdminAuthModal />
     </div>
   );
 }
