@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
 import { Lock, KeyRound, AlertCircle, ArrowLeft, ShieldCheck, Eye, EyeOff } from 'lucide-react';
+import { ThemeToggleButton } from '../components/ThemeToggle';
 
 export const AdminAuthModal = () => {
   const { loginAdmin, setCurrentView } = usePortfolio();
@@ -34,15 +35,20 @@ export const AdminAuthModal = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#070709] text-[#e4e4e7]">
+    <div className="admin-auth-root fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#070709] text-[#e4e4e7] transition-colors duration-200">
       {/* Background ambient decorative glow */}
       <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.03)_0%,transparent_70%)]" />
+
+      {/* Top right theme toggle */}
+      <div className="absolute top-5 right-5 z-20">
+        <ThemeToggleButton />
+      </div>
 
       <div className="glass-card max-w-md w-full p-6 sm:p-8 rounded-2xl border border-white/20 shadow-2xl relative z-10 animate-fadeIn">
         {/* Top return button */}
         <button
           onClick={returnToPortfolio}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-900 border border-white/10 text-xs text-zinc-400 hover:text-white transition-colors mb-6"
+          className="admin-return-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-900 border border-white/10 text-xs text-zinc-400 hover:text-white transition-colors mb-6"
         >
           <ArrowLeft size={13} />
           <span>Return to Portfolio</span>

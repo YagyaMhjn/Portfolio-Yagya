@@ -532,6 +532,281 @@ html.light footer button:hover {
 }
 
 /* ==========================================================================
+   Admin Panel Full Contrast-Inverted Light Mode Theme System
+   ========================================================================== */
+
+/* 1. Admin Root & Header */
+html.light .admin-layout,
+html.light .admin-auth-root {
+  background-color: #f8f9fa !important;
+  color: #18181b !important;
+}
+
+html.light .admin-header {
+  background-color: #ffffff !important;
+  border-bottom-color: rgba(0, 0, 0, 0.12) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04) !important;
+}
+
+html.light .admin-return-btn {
+  background-color: #f4f4f5 !important;
+  border-color: rgba(0, 0, 0, 0.16) !important;
+  color: #18181b !important;
+}
+
+html.light .admin-return-btn:hover {
+  background-color: #e4e4e7 !important;
+  color: #000000 !important;
+  border-color: rgba(0, 0, 0, 0.3) !important;
+}
+
+html.light .admin-title {
+  color: #09090b !important;
+}
+
+/* 2. Sidebar Navigation Tabs */
+html.light .admin-tab-active {
+  background-color: #09090b !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18) !important;
+}
+
+html.light .admin-tab-inactive {
+  color: #52525b !important;
+}
+
+html.light .admin-tab-inactive:hover {
+  background-color: rgba(0, 0, 0, 0.06) !important;
+  color: #09090b !important;
+}
+
+/* 3. Cards & Panels in Admin */
+html.light .admin-layout .glass-card,
+html.light .admin-auth-root .glass-card {
+  background-color: #ffffff !important;
+  border: 1.5px solid rgba(0, 0, 0, 0.16) !important;
+  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.03), inset 0 0 1px 1px rgba(0, 0, 0, 0.02), 0 4px 20px -2px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Sub-containers & Inner Boxes (e.g. bg-[#0c0c0f], bg-black/40, bg-zinc-950, bg-zinc-900) */
+html.light .admin-layout .bg-\[\#0c0c0f\],
+html.light .admin-layout .bg-black\/40,
+html.light .admin-layout .bg-zinc-950\/60,
+html.light .admin-layout .bg-zinc-950\/40,
+html.light .admin-layout .bg-zinc-950,
+html.light .admin-layout .bg-zinc-900\/60,
+html.light .admin-layout .bg-zinc-900\/50,
+html.light .admin-layout .bg-zinc-900\/40 {
+  background-color: #f8f9fa !important;
+  border-color: rgba(0, 0, 0, 0.14) !important;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.02) !important;
+}
+
+html.light .admin-layout .bg-zinc-900\/90,
+html.light .admin-layout .bg-zinc-900 {
+  background-color: #f4f4f5 !important;
+  border-color: rgba(0, 0, 0, 0.16) !important;
+  color: #18181b !important;
+}
+
+/* 4. Form Inputs & Selects in Admin */
+html.light .admin-layout select,
+html.light .admin-layout input[type="text"],
+html.light .admin-layout input[type="email"],
+html.light .admin-layout input[type="url"],
+html.light .admin-layout input[type="password"],
+html.light .admin-layout textarea,
+html.light .admin-auth-root input {
+  background-color: #f8f9fa !important;
+  color: #18181b !important;
+  border: 1.5px solid rgba(0, 0, 0, 0.2) !important;
+}
+
+html.light .admin-layout select:focus,
+html.light .admin-layout input:focus,
+html.light .admin-layout textarea:focus,
+html.light .admin-auth-root input:focus {
+  background-color: #ffffff !important;
+  border-color: #09090b !important;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1) !important;
+}
+
+html.light .admin-layout select option {
+  background-color: #ffffff !important;
+  color: #18181b !important;
+}
+
+html.light .admin-layout select.glass-input {
+  background-color: #f8f9fa !important;
+  color: #18181b !important;
+}
+
+/* 5. Buttons in Admin */
+/* Primary Buttons (Invert from white-on-black to black-on-white) */
+html.light .admin-layout button[type="submit"].bg-white,
+html.light .admin-layout button.bg-white,
+html.light .admin-auth-root button[type="submit"].bg-white {
+  background-color: #09090b !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18) !important;
+}
+
+html.light .admin-layout button[type="submit"].bg-white:hover,
+html.light .admin-layout button.bg-white:hover,
+html.light .admin-auth-root button[type="submit"].bg-white:hover {
+  background-color: #27272a !important;
+  color: #ffffff !important;
+}
+
+/* Secondary & Action Buttons */
+html.light .admin-layout button.bg-zinc-900,
+html.light .admin-layout button.bg-zinc-800 {
+  background-color: #f4f4f5 !important;
+  border-color: rgba(0, 0, 0, 0.16) !important;
+  color: #18181b !important;
+}
+
+html.light .admin-layout button.bg-zinc-900:hover,
+html.light .admin-layout button.bg-zinc-800:hover {
+  background-color: #e4e4e7 !important;
+  color: #000000 !important;
+}
+
+/* Danger / Delete Buttons */
+html.light .admin-layout button.bg-red-950\/40,
+html.light .admin-layout button.bg-red-950\/30,
+html.light .admin-layout .text-red-400 {
+  background-color: #fef2f2 !important;
+  border-color: #fca5a5 !important;
+  color: #dc2626 !important;
+}
+
+html.light .admin-layout button.bg-red-950\/40:hover,
+html.light .admin-layout button.bg-red-950\/30:hover {
+  background-color: #fee2e2 !important;
+  color: #b91c1c !important;
+}
+
+/* 6. Typography, Badges & Dividers */
+html.light .admin-layout .border-white\/\[0\.08\],
+html.light .admin-layout .border-white\/\[0\.06\],
+html.light .admin-layout .border-white\/\[0\.05\],
+html.light .admin-layout .border-white\/\[0\.04\],
+html.light .admin-layout .border-white\/10,
+html.light .admin-layout .border-white\/15,
+html.light .admin-layout .border-white\/20,
+html.light .admin-auth-root .border-white\/10,
+html.light .admin-auth-root .border-white\/20 {
+  border-color: rgba(0, 0, 0, 0.14) !important;
+}
+
+html.light .admin-layout .text-white,
+html.light .admin-auth-root .text-white {
+  color: #09090b !important;
+}
+
+html.light .admin-layout .text-zinc-200,
+html.light .admin-layout .text-zinc-300 {
+  color: #18181b !important;
+}
+
+html.light .admin-layout .text-zinc-400,
+html.light .admin-auth-root .text-zinc-400 {
+  color: #52525b !important;
+}
+
+html.light .admin-layout .text-zinc-500,
+html.light .admin-auth-root .text-zinc-500 {
+  color: #71717a !important;
+}
+
+/* Badges & Pills */
+html.light .admin-layout span.bg-zinc-900,
+html.light .admin-layout span.bg-zinc-800 {
+  background-color: #f4f4f5 !important;
+  border-color: rgba(0, 0, 0, 0.14) !important;
+  color: #27272a !important;
+}
+
+/* Upload dropzones */
+html.light .admin-layout label.border-dashed {
+  background-color: #f8f9fa !important;
+  border-color: rgba(0, 0, 0, 0.24) !important;
+  color: #27272a !important;
+}
+
+html.light .admin-layout label.border-dashed:hover {
+  background-color: #f4f4f5 !important;
+  border-color: #09090b !important;
+  color: #000000 !important;
+}
+
+/* Message Inquiries blockquotes */
+html.light .admin-layout .bg-black\/40 {
+  background-color: #f4f4f5 !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+  color: #18181b !important;
+}
+
+/* Sliders */
+html.light .admin-layout input[type="range"] {
+  background-color: #e4e4e7 !important;
+  accent-color: #09090b !important;
+}
+
+/* Admin Auth Modal Specific Elements */
+html.light .admin-auth-root .w-12.h-12.rounded-2xl {
+  background-color: #f4f4f5 !important;
+  border-color: rgba(0, 0, 0, 0.16) !important;
+  color: #09090b !important;
+}
+
+html.light .admin-auth-root .w-12.h-12.rounded-2xl svg {
+  color: #09090b !important;
+}
+
+/* Status Badges, Toast & Feedback Alerts in Light Mode */
+html.light .admin-layout .bg-emerald-950\/30,
+html.light .admin-layout .bg-emerald-950\/50,
+html.light .admin-layout .bg-emerald-950\/80,
+html.light .admin-layout .bg-emerald-950 {
+  background-color: #ecfdf5 !important;
+  border-color: #a7f3d0 !important;
+  color: #065f46 !important;
+}
+
+html.light .admin-layout .text-emerald-300,
+html.light .admin-layout .text-emerald-400 {
+  color: #047857 !important;
+}
+
+html.light .admin-layout .bg-amber-950\/80,
+html.light .admin-layout .bg-amber-950 {
+  background-color: #fffbeb !important;
+  border-color: #fde68a !important;
+  color: #92400e !important;
+}
+
+html.light .admin-layout .text-amber-300,
+html.light .admin-layout .text-amber-400 {
+  color: #b45309 !important;
+}
+
+html.light .admin-layout .bg-red-950\/30,
+html.light .admin-layout .bg-red-950\/40,
+html.light .admin-layout .bg-red-950\/50,
+html.light .admin-auth-root .bg-red-950\/50 {
+  background-color: #fef2f2 !important;
+  border-color: #fecaca !important;
+  color: #991b1b !important;
+}
+
+html.light .admin-layout .animate-orbit-spin {
+  border-color: rgba(0, 0, 0, 0.7) !important;
+}
+
+
+/* ==========================================================================
    Smooth Slant Moving Fade Transition (Lower-Left to Upper-Right)
    Hardware-Composited, Zero Frame-Drops, 100% Solid Center Coverage
    ========================================================================== */

@@ -16,6 +16,7 @@ import {
   LogOut,
   Check,
 } from 'lucide-react';
+import { ThemeToggleButton } from '../components/ThemeToggle';
 import { AdminProfile } from './AdminProfile';
 import { AdminProjects } from './AdminProjects';
 import { AdminSkills } from './AdminSkills';
@@ -38,9 +39,9 @@ export const AdminLayout = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#070709] text-zinc-200">
+    <div className="admin-layout min-h-screen bg-[#070709] text-zinc-200 transition-colors duration-200">
       {/* Top Banner */}
-      <header className="border-b border-white/[0.08] bg-[#0c0c0f] px-6 py-4 flex items-center justify-between sticky top-0 z-40">
+      <header className="admin-header border-b border-white/[0.08] bg-[#0c0c0f] px-6 py-4 flex items-center justify-between sticky top-0 z-40">
         <div className="flex items-center gap-3">
           <button
             onClick={() => {
@@ -49,13 +50,13 @@ export const AdminLayout = () => {
               } catch (e) {}
               setCurrentView('portfolio');
             }}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-900 border border-white/10 text-xs text-zinc-300 hover:text-white transition-colors"
+            className="admin-return-btn flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-900 border border-white/10 text-xs text-zinc-300 hover:text-white transition-colors"
           >
             <ArrowLeft size={13} />
             <span>Return to Portfolio</span>
           </button>
           <span className="text-zinc-600">|</span>
-          <span className="text-sm font-bold text-white font-mono tracking-wider">
+          <span className="text-sm font-bold text-white font-mono tracking-wider admin-title">
             ✦ CONTROL PANEL
           </span>
         </div>
@@ -66,6 +67,9 @@ export const AdminLayout = () => {
               <Check size={12} /> Changes Saved Instantly
             </span>
           )}
+
+          {/* Theme Toggle Button in Admin Header */}
+          <ThemeToggleButton />
 
           <button
             onClick={logoutAdmin}
@@ -90,7 +94,9 @@ export const AdminLayout = () => {
             <button
               onClick={() => setActiveTab('profile')}
               className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-medium transition-colors ${
-                activeTab === 'profile' ? 'bg-white text-black font-bold shadow' : 'text-zinc-400 hover:bg-white/[0.05] hover:text-white'
+                activeTab === 'profile'
+                  ? 'admin-tab-active bg-white text-black font-bold shadow'
+                  : 'admin-tab-inactive text-zinc-400 hover:bg-white/[0.05] hover:text-white'
               }`}
             >
               <User size={15} /> <span>Profile & Bio</span>
@@ -99,7 +105,9 @@ export const AdminLayout = () => {
             <button
               onClick={() => setActiveTab('projects')}
               className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-medium transition-colors ${
-                activeTab === 'projects' ? 'bg-white text-black font-bold shadow' : 'text-zinc-400 hover:bg-white/[0.05] hover:text-white'
+                activeTab === 'projects'
+                  ? 'admin-tab-active bg-white text-black font-bold shadow'
+                  : 'admin-tab-inactive text-zinc-400 hover:bg-white/[0.05] hover:text-white'
               }`}
             >
               <FolderGit2 size={15} /> <span>Projects ({data.projects?.length || 0})</span>
@@ -108,7 +116,9 @@ export const AdminLayout = () => {
             <button
               onClick={() => setActiveTab('skills')}
               className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-medium transition-colors ${
-                activeTab === 'skills' ? 'bg-white text-black font-bold shadow' : 'text-zinc-400 hover:bg-white/[0.05] hover:text-white'
+                activeTab === 'skills'
+                  ? 'admin-tab-active bg-white text-black font-bold shadow'
+                  : 'admin-tab-inactive text-zinc-400 hover:bg-white/[0.05] hover:text-white'
               }`}
             >
               <Cpu size={15} /> <span>Skillset ({data.skills?.length || 0})</span>
@@ -117,7 +127,9 @@ export const AdminLayout = () => {
             <button
               onClick={() => setActiveTab('timeline')}
               className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-medium transition-colors ${
-                activeTab === 'timeline' ? 'bg-white text-black font-bold shadow' : 'text-zinc-400 hover:bg-white/[0.05] hover:text-white'
+                activeTab === 'timeline'
+                  ? 'admin-tab-active bg-white text-black font-bold shadow'
+                  : 'admin-tab-inactive text-zinc-400 hover:bg-white/[0.05] hover:text-white'
               }`}
             >
               <Milestone size={15} /> <span>Journey Timeline</span>
@@ -126,7 +138,9 @@ export const AdminLayout = () => {
             <button
               onClick={() => setActiveTab('certificates')}
               className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-medium transition-colors ${
-                activeTab === 'certificates' ? 'bg-white text-black font-bold shadow' : 'text-zinc-400 hover:bg-white/[0.05] hover:text-white'
+                activeTab === 'certificates'
+                  ? 'admin-tab-active bg-white text-black font-bold shadow'
+                  : 'admin-tab-inactive text-zinc-400 hover:bg-white/[0.05] hover:text-white'
               }`}
             >
               <Award size={15} /> <span>Certificates ({data.certificates?.length || 0})</span>
@@ -135,7 +149,9 @@ export const AdminLayout = () => {
             <button
               onClick={() => setActiveTab('beyondData')}
               className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-medium transition-colors ${
-                activeTab === 'beyondData' ? 'bg-white text-black font-bold shadow' : 'text-zinc-400 hover:bg-white/[0.05] hover:text-white'
+                activeTab === 'beyondData'
+                  ? 'admin-tab-active bg-white text-black font-bold shadow'
+                  : 'admin-tab-inactive text-zinc-400 hover:bg-white/[0.05] hover:text-white'
               }`}
             >
               <Sparkles size={15} /> <span>Beyond Data ({data.beyondData?.length || 0})</span>
@@ -144,7 +160,9 @@ export const AdminLayout = () => {
             <button
               onClick={() => setActiveTab('messages')}
               className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition-colors ${
-                activeTab === 'messages' ? 'bg-white text-black font-bold shadow' : 'text-zinc-400 hover:bg-white/[0.05] hover:text-white'
+                activeTab === 'messages'
+                  ? 'admin-tab-active bg-white text-black font-bold shadow'
+                  : 'admin-tab-inactive text-zinc-400 hover:bg-white/[0.05] hover:text-white'
               }`}
             >
               <div className="flex items-center gap-2.5">
@@ -160,7 +178,9 @@ export const AdminLayout = () => {
             <button
               onClick={() => setActiveTab('settings')}
               className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-medium transition-colors ${
-                activeTab === 'settings' ? 'bg-white text-black font-bold shadow' : 'text-zinc-400 hover:bg-white/[0.05] hover:text-white'
+                activeTab === 'settings'
+                  ? 'admin-tab-active bg-white text-black font-bold shadow'
+                  : 'admin-tab-inactive text-zinc-400 hover:bg-white/[0.05] hover:text-white'
               }`}
             >
               <Sliders size={15} /> <span>Settings & Display</span>
@@ -169,7 +189,9 @@ export const AdminLayout = () => {
             <button
               onClick={() => setActiveTab('security')}
               className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-medium transition-colors ${
-                activeTab === 'security' ? 'bg-white text-black font-bold shadow' : 'text-zinc-400 hover:bg-white/[0.05] hover:text-white'
+                activeTab === 'security'
+                  ? 'admin-tab-active bg-white text-black font-bold shadow'
+                  : 'admin-tab-inactive text-zinc-400 hover:bg-white/[0.05] hover:text-white'
               }`}
             >
               <Shield size={15} /> <span>Security & Password</span>
@@ -178,7 +200,9 @@ export const AdminLayout = () => {
             <button
               onClick={() => setActiveTab('backup')}
               className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-medium transition-colors ${
-                activeTab === 'backup' ? 'bg-white text-black font-bold shadow' : 'text-zinc-400 hover:bg-white/[0.05] hover:text-white'
+                activeTab === 'backup'
+                  ? 'admin-tab-active bg-white text-black font-bold shadow'
+                  : 'admin-tab-inactive text-zinc-400 hover:bg-white/[0.05] hover:text-white'
               }`}
             >
               <Database size={15} /> <span>Database & Backup</span>
