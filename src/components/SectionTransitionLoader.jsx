@@ -267,10 +267,10 @@ export const SectionTransitionLoader = () => {
 
     // Start loading sequence
     setLoading(true);
-    setProgress(10);
+    setProgress(8);
 
     const startTime = Date.now();
-    const duration = 650; // Total loading animation duration (ms)
+    const duration = 1450; // Increased duration so user clearly sees the visualizers
 
     const interval = setInterval(() => {
       const elapsed = Date.now() - startTime;
@@ -282,7 +282,7 @@ export const SectionTransitionLoader = () => {
         setTimeout(() => {
           setLoading(false);
           setProgress(0);
-        }, 120);
+        }, 180);
       }
     }, 20);
 
