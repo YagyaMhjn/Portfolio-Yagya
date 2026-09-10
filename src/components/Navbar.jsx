@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { Menu, X, Lock, ShieldCheck } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 
 export const Navbar = () => {
-  const { data, isAdmin, setShowAdminModal, setCurrentView, activePage, setActivePage } = usePortfolio();
+  const { data, activePage, setActivePage } = usePortfolio();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navLinks = [

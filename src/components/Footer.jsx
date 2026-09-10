@@ -1,9 +1,9 @@
 import React from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { ArrowUp, Lock, ShieldCheck, Heart } from 'lucide-react';
+import { ArrowUp } from 'lucide-react';
 
 export const Footer = () => {
-  const { data, isAdmin, setShowAdminModal, setCurrentView } = usePortfolio();
+  const { data } = usePortfolio();
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });

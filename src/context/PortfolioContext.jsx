@@ -341,8 +341,6 @@ export const PortfolioProvider = ({ children }) => {
       value={{
         data,
         isAdmin,
-        showAdminModal,
-        setShowAdminModal,
         currentView,
         setCurrentView,
         activePage,
