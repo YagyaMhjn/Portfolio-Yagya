@@ -240,7 +240,7 @@ export const SectionTransitionLoader = () => {
   const [activeVisualizerIndex, setActiveVisualizerIndex] = useState(0);
   const [activePhrase, setActivePhrase] = useState(MOTIVATIONAL_PHRASES[0]);
   
-  const previousPageRef = useRef(activePage);
+  const previousPageRef = useRef(null);
   const lastIndexRef = useRef(0);
   const lastPhraseRef = useRef(0);
 
@@ -267,10 +267,10 @@ export const SectionTransitionLoader = () => {
 
     // Start loading sequence
     setLoading(true);
-    setProgress(8);
+    setProgress(5);
 
     const startTime = Date.now();
-    const duration = 1450; // Increased duration so user clearly sees the visualizers
+    const duration = 2600; // 2.6 seconds so user clearly sees and enjoys the data visualization
 
     const interval = setInterval(() => {
       const elapsed = Date.now() - startTime;
@@ -282,7 +282,7 @@ export const SectionTransitionLoader = () => {
         setTimeout(() => {
           setLoading(false);
           setProgress(0);
-        }, 180);
+        }, 220);
       }
     }, 20);
 
