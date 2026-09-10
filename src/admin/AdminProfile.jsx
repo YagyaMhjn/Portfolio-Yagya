@@ -252,13 +252,13 @@ export const AdminProfile = ({ triggerToast }) => {
                   } transition-transform duration-200`}
                 >
                   {/* Outer rotating dashed ring */}
-                  <div className="absolute inset-0 rounded-full border border-dashed border-white/20 animate-orbit-spin pointer-events-none" />
+                  <div className="absolute inset-0 rounded-full border border-dashed border-white/70 animate-orbit-spin pointer-events-none shadow-[0_0_15px_rgba(255,255,255,0.15)]" />
                   
                   {/* Middle glowing glass ring */}
-                  <div className="absolute inset-2.5 rounded-full border border-white/10 bg-zinc-950/60 backdrop-blur-md shadow-2xl pointer-events-none" />
+                  <div className="absolute inset-2.5 rounded-full border border-white/20 bg-zinc-950/60 backdrop-blur-md shadow-2xl pointer-events-none" />
                   
                   {/* Satellite node */}
-                  <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-white shadow-[0_0_12px_rgba(255,255,255,0.9)] pointer-events-none" />
+                  <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-white shadow-[0_0_12px_rgba(255,255,255,1)] pointer-events-none" />
 
                   {/* Internal Circle Clip */}
                   <div className="relative z-10 w-36 h-36 sm:w-40 sm:h-40 rounded-full overflow-hidden flex items-center justify-center border border-white/20 shadow-[0_0_25px_rgba(0,0,0,0.9)] bg-zinc-950 pointer-events-none">

@@ -93,14 +93,14 @@ export const Hero = () => {
           <div className="lg:col-span-5 flex justify-center lg:justify-start lg:pl-4">
             <div className="animate-subtle-float flex items-center justify-center">
               <div className="relative w-64 h-64 sm:w-72 sm:h-72 lg:w-80 lg:h-80 flex items-center justify-center group cursor-pointer transition-all duration-500 ease-out hover:scale-105 sm:hover:scale-108">
-                {/* Outer rotating ring with glow on hover */}
-                <div className="absolute inset-0 rounded-full border border-dashed border-white/20 group-hover:border-white/40 animate-orbit-spin transition-colors" />
+                {/* Outer rotating ring with crisp white styling and glow on hover */}
+                <div className="absolute inset-0 rounded-full border border-dashed border-white/70 group-hover:border-white animate-orbit-spin transition-colors shadow-[0_0_15px_rgba(255,255,255,0.15)]" />
                 
                 {/* Middle glowing glass ring */}
-                <div className="absolute inset-3 sm:inset-3.5 rounded-full border border-white/10 group-hover:border-white/30 bg-zinc-950/60 backdrop-blur-md shadow-2xl group-hover:shadow-[0_0_40px_rgba(255,255,255,0.14)] transition-all overflow-hidden" />
+                <div className="absolute inset-3 sm:inset-3.5 rounded-full border border-white/20 group-hover:border-white/40 bg-zinc-950/60 backdrop-blur-md shadow-2xl group-hover:shadow-[0_0_40px_rgba(255,255,255,0.18)] transition-all overflow-hidden" />
                 
                 {/* Satellite node */}
-                <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-white shadow-[0_0_18px_rgba(255,255,255,0.95)] group-hover:scale-125 transition-transform duration-300" />
+                <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-white shadow-[0_0_18px_rgba(255,255,255,1)] group-hover:scale-125 transition-transform duration-300" />
 
                 {/* Enriched Large Internal Profile Picture Circle */}
                 <div className="relative z-10 w-52 h-52 sm:w-60 sm:h-60 lg:w-64 lg:h-64 rounded-full overflow-hidden flex items-center justify-center border border-white/10 group-hover:border-white/30 transition-all shadow-[0_0_35px_rgba(0,0,0,0.9)] bg-zinc-950">
