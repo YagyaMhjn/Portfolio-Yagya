@@ -21,24 +21,24 @@ export const Skillset = () => {
   });
 
   return (
-    <section id="tech" className="py-20 md:py-28 relative">
+    <div className="pt-20 sm:pt-24 pb-16 relative animate-fadeIn">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-white/[0.08] text-[11px] font-mono tracking-widest uppercase text-zinc-400 mb-4 shadow-[0_0_12px_rgba(255,255,255,0.02)]">
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-white/[0.08] text-[11px] font-mono tracking-widest uppercase text-zinc-400 mb-3.5 shadow-[0_0_12px_rgba(255,255,255,0.02)]">
             <span>✦</span> TECHNICAL MATRIX <span>✦</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
             Skillset & Capabilities
           </h2>
-          <p className="mt-3 text-sm text-zinc-400 max-w-lg mx-auto">
+          <p className="mt-2.5 text-sm text-zinc-400 max-w-lg mx-auto">
             A comprehensive ecosystem of full-stack engineering tools, AI frameworks, and architectural proficiencies.
           </p>
         </div>
 
         {/* Category Filter Tabs */}
-        <div className="flex flex-wrap justify-center gap-2 mb-12">
+        <div className="flex flex-wrap justify-center gap-2 mb-10">
           {categories.map((cat) => (
             <button
               key={cat}
@@ -55,7 +55,7 @@ export const Skillset = () => {
         </div>
 
         {/* Skills Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4 mb-14">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4 mb-12">
           {filteredSkills.map((skill) => (
             <div
               key={skill.id}
@@ -120,6 +120,6 @@ export const Skillset = () => {
         </div>
 
       </div>
-    </section>
+    </div>
   );
 };

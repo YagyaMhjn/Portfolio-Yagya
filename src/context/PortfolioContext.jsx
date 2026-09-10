@@ -36,6 +36,31 @@ export const PortfolioProvider = ({ children }) => {
   const [showAdminModal, setShowAdminModal] = useState(false);
   const [currentView, setCurrentView] = useState('portfolio'); // 'portfolio' | 'admin'
 
+  // Dedicated Active Page State: 'home' | 'journey' | 'skillset' | 'projects' | 'certificates' | 'beyond-data' | 'contact'
+  const [activePage, setActivePage] = useState(() => {
+    const hash = window.location.hash.replace('#', '');
+    const validPages = ['home', 'journey', 'skillset', 'projects', 'certificates', 'beyond-data', 'contact'];
+    return validPages.includes(hash) ? hash : 'home';
+  });
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.replace('#', '');
+      const validPages = ['home', 'journey', 'skillset', 'projects', 'certificates', 'beyond-data', 'contact'];
+      if (validPages.includes(hash)) {
+        setActivePage(hash);
+      }
+    };
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  useEffect(() => {
+    window.location.hash = activePage;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [activePage]);
+
+  // Admin routing check
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const hasAdminQuery = urlParams.has('admin');
@@ -286,6 +311,8 @@ export const PortfolioProvider = ({ children }) => {
         setShowAdminModal,
         currentView,
         setCurrentView,
+        activePage,
+        setActivePage,
         loginAdmin,
         logoutAdmin,
         updateProfile,

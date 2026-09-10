@@ -38,24 +38,24 @@ export const BeyondData = () => {
   };
 
   return (
-    <section id="beyond-data" className="py-20 md:py-28 relative">
+    <div className="pt-20 sm:pt-24 pb-16 relative animate-fadeIn">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-white/[0.08] text-[11px] font-mono tracking-widest uppercase text-zinc-400 mb-4 shadow-[0_0_12px_rgba(255,255,255,0.02)]">
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-white/[0.08] text-[11px] font-mono tracking-widest uppercase text-zinc-400 mb-3.5 shadow-[0_0_12px_rgba(255,255,255,0.02)]">
             <span>✦</span> CO-CURRICULAR & LEADERSHIP <span>✦</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
             Beyond Data
           </h2>
-          <p className="mt-3 text-sm text-zinc-400 max-w-lg mx-auto">
+          <p className="mt-2.5 text-sm text-zinc-400 max-w-lg mx-auto">
             Extra co-curricular achievements, leadership initiatives, technical community contributions, and hackathon milestones.
           </p>
 
           {/* Filter tabs */}
           {categories.length > 1 && (
-            <div className="mt-8 flex flex-wrap justify-center gap-2">
+            <div className="mt-6 flex flex-wrap justify-center gap-2">
               {categories.map((cat) => (
                 <button
                   key={cat}
@@ -117,6 +117,6 @@ export const BeyondData = () => {
         </div>
 
       </div>
-    </section>
+    </div>
   );
 };

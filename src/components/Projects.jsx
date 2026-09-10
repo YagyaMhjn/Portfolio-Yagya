@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { ExternalLink, Search, FolderGit2, Star, ArrowUpRight } from 'lucide-react';
+import { ExternalLink, Search, FolderGit2, Star } from 'lucide-react';
 import { GithubIcon } from './Icons';
 
 export const Projects = () => {
@@ -47,24 +47,24 @@ export const Projects = () => {
   }, [projects, selectedTag, searchQuery]);
 
   return (
-    <section id="projects" className="py-20 md:py-28 relative">
+    <div className="pt-20 sm:pt-24 pb-16 relative animate-fadeIn">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-white/[0.08] text-[11px] font-mono tracking-widest uppercase text-zinc-400 mb-4 shadow-[0_0_12px_rgba(255,255,255,0.02)]">
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-white/[0.08] text-[11px] font-mono tracking-widest uppercase text-zinc-400 mb-3.5 shadow-[0_0_12px_rgba(255,255,255,0.02)]">
             <span>✦</span> CURATED PORTFOLIO <span>✦</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
             Featured Projects
           </h2>
-          <p className="mt-3 text-sm text-zinc-400 max-w-lg mx-auto">
+          <p className="mt-2.5 text-sm text-zinc-400 max-w-lg mx-auto">
             A curated showcase of full-stack web applications, AI agent systems, and distributed platforms.
           </p>
         </div>
 
         {/* Filters & Search Header */}
-        <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 mb-10">
+        <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 mb-8">
           <div className="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-none">
             {allTags.slice(0, 8).map((tag) => (
               <button
@@ -176,6 +176,6 @@ export const Projects = () => {
         )}
 
       </div>
-    </section>
+    </div>
   );
 };

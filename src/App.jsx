@@ -15,14 +15,14 @@ import { AdminAuthModal } from './admin/AdminAuthModal';
 import { AdminLayout } from './admin/AdminLayout';
 
 function App() {
-  const { currentView } = usePortfolio();
+  const { currentView, activePage } = usePortfolio();
 
   if (currentView === 'admin') {
     return <AdminLayout />;
   }
 
   return (
-    <div className="relative min-h-screen bg-[#070707] text-[#e4e4e7] overflow-x-hidden selection:bg-white selection:text-black">
+    <div className="relative min-h-screen bg-[#070707] text-[#e4e4e7] overflow-x-hidden selection:bg-white selection:text-black flex flex-col justify-between">
       {/* Background canvas particles & interactive dark blooms */}
       <AmbientCanvas />
 
@@ -32,28 +32,15 @@ function App() {
       {/* Main Navbar with 7 sections */}
       <Navbar />
 
-      {/* Exact 7 Main Sections */}
-      <main className="relative z-10">
-        {/* 1) Home */}
-        <Hero />
-
-        {/* 2) Journey */}
-        <Journey />
-
-        {/* 3) Skillset */}
-        <Skillset />
-
-        {/* 4) Projects */}
-        <Projects />
-
-        {/* 5) Certificates */}
-        <Certificates />
-
-        {/* 6) Beyond Data (Co-curricular Achievements) */}
-        <BeyondData />
-
-        {/* 7) Contact */}
-        <Contact />
+      {/* Discrete 7 Main Pages */}
+      <main className="relative z-10 flex-1">
+        {activePage === 'home' && <Hero key="home" />}
+        {activePage === 'journey' && <Journey key="journey" />}
+        {activePage === 'skillset' && <Skillset key="skillset" />}
+        {activePage === 'projects' && <Projects key="projects" />}
+        {activePage === 'certificates' && <Certificates key="certificates" />}
+        {activePage === 'beyond-data' && <BeyondData key="beyond-data" />}
+        {activePage === 'contact' && <Contact key="contact" />}
       </main>
 
       {/* Footer */}

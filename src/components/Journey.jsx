@@ -3,7 +3,7 @@ import { usePortfolio } from '../context/PortfolioContext';
 import { Briefcase, GraduationCap, Download, ArrowUpRight } from 'lucide-react';
 
 export const Journey = () => {
-  const { data } = usePortfolio();
+  const { data, setActivePage } = usePortfolio();
   const { timeline } = data;
   const [filterType, setFilterType] = useState('all');
 
@@ -21,41 +21,41 @@ export const Journey = () => {
   });
 
   return (
-    <section id="journey" className="py-20 md:py-28 relative">
+    <div className="pt-20 sm:pt-24 pb-16 relative animate-fadeIn">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-white/[0.08] text-[11px] font-mono tracking-widest uppercase text-zinc-400 mb-4 shadow-[0_0_12px_rgba(255,255,255,0.02)]">
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-white/[0.08] text-[11px] font-mono tracking-widest uppercase text-zinc-400 mb-3.5 shadow-[0_0_12px_rgba(255,255,255,0.02)]">
             <span>✦</span> CAREER TIMELINE & EDUCATION <span>✦</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
             Professional Journey
           </h2>
-          <p className="mt-3 text-sm text-zinc-400 max-w-lg mx-auto">
+          <p className="mt-2.5 text-sm text-zinc-400 max-w-lg mx-auto">
             A chronological roadmap of engineering roles, software projects, and academic foundations.
           </p>
 
           {/* Action / Resume buttons */}
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <a
-              href="#contact"
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
+            <button
+              onClick={() => setActivePage('contact')}
               className="btn-glow inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-white/10 hover:border-white/30 text-xs font-medium transition-all"
             >
               <Download size={13} className="text-zinc-300" />
               <span>Download Resume (ATS Standard)</span>
-            </a>
-            <a
-              href="#contact"
+            </button>
+            <button
+              onClick={() => setActivePage('contact')}
               className="btn-glow inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-white/10 hover:border-white/30 text-xs font-medium transition-all"
             >
               <ArrowUpRight size={13} className="text-zinc-300" />
               <span>Request Verified Dossier</span>
-            </a>
+            </button>
           </div>
 
           {/* Filter Pills */}
-          <div className="mt-8 inline-flex p-1 rounded-xl bg-zinc-900/90 border border-white/[0.08]">
+          <div className="mt-6 inline-flex p-1 rounded-xl bg-zinc-900/90 border border-white/[0.08]">
             <button
               onClick={() => setFilterType('all')}
               className={`px-4 py-1.5 rounded-lg text-xs font-medium transition-all ${
@@ -84,7 +84,7 @@ export const Journey = () => {
         </div>
 
         {/* Timeline List */}
-        <div className="relative border-l border-zinc-800 ml-4 sm:ml-32 space-y-10">
+        <div className="relative border-l border-zinc-800 ml-4 sm:ml-32 space-y-8">
           {filteredTimeline.map((item, idx) => {
             const isExp = item.type === 'experience';
             return (
@@ -135,6 +135,6 @@ export const Journey = () => {
         </div>
 
       </div>
-    </section>
+    </div>
   );
 };

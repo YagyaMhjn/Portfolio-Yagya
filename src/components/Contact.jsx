@@ -44,18 +44,18 @@ export const Contact = () => {
   };
 
   return (
-    <section id="contact" className="py-20 md:py-28 relative">
+    <div className="pt-20 sm:pt-24 pb-16 relative animate-fadeIn">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-white/[0.08] text-[11px] font-mono tracking-widest uppercase text-zinc-400 mb-4">
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-white/[0.08] text-[11px] font-mono tracking-widest uppercase text-zinc-400 mb-3.5 shadow-[0_0_12px_rgba(255,255,255,0.02)]">
             <span>✦</span> INITIATE COMMUNICATION <span>✦</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
             Get in Touch
           </h2>
-          <p className="mt-3 text-sm text-zinc-400 max-w-lg mx-auto">
+          <p className="mt-2.5 text-sm text-zinc-400 max-w-lg mx-auto">
             Have a project in mind, an engineering opportunity, or wish to connect? Send a message and I'll respond promptly.
           </p>
         </div>
@@ -212,6 +212,6 @@ export const Contact = () => {
         </div>
 
       </div>
-    </section>
+    </div>
   );
 };
