@@ -26,7 +26,7 @@ export const Journey = () => {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header with Broad Distinct Separation Line */}
-        <div className="mb-8 pb-6 border-b-2 border-white/20 shadow-[0_2px_12px_rgba(255,255,255,0.06)]">
+        <div className="mb-8 pb-6 border-b-[3px] border-zinc-900/40 dark:border-white/30 shadow-[0_3px_14px_rgba(0,0,0,0.08)] dark:shadow-[0_3px_14px_rgba(255,255,255,0.08)]">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-white/[0.08] text-[11px] font-mono tracking-widest uppercase text-zinc-400 mb-2.5 shadow-[0_0_12px_rgba(255,255,255,0.02)]">
             <span>✦</span> CAREER TIMELINE & EDUCATION <span>✦</span>
           </div>

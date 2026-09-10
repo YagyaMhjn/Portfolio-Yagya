@@ -98,14 +98,14 @@ body {
   background: rgba(18, 18, 20, 0.7);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
 }
 
 .glass-card {
   background: linear-gradient(180deg, rgba(22, 22, 26, 0.65) 0%, rgba(12, 12, 14, 0.85) 100%);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
   position: relative;
   overflow: hidden;
   transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
@@ -136,7 +136,7 @@ body {
 
 .glass-panel-hover:hover {
   background: linear-gradient(180deg, rgba(30, 30, 36, 0.8) 0%, rgba(16, 16, 20, 0.95) 100%);
-  border-color: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.35);
   transform: translateY(-3px) scale(1.008);
   box-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.8), 0 0 20px 2px rgba(255, 255, 255, 0.04);
 }
@@ -204,45 +204,45 @@ html.light #root > div {
   color: #18181b !important;
 }
 
-/* Glassmorphism Cards & Panels (Crisp Pure White with Tactile Internal Shadows) */
+/* Glassmorphism Cards & Panels (Crisp Pure White with Tactile Internal Shadows and Distinct Darker Borders) */
 html.light .glass-panel {
-  background: rgba(255, 255, 255, 0.95) !important;
-  border: 1px solid rgba(0, 0, 0, 0.1) !important;
-  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.035), inset 0 0 1px 1px rgba(0, 0, 0, 0.02), 0 4px 20px -2px rgba(0, 0, 0, 0.06) !important;
+  background: rgba(255, 255, 255, 0.96) !important;
+  border: 1.5px solid rgba(0, 0, 0, 0.2) !important;
+  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.04), inset 0 0 1px 1px rgba(0, 0, 0, 0.03), 0 4px 20px -2px rgba(0, 0, 0, 0.08) !important;
 }
 
 html.light .glass-card {
   background: #ffffff !important;
-  border: 1px solid rgba(0, 0, 0, 0.09) !important;
-  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.035), inset 0 0 1px 1px rgba(0, 0, 0, 0.02), 0 4px 20px -2px rgba(0, 0, 0, 0.06) !important;
+  border: 1.5px solid rgba(0, 0, 0, 0.18) !important;
+  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.04), inset 0 0 1px 1px rgba(0, 0, 0, 0.03), 0 4px 20px -2px rgba(0, 0, 0, 0.08) !important;
 }
 
 html.light .glass-panel-hover:hover {
   background: #ffffff !important;
-  border-color: rgba(0, 0, 0, 0.22) !important;
-  box-shadow: inset 0 2px 6px 0 rgba(0, 0, 0, 0.045), inset 0 0 1px 1px rgba(0, 0, 0, 0.025), 0 16px 36px -8px rgba(0, 0, 0, 0.1) !important;
+  border-color: rgba(0, 0, 0, 0.45) !important;
+  box-shadow: inset 0 2px 6px 0 rgba(0, 0, 0, 0.05), inset 0 0 1px 1px rgba(0, 0, 0, 0.04), 0 16px 36px -8px rgba(0, 0, 0, 0.14) !important;
   transform: translateY(-3px) scale(1.008);
 }
 
 html.light .glass-panel-hover::before {
   background: radial-gradient(
     600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-    rgba(0, 0, 0, 0.03),
+    rgba(0, 0, 0, 0.04),
     transparent 40%
   ) !important;
 }
 
 html.light .glass-input {
   background: #f8f9fa !important;
-  border: 1px solid rgba(0, 0, 0, 0.16) !important;
+  border: 1.5px solid rgba(0, 0, 0, 0.22) !important;
   color: #18181b !important;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05) !important;
 }
 
 html.light .glass-input:focus {
   background: #ffffff !important;
-  border-color: rgba(0, 0, 0, 0.65) !important;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04), 0 0 0 2px rgba(0, 0, 0, 0.08), 0 0 16px rgba(0, 0, 0, 0.05) !important;
+  border-color: #09090b !important;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04), 0 0 0 2px rgba(0, 0, 0, 0.12), 0 0 16px rgba(0, 0, 0, 0.06) !important;
 }
 
 /* Typography Hierarchy (Inverted from White to Solid Obsidian Black) */
@@ -419,23 +419,26 @@ html.light a[class*="bg-zinc-900"] svg {
   color: #18181b !important;
 }
 
-/* Distinct Section Header Separation Line */
-html.light .border-b-2 {
-  border-color: rgba(0, 0, 0, 0.16) !important;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04) !important;
+/* Distinct Section Header Separation Line (Bold, Broad & Darker in Tone) */
+html.light .border-b-2,
+html.light .border-b-\[3px\],
+html.light [class*="border-b-2"],
+html.light [class*="border-b-\[3px\]"] {
+  border-bottom: 3px solid rgba(0, 0, 0, 0.45) !important;
+  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.09) !important;
 }
 
-/* Border Subtlety Inversion */
+/* Border Subtlety Inversion with High Contrast Tone */
 html.light [class*="border-white/"] {
-  border-color: rgba(0, 0, 0, 0.09) !important;
+  border-color: rgba(0, 0, 0, 0.18) !important;
 }
 
 html.light [class*="border-t"][class*="border-white/"] {
-  border-top-color: rgba(0, 0, 0, 0.08) !important;
+  border-top: 1.5px solid rgba(0, 0, 0, 0.16) !important;
 }
 
 html.light [class*="border-l"][class*="border-zinc-800"] {
-  border-left-color: rgba(0, 0, 0, 0.15) !important;
+  border-left: 2px solid rgba(0, 0, 0, 0.3) !important;
 }
 
 /* Social Handle Buttons & Floating Dock */
@@ -443,15 +446,15 @@ html.light .bg-\[\#111114\]\/95,
 html.light aside a {
   background: rgba(255, 255, 255, 0.96) !important;
   color: #18181b !important;
-  border: 1px solid rgba(0, 0, 0, 0.14) !important;
+  border: 1.5px solid rgba(0, 0, 0, 0.2) !important;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02), 0 4px 15px rgba(0, 0, 0, 0.06) !important;
 }
 
 html.light .bg-\[\#111114\]\/95:hover,
 html.light aside a:hover {
   background: #ffffff !important;
-  border-color: rgba(0, 0, 0, 0.35) !important;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02), 0 0 20px rgba(0, 0, 0, 0.15) !important;
+  border-color: rgba(0, 0, 0, 0.45) !important;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02), 0 0 20px rgba(0, 0, 0, 0.18) !important;
 }
 
 html.light .bg-\[\#111114\]\/95 svg,
@@ -459,28 +462,35 @@ html.light aside a svg {
   color: #18181b !important;
 }
 
-/* Hero Orbit Profile Badge (Inverted) */
+/* Hero Orbit Profile Badge - Dark/Black in Light Mode */
 html.light .animate-orbit-spin {
-  border-color: rgba(0, 0, 0, 0.6) !important;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.08) !important;
+  border-color: #09090b !important;
+  border-width: 2px !important;
+  border-style: dashed !important;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.18) !important;
 }
 
-html.light .animate-orbit-spin ~ div.rounded-full.bg-zinc-950\/60 {
-  background: rgba(255, 255, 255, 0.9) !important;
-  border-color: rgba(0, 0, 0, 0.12) !important;
-  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.04), 0 10px 30px rgba(0, 0, 0, 0.08) !important;
+html.light .animate-orbit-spin ~ div.rounded-full.bg-zinc-950\/60,
+html.light .animate-orbit-spin ~ div.rounded-full {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-color: rgba(0, 0, 0, 0.4) !important;
+  border-width: 2px !important;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.06), 0 10px 30px rgba(0, 0, 0, 0.12) !important;
 }
 
-html.light .animate-orbit-spin ~ div > .bg-white {
-  background-color: #09090b !important;
-  box-shadow: 0 0 16px rgba(0, 0, 0, 0.5) !important;
+html.light .animate-orbit-spin ~ div.rounded-full > div,
+html.light .animate-orbit-spin ~ div.-top-1\.5 {
+  background-color: #000000 !important;
+  box-shadow: 0 0 18px rgba(0, 0, 0, 0.8) !important;
 }
 
-/* Profile Image Container in Light Mode */
-html.light .lg\:w-64.rounded-full {
+/* Profile Image Container in Light Mode - Crisp Dark Outer Border */
+html.light .animate-orbit-spin ~ div.relative.z-10,
+html.light .lg\:w-64.rounded-full,
+html.light .lg\:w-80 .rounded-full {
   background-color: #ffffff !important;
-  border-color: rgba(0, 0, 0, 0.12) !important;
-  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.05), 0 8px 24px rgba(0, 0, 0, 0.08) !important;
+  border: 2px solid #09090b !important;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.08), 0 8px 30px rgba(0, 0, 0, 0.18) !important;
 }
 
 /* Name Glow Shimmer (Inverted) */
