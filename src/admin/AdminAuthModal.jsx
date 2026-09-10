@@ -68,7 +68,7 @@ export const AdminAuthModal = () => {
                 type="password"
                 autoFocus
                 required
-                placeholder="Enter password (e.g. Yagy@1605)"
+                placeholder="Enter administrator password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="glass-input w-full pl-9 pr-4 py-2.5 text-sm"

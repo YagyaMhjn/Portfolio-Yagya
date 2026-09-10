@@ -3,7 +3,17 @@ import { initialPortfolioData } from '../data/initialData';
 
 const PortfolioContext = createContext(null);
 const STORAGE_KEY = 'yagya_portfolio_data_v2';
-const AUTH_KEY = 'yagya_portfolio_admin_auth';
+const PASSWORD_KEY = 'yagya_portfolio_admin_password';
+
+const getAdminPassword = () => {
+  try {
+    const customPass = localStorage.getItem(PASSWORD_KEY);
+    if (customPass) return customPass;
+  } catch (e) {
+    console.error('Failed to read password from localStorage', e);
+  }
+  return import.meta.env.VITE_ADMIN_PASSWORD || 'Yagy@1605';
+};
 
 export const PortfolioProvider = ({ children }) => {
   const [data, setData] = useState(() => {
@@ -88,7 +98,7 @@ export const PortfolioProvider = ({ children }) => {
   };
 
   const loginAdmin = (password) => {
-    const expectedPassword = import.meta.env.VITE_ADMIN_PASSWORD || 'Yagy@1605';
+    const expectedPassword = getAdminPassword();
     if (password === expectedPassword) {
       setIsAdmin(true);
       sessionStorage.setItem(AUTH_KEY, 'true');
@@ -97,6 +107,25 @@ export const PortfolioProvider = ({ children }) => {
       return { success: true };
     }
     return { success: false, error: 'Incorrect administrator password.' };
+  };
+
+  const changePassword = (oldPassword, newPassword, confirmPassword) => {
+    const currentPassword = getAdminPassword();
+    if (oldPassword !== currentPassword) {
+      return { success: false, error: 'Current password is incorrect.' };
+    }
+    if (!newPassword || newPassword.trim().length < 4) {
+      return { success: false, error: 'New password must be at least 4 characters long.' };
+    }
+    if (newPassword !== confirmPassword) {
+      return { success: false, error: 'New passwords do not match. Please verify.' };
+    }
+    try {
+      localStorage.setItem(PASSWORD_KEY, newPassword);
+      return { success: true, message: 'Password successfully updated! Use your new password on next login.' };
+    } catch (e) {
+      return { success: false, error: 'Failed to update password in browser storage.' };
+    }
   };
 
   const logoutAdmin = () => {
@@ -315,6 +344,7 @@ export const PortfolioProvider = ({ children }) => {
         setActivePage,
         loginAdmin,
         logoutAdmin,
+        changePassword,
         updateProfile,
         addProject,
         updateProject,

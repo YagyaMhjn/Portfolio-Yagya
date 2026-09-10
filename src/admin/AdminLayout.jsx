@@ -9,6 +9,8 @@ import {
   Sparkles,
   MessageSquare,
   Database,
+  KeyRound,
+  Shield,
   ArrowLeft,
   LogOut,
   Check,
@@ -21,6 +23,7 @@ import { AdminCertificates } from './AdminCertificates';
 import { AdminBeyondData } from './AdminBeyondData';
 import { AdminMessages } from './AdminMessages';
 import { AdminBackup } from './AdminBackup';
+import { AdminSecurity } from './AdminSecurity';
 
 export const AdminLayout = () => {
   const { data, setCurrentView, logoutAdmin } = usePortfolio();
@@ -148,6 +151,15 @@ export const AdminLayout = () => {
             </button>
 
             <button
+              onClick={() => setActiveTab('security')}
+              className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-medium transition-colors ${
+                activeTab === 'security' ? 'bg-white text-black font-bold shadow' : 'text-zinc-400 hover:bg-white/[0.05] hover:text-white'
+              }`}
+            >
+              <Shield size={15} /> <span>Security & Password</span>
+            </button>
+
+            <button
               onClick={() => setActiveTab('backup')}
               className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-medium transition-colors ${
                 activeTab === 'backup' ? 'bg-white text-black font-bold shadow' : 'text-zinc-400 hover:bg-white/[0.05] hover:text-white'
@@ -166,6 +178,7 @@ export const AdminLayout = () => {
             {activeTab === 'certificates' && <AdminCertificates triggerToast={triggerToast} />}
             {activeTab === 'beyondData' && <AdminBeyondData triggerToast={triggerToast} />}
             {activeTab === 'messages' && <AdminMessages />}
+            {activeTab === 'security' && <AdminSecurity triggerToast={triggerToast} />}
             {activeTab === 'backup' && <AdminBackup />}
           </div>
 
