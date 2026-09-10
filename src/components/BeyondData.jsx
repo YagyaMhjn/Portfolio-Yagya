@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
 import { Trophy, Users, Megaphone, GitPullRequest, Bookmark } from 'lucide-react';
+import { SocialBar } from './SocialHandleButton';
 
 export const BeyondData = () => {
   const { data } = usePortfolio();
-  const { beyondData } = data;
+  const { beyondData, profile } = data;
   const [activeCategory, setActiveCategory] = useState('All');
 
   const handleMouseMove = (e) => {
@@ -41,37 +42,44 @@ export const BeyondData = () => {
     <div className="pt-20 sm:pt-24 pb-16 relative animate-fadeIn">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Header */}
-        <div className="text-center mb-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-white/[0.08] text-[11px] font-mono tracking-widest uppercase text-zinc-400 mb-3.5 shadow-[0_0_12px_rgba(255,255,255,0.02)]">
-            <span>✦</span> CO-CURRICULAR & LEADERSHIP <span>✦</span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-            Beyond Data
-          </h2>
-          <p className="mt-2.5 text-sm text-zinc-400 max-w-lg mx-auto">
-            Extra co-curricular achievements, leadership initiatives, technical community contributions, and hackathon milestones.
-          </p>
-
-          {/* Filter tabs */}
-          {categories.length > 1 && (
-            <div className="mt-6 flex flex-wrap justify-center gap-2">
-              {categories.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setActiveCategory(cat)}
-                  className={`px-3.5 py-1.5 rounded-xl text-xs font-mono transition-all ${
-                    activeCategory === cat
-                      ? 'bg-white text-black font-bold shadow-[0_0_15px_rgba(255,255,255,0.2)] scale-105'
-                      : 'bg-zinc-900/90 text-zinc-400 border border-white/[0.08] hover:text-white hover:border-white/30 hover:scale-105'
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
+        {/* Section Header with Right-Corner Social Handles */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-5 mb-8 pb-6 border-b border-white/[0.06]">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-white/[0.08] text-[11px] font-mono tracking-widest uppercase text-zinc-400 mb-2.5 shadow-[0_0_12px_rgba(255,255,255,0.02)]">
+              <span>✦</span> CO-CURRICULAR & LEADERSHIP <span>✦</span>
             </div>
-          )}
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+              Beyond Data
+            </h2>
+            <p className="mt-1.5 text-sm text-zinc-400 max-w-lg">
+              Extra co-curricular achievements, leadership initiatives, technical community contributions, and hackathon milestones.
+            </p>
+          </div>
+
+          {/* Right Corner Horizontal Social Handles */}
+          <div className="shrink-0 flex items-center justify-start md:justify-end">
+            <SocialBar socials={profile?.socials} />
+          </div>
         </div>
+
+        {/* Filter tabs */}
+        {categories.length > 1 && (
+          <div className="mb-8 flex flex-wrap justify-center md:justify-start gap-2">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-mono transition-all ${
+                  activeCategory === cat
+                    ? 'bg-white text-black font-bold shadow-[0_0_15px_rgba(255,255,255,0.2)] scale-105'
+                    : 'bg-zinc-900/90 text-zinc-400 border border-white/[0.08] hover:text-white hover:border-white/30 hover:scale-105'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        )}
 
         {/* Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

@@ -12,6 +12,13 @@ export const initialPortfolioData = {
     github: "https://github.com/YagyaMhjn",
     resumeUrl: "#",
     cvUrl: "#",
+    socials: [
+      { id: "soc_1", platform: "GitHub", url: "https://github.com/YagyaMhjn", label: "GitHub" },
+      { id: "soc_2", platform: "LinkedIn", url: "https://linkedin.com/in/yagya-mahajan", label: "LinkedIn" },
+      { id: "soc_3", platform: "Instagram", url: "https://instagram.com/yagyamahajan", label: "Instagram" },
+      { id: "soc_4", platform: "Email", url: "mailto:yagyamahajan16@gmail.com", label: "Email" },
+      { id: "soc_5", platform: "Download CV", url: "#", label: "Download CV" }
+    ],
     primaryTech: [
       "React",
       "Next.js",

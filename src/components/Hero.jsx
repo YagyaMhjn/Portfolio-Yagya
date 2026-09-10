@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { Send, Clock, Quote, ArrowUpRight } from 'lucide-react';
+import { Send, Clock, ArrowUpRight } from 'lucide-react';
+import { SocialBar } from './SocialHandleButton';
 
 export const Hero = () => {
   const { data, setActivePage } = usePortfolio();
   const { profile, projects, skills } = data;
   const [time, setTime] = useState('');
-  const [activeSlide, setActiveSlide] = useState(0);
 
   // Live IST Clock
   useEffect(() => {
@@ -24,15 +24,6 @@ export const Hero = () => {
     const timer = setInterval(updateClock, 1000);
     return () => clearInterval(timer);
   }, []);
-
-  // Quotes slider auto-rotate
-  useEffect(() => {
-    if (!profile.principles || profile.principles.length === 0) return;
-    const interval = setInterval(() => {
-      setActiveSlide((prev) => (prev + 1) % profile.principles.length);
-    }, 6000);
-    return () => clearInterval(interval);
-  }, [profile.principles]);
 
   const handleMouseMove = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -76,22 +67,25 @@ export const Hero = () => {
               {profile.bio}
             </p>
 
-            {/* Interactive Page Switcher CTA Buttons */}
-            <div className="flex flex-wrap items-center gap-4">
+            {/* Interactive Page Switcher CTA Buttons & Expanding Social Handles */}
+            <div className="flex flex-wrap items-center gap-3">
               <button
                 onClick={() => setActivePage('projects')}
-                className="btn-glow inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-black font-semibold text-sm hover:bg-zinc-100 transition-all shadow-[0_4px_20px_rgba(255,255,255,0.15)] group"
+                className="btn-glow inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-black font-semibold text-sm hover:bg-zinc-100 transition-all shadow-[0_4px_20px_rgba(255,255,255,0.15)] group h-11"
               >
                 <span>Explore Work</span>
                 <ArrowUpRight size={15} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </button>
               <button
                 onClick={() => setActivePage('contact')}
-                className="btn-glow inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-zinc-900/90 text-zinc-200 border border-white/10 font-medium text-sm hover:bg-zinc-800 hover:text-white hover:border-white/25 transition-all group"
+                className="btn-glow inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-zinc-900/90 text-zinc-200 border border-white/10 font-medium text-sm hover:bg-zinc-800 hover:text-white hover:border-white/25 transition-all group h-11"
               >
                 <Send size={14} className="text-zinc-400 group-hover:text-white group-hover:translate-x-0.5 transition-all" />
                 <span>Get in Touch</span>
               </button>
+
+              {/* Square (rounded corners) expanding social handles & CV */}
+              <SocialBar socials={profile.socials} />
             </div>
           </div>
 
@@ -117,7 +111,7 @@ export const Hero = () => {
         </div>
 
         {/* Hero Bento Grid with Mouse Position Spotlight Glow */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           
           {/* Bento Tile 1: Status & Live Clock */}
           <div
@@ -203,40 +197,6 @@ export const Hero = () => {
           </div>
 
         </div>
-
-        {/* Guiding Principles Slider */}
-        {profile.principles && profile.principles.length > 0 && (
-          <div
-            onMouseMove={handleMouseMove}
-            className="glass-card glass-panel-hover p-6 sm:p-7 rounded-2xl border border-white/[0.08]"
-          >
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-[11px] font-mono uppercase tracking-widest text-zinc-400 flex items-center gap-2">
-                <Quote size={13} className="text-zinc-400" /> Guiding Engineering Principles
-              </span>
-              <div className="flex gap-1.5">
-                {profile.principles.map((_, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setActiveSlide(idx)}
-                    className={`h-1.5 rounded-full transition-all duration-300 ${
-                      activeSlide === idx ? 'w-6 bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)]' : 'w-2 bg-zinc-700 hover:bg-zinc-500'
-                    }`}
-                    aria-label={`Slide ${idx + 1}`}
-                  />
-                ))}
-              </div>
-            </div>
-            <div className="min-h-[60px] flex flex-col justify-center">
-              <p className="text-sm sm:text-base text-zinc-200 italic font-light leading-relaxed">
-                "{profile.principles[activeSlide]?.quote}"
-              </p>
-              <div className="text-xs text-zinc-500 font-mono mt-1.5">
-                — {profile.principles[activeSlide]?.author}
-              </div>
-            </div>
-          </div>
-        )}
 
       </div>
     </div>

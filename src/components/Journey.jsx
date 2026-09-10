@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { Briefcase, GraduationCap, Download, ArrowUpRight } from 'lucide-react';
+import { Briefcase, GraduationCap } from 'lucide-react';
+import { SocialBar } from './SocialHandleButton';
 
 export const Journey = () => {
-  const { data, setActivePage } = usePortfolio();
-  const { timeline } = data;
+  const { data } = usePortfolio();
+  const { timeline, profile } = data;
   const [filterType, setFilterType] = useState('all');
 
   const handleMouseMove = (e) => {
@@ -22,40 +23,31 @@ export const Journey = () => {
 
   return (
     <div className="pt-20 sm:pt-24 pb-16 relative animate-fadeIn">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Section Header */}
-        <div className="text-center mb-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-white/[0.08] text-[11px] font-mono tracking-widest uppercase text-zinc-400 mb-3.5 shadow-[0_0_12px_rgba(255,255,255,0.02)]">
-            <span>✦</span> CAREER TIMELINE & EDUCATION <span>✦</span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-            Professional Journey
-          </h2>
-          <p className="mt-2.5 text-sm text-zinc-400 max-w-lg mx-auto">
-            A chronological roadmap of engineering roles, software projects, and academic foundations.
-          </p>
-
-          {/* Action / Resume buttons */}
-          <div className="mt-6 flex flex-wrap justify-center gap-3">
-            <button
-              onClick={() => setActivePage('contact')}
-              className="btn-glow inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-white/10 hover:border-white/30 text-xs font-medium transition-all"
-            >
-              <Download size={13} className="text-zinc-300" />
-              <span>Download Resume (ATS Standard)</span>
-            </button>
-            <button
-              onClick={() => setActivePage('contact')}
-              className="btn-glow inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-white/10 hover:border-white/30 text-xs font-medium transition-all"
-            >
-              <ArrowUpRight size={13} className="text-zinc-300" />
-              <span>Request Verified Dossier</span>
-            </button>
+        {/* Section Header with Right-Corner Social Handles */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-5 mb-8 pb-6 border-b border-white/[0.06]">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-white/[0.08] text-[11px] font-mono tracking-widest uppercase text-zinc-400 mb-2.5 shadow-[0_0_12px_rgba(255,255,255,0.02)]">
+              <span>✦</span> CAREER TIMELINE & EDUCATION <span>✦</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+              Professional Journey
+            </h2>
+            <p className="mt-1.5 text-sm text-zinc-400 max-w-lg">
+              A chronological roadmap of engineering roles, software projects, and academic foundations.
+            </p>
           </div>
 
-          {/* Filter Pills */}
-          <div className="mt-6 inline-flex p-1 rounded-xl bg-zinc-900/90 border border-white/[0.08]">
+          {/* Right Corner Horizontal Social Handles */}
+          <div className="shrink-0 flex items-center justify-start md:justify-end">
+            <SocialBar socials={profile?.socials} />
+          </div>
+        </div>
+
+        {/* Filter Pills */}
+        <div className="flex justify-center md:justify-start mb-8">
+          <div className="inline-flex p-1 rounded-xl bg-zinc-900/90 border border-white/[0.08]">
             <button
               onClick={() => setFilterType('all')}
               className={`px-4 py-1.5 rounded-lg text-xs font-medium transition-all ${

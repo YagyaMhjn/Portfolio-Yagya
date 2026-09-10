@@ -25,7 +25,11 @@ export const PortfolioProvider = ({ children }) => {
         return {
           ...initialPortfolioData,
           ...parsed,
-          profile: { ...initialPortfolioData.profile, ...(parsed.profile || {}) },
+          profile: {
+            ...initialPortfolioData.profile,
+            ...(parsed.profile || {}),
+            socials: parsed.profile?.socials || initialPortfolioData.profile.socials || []
+          },
           certificates: parsed.certificates || initialPortfolioData.certificates,
           beyondData: parsed.beyondData || initialPortfolioData.beyondData,
         };
