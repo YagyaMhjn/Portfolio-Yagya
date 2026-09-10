@@ -3,6 +3,7 @@ import { initialPortfolioData } from '../data/initialData';
 
 const PortfolioContext = createContext(null);
 const STORAGE_KEY = 'yagya_portfolio_data_v2';
+const AUTH_KEY = 'yagya_portfolio_admin_auth';
 const PASSWORD_KEY = 'yagya_portfolio_admin_password';
 
 const getAdminPassword = () => {
