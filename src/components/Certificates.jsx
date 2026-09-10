@@ -67,7 +67,7 @@ export const Certificates = () => {
             <div
               key={cert.id}
               onMouseMove={handleMouseMove}
-              className="glass-card glass-panel-hover p-6 sm:p-7 rounded-2xl border border-white/[0.08] flex flex-col justify-between group cursor-default"
+              className="glass-card glass-panel-hover p-6 sm:p-7 rounded-2xl border border-white/[0.08] flex flex-col justify-between group cursor-default transition-all duration-300 relative"
             >
               <div>
                 <div className="flex items-center justify-between gap-3 mb-4">
@@ -91,6 +91,19 @@ export const Certificates = () => {
                     </a>
                   )}
                 </div>
+
+                {/* Upward Hover Pop-Up Certificate Media Preview */}
+                {cert.media && (
+                  <div className="relative mb-4.5 rounded-xl overflow-hidden border border-white/[0.08] bg-zinc-950/80 h-44 sm:h-48 w-full group/media transition-all duration-300 ease-out transform group-hover:-translate-y-3.5 group-hover:scale-[1.02] group-hover:shadow-[0_20px_40px_rgba(0,0,0,0.95),0_0_25px_rgba(255,255,255,0.18)] group-hover:border-white/40 group-hover:ring-1 group-hover:ring-white/20 z-10">
+                    <img
+                      src={cert.media}
+                      alt={cert.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-40 group-hover:opacity-10 transition-opacity" />
+                  </div>
+                )}
 
                 <h3 className="text-lg font-bold text-white mb-3 group-hover:text-zinc-100 transition-colors">
                   {cert.title}

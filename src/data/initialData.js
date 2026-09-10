@@ -85,6 +85,7 @@ export const initialPortfolioData = {
       tags: ["React", "TypeScript", "Python", "FastAPI", "Tailwind CSS", "LangChain", "ChromaDB"],
       github: "https://github.com/YagyaMhjn/neuropulse-ai",
       live: "https://neuropulse-ai.vercel.app",
+      media: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80",
       featured: true,
       year: "2026"
     },
@@ -96,6 +97,7 @@ export const initialPortfolioData = {
       tags: ["Node.js", "Express", "Docker", "Redis", "PostgreSQL", "Tailwind CSS"],
       github: "https://github.com/YagyaMhjn/cloudscale-engine",
       live: "https://cloudscale-demo.vercel.app",
+      media: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80",
       featured: true,
       year: "2025"
     },
@@ -107,6 +109,7 @@ export const initialPortfolioData = {
       tags: ["React", "Next.js", "TypeScript", "Tailwind CSS", "WebSockets"],
       github: "https://github.com/YagyaMhjn/omniflow-platform",
       live: "https://omniflow.dev",
+      media: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80",
       featured: true,
       year: "2025"
     },
@@ -118,6 +121,7 @@ export const initialPortfolioData = {
       tags: ["React", "Three.js", "Python", "FastAPI", "Tailwind CSS"],
       github: "https://github.com/YagyaMhjn/aerovision-3d",
       live: "https://aerovision.vercel.app",
+      media: "",
       featured: false,
       year: "2024"
     },
@@ -129,6 +133,7 @@ export const initialPortfolioData = {
       tags: ["Python", "FastAPI", "React", "TypeScript", "Tailwind CSS"],
       github: "https://github.com/YagyaMhjn/hyperledger-quant",
       live: "https://hyperledger-quant.vercel.app",
+      media: "",
       featured: false,
       year: "2024"
     },
@@ -140,6 +145,7 @@ export const initialPortfolioData = {
       tags: ["React", "Tailwind CSS", "Vite", "LocalStorage", "Vercel"],
       github: "https://github.com/YagyaMhjn/Portfolio-Yagya",
       live: "https://portfolio-yagya.vercel.app",
+      media: "",
       featured: true,
       year: "2026"
     }
@@ -177,6 +183,7 @@ export const initialPortfolioData = {
       issuer: "DeepLearning.AI",
       date: "2024",
       credentialUrl: "https://coursera.org",
+      media: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80",
       skills: ["Neural Networks", "CNNs", "Transformers", "PyTorch"]
     },
     {
@@ -185,6 +192,7 @@ export const initialPortfolioData = {
       issuer: "Amazon Web Services",
       date: "2024",
       credentialUrl: "https://aws.amazon.com",
+      media: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80",
       skills: ["Cloud Architecture", "EC2", "S3", "Lambda", "High Availability"]
     },
     {
@@ -193,6 +201,7 @@ export const initialPortfolioData = {
       issuer: "Meta",
       date: "2023",
       credentialUrl: "https://coursera.org",
+      media: "",
       skills: ["React", "Node.js", "Database Systems", "API Design"]
     },
     {
@@ -201,6 +210,7 @@ export const initialPortfolioData = {
       issuer: "IBM",
       date: "2023",
       credentialUrl: "https://coursera.org",
+      media: "",
       skills: ["Python", "Pandas", "Scikit-Learn", "Data Analysis"]
     }
   ],
@@ -212,7 +222,8 @@ export const initialPortfolioData = {
       period: "2023 - 2024",
       category: "Leadership & Community",
       description: "Organized 12+ technical workshops, hackathons, and coding bootcamps for over 600+ students, fostering peer-to-peer technical mentorship and open-source contributions.",
-      highlight: "600+ Students Mentored"
+      highlight: "600+ Students Mentored",
+      media: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=800&q=80"
     },
     {
       id: "bd2",
@@ -221,7 +232,8 @@ export const initialPortfolioData = {
       period: "2024",
       category: "Competitions",
       description: "Spearheaded a 4-person engineering team to architect and ship an autonomous code-refactoring multi-agent swarm in 36 continuous sprint hours.",
-      highlight: "Top Prize Winner ($5,000)"
+      highlight: "Top Prize Winner ($5,000)",
+      media: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=80"
     },
     {
       id: "bd3",
@@ -230,7 +242,8 @@ export const initialPortfolioData = {
       period: "2024",
       category: "Public Speaking",
       description: "Delivered hands-on keynote and live-coding sessions on 'Building Production-Ready Vector Search & Multi-Agent Workflows with React & FastAPI'.",
-      highlight: "250+ Attendees"
+      highlight: "250+ Attendees",
+      media: ""
     },
     {
       id: "bd4",
@@ -239,7 +252,8 @@ export const initialPortfolioData = {
       period: "2022 - Present",
       category: "Open Source",
       description: "Contributed performance patches, type definitions, and documentation improvements to popular React and Python developer tooling repositories.",
-      highlight: "Active Contributor"
+      highlight: "Active Contributor",
+      media: ""
     }
   ],
   messages: []

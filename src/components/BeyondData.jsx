@@ -107,9 +107,21 @@ export const BeyondData = () => {
                   <span>{item.organization}</span>
                 </div>
 
-                <p className="text-xs sm:text-sm text-zinc-300 font-light leading-relaxed mb-6">
+                <p className="text-xs sm:text-sm text-zinc-300 font-light leading-relaxed mb-4">
                   {item.description}
                 </p>
+
+                {/* Media attached directly to description (No pop-up effect) */}
+                {item.media && (
+                  <div className="rounded-xl overflow-hidden border border-white/[0.08] bg-zinc-950/60 h-44 sm:h-52 w-full mb-6">
+                    <img
+                      src={item.media}
+                      alt={item.title}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                )}
               </div>
 
               {item.highlight && (

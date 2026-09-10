@@ -30,8 +30,30 @@ export const PortfolioProvider = ({ children }) => {
             ...(parsed.profile || {}),
             socials: parsed.profile?.socials || initialPortfolioData.profile.socials || []
           },
-          certificates: parsed.certificates || initialPortfolioData.certificates,
-          beyondData: parsed.beyondData || initialPortfolioData.beyondData,
+          projects: (parsed.projects || initialPortfolioData.projects).map((p) => {
+            const initP = initialPortfolioData.projects.find((ip) => ip.id === p.id);
+            return {
+              ...initP,
+              ...p,
+              media: p.media !== undefined ? p.media : (initP?.media || '')
+            };
+          }),
+          certificates: (parsed.certificates || initialPortfolioData.certificates).map((c) => {
+            const initC = initialPortfolioData.certificates.find((ic) => ic.id === c.id);
+            return {
+              ...initC,
+              ...c,
+              media: c.media !== undefined ? c.media : (initC?.media || '')
+            };
+          }),
+          beyondData: (parsed.beyondData || initialPortfolioData.beyondData).map((b) => {
+            const initB = initialPortfolioData.beyondData.find((ib) => ib.id === b.id);
+            return {
+              ...initB,
+              ...b,
+              media: b.media !== undefined ? b.media : (initB?.media || '')
+            };
+          }),
         };
       }
     } catch (e) {
