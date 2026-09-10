@@ -94,7 +94,7 @@ export const Hero = () => {
             <div className="animate-subtle-float flex items-center justify-center">
               <div className="relative w-64 h-64 sm:w-72 sm:h-72 lg:w-80 lg:h-80 flex items-center justify-center group cursor-pointer transition-all duration-500 ease-out hover:scale-105 sm:hover:scale-108">
                 
-                {/* Outer rotating SVG dashed orbit ring */}
+                {/* Outer rotating SVG dashed orbit ring (Refined subtle stroke, no attached dot) */}
                 <div className="absolute inset-0 flex items-center justify-center animate-orbit-spin pointer-events-none">
                   <svg className="w-full h-full" viewBox="0 0 100 100">
                     <circle
@@ -103,13 +103,11 @@ export const Hero = () => {
                       r="48.5"
                       fill="none"
                       stroke="currentColor"
-                      strokeWidth="1.6"
-                      strokeDasharray="3.2 3.2"
-                      className="text-black/85 dark:text-white/75 transition-colors"
+                      strokeWidth="1.2"
+                      strokeDasharray="2.8 2.8"
+                      className="text-black/80 dark:text-white/70 transition-colors"
                     />
                   </svg>
-                  {/* Satellite node attached to outer rotating ring */}
-                  <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-black dark:bg-white shadow-[0_0_18px_rgba(0,0,0,0.8)] dark:shadow-[0_0_18px_rgba(255,255,255,1)] group-hover:scale-125 transition-transform duration-300 z-20 pointer-events-auto" />
                 </div>
                 
                 {/* Middle glowing glass ring */}

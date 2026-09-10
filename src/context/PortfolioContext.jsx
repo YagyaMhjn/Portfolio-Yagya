@@ -95,7 +95,13 @@ export const PortfolioProvider = ({ children }) => {
   });
 
   const toggleTheme = () => {
-    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+    if (!document.startViewTransition) {
+      setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+      return;
+    }
+    document.startViewTransition(() => {
+      setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+    });
   };
 
   // Section Transition Loader Management (Enabled / Disabled via Admin)

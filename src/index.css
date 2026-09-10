@@ -530,3 +530,45 @@ html.light footer .text-zinc-400 {
 html.light footer button:hover {
   color: #09090b !important;
 }
+
+/* ==========================================================================
+   Smooth Slant Moving Fade Transition (Lower-Left to Upper-Right)
+   ========================================================================== */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.7s;
+  animation-timing-function: cubic-bezier(0.25, 1, 0.35, 1);
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+  animation-name: slant-fade-out;
+}
+
+::view-transition-new(root) {
+  z-index: 9999;
+  animation-name: slant-sweep-in;
+  mix-blend-mode: normal;
+}
+
+@keyframes slant-sweep-in {
+  0% {
+    clip-path: polygon(0% 100%, 0% 100%, 0% 100%, 0% 100%);
+    opacity: 0.75;
+    filter: brightness(1.04);
+  }
+  100% {
+    clip-path: polygon(-30% 130%, 130% -30%, 200% -30%, -30% 200%);
+    opacity: 1;
+    filter: brightness(1);
+  }
+}
+
+@keyframes slant-fade-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.9;
+  }
+}
