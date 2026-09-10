@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { Menu, X, Lock, ShieldCheck, Terminal } from 'lucide-react';
+import { Menu, X, Lock, ShieldCheck } from 'lucide-react';
 
 export const Navbar = () => {
   const { data, isAdmin, setShowAdminModal, setCurrentView } = usePortfolio();
@@ -12,7 +12,7 @@ export const Navbar = () => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
 
-      const sections = ['home', 'journey', 'tech', 'projects', 'blog', 'contact'];
+      const sections = ['home', 'journey', 'tech', 'projects', 'certificates', 'beyond-data', 'contact'];
       const scrollPosition = window.scrollY + 200;
 
       for (const section of sections) {
@@ -37,7 +37,8 @@ export const Navbar = () => {
     { name: 'Journey', href: '#journey', id: 'journey' },
     { name: 'Skillset', href: '#tech', id: 'tech' },
     { name: 'Projects', href: '#projects', id: 'projects' },
-    { name: 'Articles & Honors', href: '#blog', id: 'blog' },
+    { name: 'Certificates', href: '#certificates', id: 'certificates' },
+    { name: 'Beyond Data', href: '#beyond-data', id: 'beyond-data' },
     { name: 'Contact', href: '#contact', id: 'contact' },
   ];
 
@@ -62,12 +63,12 @@ export const Navbar = () => {
         </a>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-1 bg-[#121215]/80 border border-white/[0.08] rounded-full px-3 py-1.5 backdrop-blur-md shadow-inner">
+        <nav className="hidden lg:flex items-center gap-1 bg-[#121215]/80 border border-white/[0.08] rounded-full px-3 py-1.5 backdrop-blur-md shadow-inner">
           {navLinks.map((link) => (
             <a
               key={link.id}
               href={link.href}
-              className={`px-3.5 py-1.5 text-xs font-medium rounded-full transition-all duration-200 ${
+              className={`px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-200 ${
                 activeSection === link.id
                   ? 'bg-white text-black font-semibold shadow-sm'
                   : 'text-zinc-400 hover:text-white hover:bg-white/[0.05]'
@@ -111,7 +112,7 @@ export const Navbar = () => {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 rounded-lg bg-zinc-900 border border-white/10 text-zinc-300 hover:text-white"
+            className="lg:hidden p-2 rounded-lg bg-zinc-900 border border-white/10 text-zinc-300 hover:text-white"
             aria-label="Toggle menu"
           >
             {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
@@ -121,8 +122,8 @@ export const Navbar = () => {
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden fixed inset-x-0 top-[60px] bg-[#0c0c0e]/95 border-b border-white/10 backdrop-blur-xl px-6 py-6 shadow-2xl">
-          <div className="flex flex-col gap-3">
+        <div className="lg:hidden fixed inset-x-0 top-[60px] bg-[#0c0c0e]/95 border-b border-white/10 backdrop-blur-xl px-6 py-6 shadow-2xl">
+          <div className="flex flex-col gap-2.5">
             {navLinks.map((link) => (
               <a
                 key={link.id}

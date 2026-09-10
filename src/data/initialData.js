@@ -163,73 +163,76 @@ export const initialPortfolioData = {
       description: "Graduated with Honors. Specialized in Algorithms, Distributed Systems, Software Engineering, and Machine Learning architectures."
     }
   ],
-  blog: [
-    {
-      id: "b1",
-      title: "Architecting Scalable Multi-Agent LLM Systems in Production",
-      summary: "A deep dive into state machines, token optimization, and latency mitigation for autonomous agent swarms.",
-      tags: "AI, LLMs, Architecture",
-      date: "March 2026",
-      readTime: "6 min read"
-    },
-    {
-      id: "b2",
-      title: "Mastering Strict Monochrome UI/UX in Modern Web Apps",
-      summary: "Why eliminating color noise and focusing on contrast, typography, and micro-interactions elevates perceived software quality.",
-      tags: "Design, Frontend, Tailwind",
-      date: "February 2026",
-      readTime: "4 min read"
-    },
-    {
-      id: "b3",
-      title: "Zero-Latency Reactive Client Stores with LocalStorage Fallbacks",
-      summary: "Patterns for optimistic offline-first web applications that keep state instantly synchronized without UI stutter.",
-      tags: "React, JavaScript, State",
-      date: "January 2026",
-      readTime: "5 min read"
-    }
-  ],
-  hackathons: [
-    {
-      id: "h1",
-      title: "Global AI Innovation Hackathon 2024",
-      award: "1st Place Winner",
-      description: "Built an autonomous multi-agent code debugging system using LLMs and AST analysis under 36 hours."
-    },
-    {
-      id: "h2",
-      title: "National Smart India Hackathon",
-      award: "Finalist & Special Mention",
-      description: "Developed an offline-first geospatial relief routing system for emergency medical services."
-    },
-    {
-      id: "h3",
-      title: "Devpost HackOpen 2023",
-      award: "Best Full-Stack Application",
-      description: "Created an AI-assisted collaborative documentation workspace with live multi-user editing."
-    }
-  ],
   certificates: [
     {
       id: "c1",
       title: "Deep Learning Specialization",
       issuer: "DeepLearning.AI",
       date: "2024",
-      credentialUrl: "https://coursera.org"
+      credentialUrl: "https://coursera.org",
+      skills: ["Neural Networks", "CNNs", "Transformers", "PyTorch"]
     },
     {
       id: "c2",
       title: "AWS Certified Solutions Architect",
       issuer: "Amazon Web Services",
       date: "2024",
-      credentialUrl: "https://aws.amazon.com"
+      credentialUrl: "https://aws.amazon.com",
+      skills: ["Cloud Architecture", "EC2", "S3", "Lambda", "High Availability"]
     },
     {
       id: "c3",
       title: "Meta Full-Stack Professional Certificate",
       issuer: "Meta",
       date: "2023",
-      credentialUrl: "https://coursera.org"
+      credentialUrl: "https://coursera.org",
+      skills: ["React", "Node.js", "Database Systems", "API Design"]
+    },
+    {
+      id: "c4",
+      title: "Python for Data Science & Machine Learning",
+      issuer: "IBM",
+      date: "2023",
+      credentialUrl: "https://coursera.org",
+      skills: ["Python", "Pandas", "Scikit-Learn", "Data Analysis"]
+    }
+  ],
+  beyondData: [
+    {
+      id: "bd1",
+      title: "President & Lead Organizer",
+      organization: "University Developer Student Club",
+      period: "2023 - 2024",
+      category: "Leadership & Community",
+      description: "Organized 12+ technical workshops, hackathons, and coding bootcamps for over 600+ students, fostering peer-to-peer technical mentorship and open-source contributions.",
+      highlight: "600+ Students Mentored"
+    },
+    {
+      id: "bd2",
+      title: "1st Place Winner — Global AI Innovation Hackathon",
+      organization: "TechFest International",
+      period: "2024",
+      category: "Competitions",
+      description: "Spearheaded a 4-person engineering team to architect and ship an autonomous code-refactoring multi-agent swarm in 36 continuous sprint hours.",
+      highlight: "Top Prize Winner ($5,000)"
+    },
+    {
+      id: "bd3",
+      title: "Technical Speaker & Workshop Conductor",
+      organization: "Regional Web & AI Dev Summit",
+      period: "2024",
+      category: "Public Speaking",
+      description: "Delivered hands-on keynote and live-coding sessions on 'Building Production-Ready Vector Search & Multi-Agent Workflows with React & FastAPI'.",
+      highlight: "250+ Attendees"
+    },
+    {
+      id: "bd4",
+      title: "Open Source Contributor & Maintainer",
+      organization: "GitHub Community",
+      period: "2022 - Present",
+      category: "Open Source",
+      description: "Contributed performance patches, type definitions, and documentation improvements to popular React and Python developer tooling repositories.",
+      highlight: "Active Contributor"
     }
   ],
   messages: []

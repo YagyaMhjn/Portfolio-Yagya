@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { initialPortfolioData } from '../data/initialData';
 
 const PortfolioContext = createContext(null);
-const STORAGE_KEY = 'yagya_portfolio_data_v1';
+const STORAGE_KEY = 'yagya_portfolio_data_v2';
 const AUTH_KEY = 'yagya_portfolio_admin_auth';
 
 export const PortfolioProvider = ({ children }) => {
@@ -14,7 +14,9 @@ export const PortfolioProvider = ({ children }) => {
         return {
           ...initialPortfolioData,
           ...parsed,
-          profile: { ...initialPortfolioData.profile, ...(parsed.profile || {}) }
+          profile: { ...initialPortfolioData.profile, ...(parsed.profile || {}) },
+          certificates: parsed.certificates || initialPortfolioData.certificates,
+          beyondData: parsed.beyondData || initialPortfolioData.beyondData,
         };
       }
     } catch (e) {
@@ -34,7 +36,6 @@ export const PortfolioProvider = ({ children }) => {
   const [showAdminModal, setShowAdminModal] = useState(false);
   const [currentView, setCurrentView] = useState('portfolio'); // 'portfolio' | 'admin'
 
-  // Detect URL parameter ?admin or /admin path on mount
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const hasAdminQuery = urlParams.has('admin');
@@ -49,7 +50,6 @@ export const PortfolioProvider = ({ children }) => {
     }
   }, [isAdmin]);
 
-  // Persist data updates to LocalStorage
   const saveData = (updater) => {
     setData((prev) => {
       const next = typeof updater === 'function' ? updater(prev) : { ...prev, ...updater };
@@ -62,7 +62,6 @@ export const PortfolioProvider = ({ children }) => {
     });
   };
 
-  // Auth methods
   const loginAdmin = (password) => {
     const expectedPassword = import.meta.env.VITE_ADMIN_PASSWORD || 'Yagy@1605';
     if (password === expectedPassword) {
@@ -81,7 +80,7 @@ export const PortfolioProvider = ({ children }) => {
     setCurrentView('portfolio');
   };
 
-  // Profile actions
+  // Profile
   const updateProfile = (profileFields) => {
     saveData((prev) => ({
       ...prev,
@@ -89,7 +88,7 @@ export const PortfolioProvider = ({ children }) => {
     }));
   };
 
-  // Project actions
+  // Projects
   const addProject = (project) => {
     const newProject = {
       ...project,
@@ -116,7 +115,7 @@ export const PortfolioProvider = ({ children }) => {
     }));
   };
 
-  // Skill actions
+  // Skills
   const addSkill = (skill) => {
     const newSkill = { ...skill, id: 's_' + Date.now() };
     saveData((prev) => ({
@@ -149,7 +148,7 @@ export const PortfolioProvider = ({ children }) => {
     }));
   };
 
-  // Timeline / Journey actions
+  // Journey / Timeline
   const addTimeline = (entry) => {
     const newEntry = { ...entry, id: 't_' + Date.now() };
     saveData((prev) => ({
@@ -172,38 +171,67 @@ export const PortfolioProvider = ({ children }) => {
     }));
   };
 
-  // Blog & Certificates actions
-  const addBlog = (post) => {
-    const newPost = { ...post, id: 'b_' + Date.now(), date: new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) };
-    saveData((prev) => ({
-      ...prev,
-      blog: [newPost, ...prev.blog]
-    }));
-  };
-
-  const deleteBlog = (id) => {
-    saveData((prev) => ({
-      ...prev,
-      blog: prev.blog.filter((b) => b.id !== id)
-    }));
-  };
-
+  // Certificates
   const addCertificate = (cert) => {
-    const newCert = { ...cert, id: 'c_' + Date.now() };
+    const newCert = {
+      ...cert,
+      id: 'c_' + Date.now(),
+      skills: typeof cert.skills === 'string' ? cert.skills.split(',').map((s) => s.trim()).filter(Boolean) : (cert.skills || [])
+    };
     saveData((prev) => ({
       ...prev,
-      certificates: [newCert, ...prev.certificates]
+      certificates: [newCert, ...(prev.certificates || [])]
+    }));
+  };
+
+  const updateCertificate = (id, updatedFields) => {
+    saveData((prev) => ({
+      ...prev,
+      certificates: (prev.certificates || []).map((c) =>
+        c.id === id
+          ? {
+              ...c,
+              ...updatedFields,
+              skills: typeof updatedFields.skills === 'string'
+                ? updatedFields.skills.split(',').map((s) => s.trim()).filter(Boolean)
+                : (updatedFields.skills || c.skills || [])
+            }
+          : c
+      )
     }));
   };
 
   const deleteCertificate = (id) => {
     saveData((prev) => ({
       ...prev,
-      certificates: prev.certificates.filter((c) => c.id !== id)
+      certificates: (prev.certificates || []).filter((c) => c.id !== id)
     }));
   };
 
-  // Contact / Visitor message actions
+  // Beyond Data (Co-curricular achievements)
+  const addBeyondData = (item) => {
+    const newItem = { ...item, id: 'bd_' + Date.now() };
+    saveData((prev) => ({
+      ...prev,
+      beyondData: [newItem, ...(prev.beyondData || [])]
+    }));
+  };
+
+  const updateBeyondData = (id, updatedFields) => {
+    saveData((prev) => ({
+      ...prev,
+      beyondData: (prev.beyondData || []).map((b) => (b.id === id ? { ...b, ...updatedFields } : b))
+    }));
+  };
+
+  const deleteBeyondData = (id) => {
+    saveData((prev) => ({
+      ...prev,
+      beyondData: (prev.beyondData || []).filter((b) => b.id !== id)
+    }));
+  };
+
+  // Visitor messages
   const addMessage = (message) => {
     const newMsg = {
       ...message,
@@ -231,7 +259,6 @@ export const PortfolioProvider = ({ children }) => {
     }));
   };
 
-  // Backup and restore
   const resetToDefault = () => {
     saveData(initialPortfolioData);
   };
@@ -272,10 +299,12 @@ export const PortfolioProvider = ({ children }) => {
         addTimeline,
         updateTimeline,
         deleteTimeline,
-        addBlog,
-        deleteBlog,
         addCertificate,
+        updateCertificate,
         deleteCertificate,
+        addBeyondData,
+        updateBeyondData,
+        deleteBeyondData,
         addMessage,
         deleteMessage,
         markMessageRead,

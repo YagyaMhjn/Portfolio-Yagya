@@ -6,7 +6,8 @@ import { Hero } from './components/Hero';
 import { Journey } from './components/Journey';
 import { Skillset } from './components/Skillset';
 import { Projects } from './components/Projects';
-import { BlogCertificates } from './components/BlogCertificates';
+import { Certificates } from './components/Certificates';
+import { BeyondData } from './components/BeyondData';
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
 import { AdminAuthModal } from './admin/AdminAuthModal';
@@ -24,16 +25,30 @@ function App() {
       {/* Background canvas particles & dark glow */}
       <AmbientCanvas />
 
-      {/* Main Navbar */}
+      {/* Main Navbar with 7 sections */}
       <Navbar />
 
-      {/* Main Sections */}
+      {/* Exact 7 Main Sections */}
       <main className="relative z-10">
+        {/* 1) Home */}
         <Hero />
+
+        {/* 2) Journey */}
         <Journey />
+
+        {/* 3) Skillset */}
         <Skillset />
+
+        {/* 4) Projects */}
         <Projects />
-        <BlogCertificates />
+
+        {/* 5) Certificates */}
+        <Certificates />
+
+        {/* 6) Beyond Data (Co-curricular Achievements) */}
+        <BeyondData />
+
+        {/* 7) Contact */}
         <Contact />
       </main>
 

@@ -5,7 +5,8 @@ import {
   FolderGit2,
   Cpu,
   Milestone,
-  BookOpen,
+  Award,
+  Sparkles,
   MessageSquare,
   Database,
   ArrowLeft,
@@ -16,7 +17,8 @@ import { AdminProfile } from './AdminProfile';
 import { AdminProjects } from './AdminProjects';
 import { AdminSkills } from './AdminSkills';
 import { AdminJourney } from './AdminJourney';
-import { AdminBlog } from './AdminBlog';
+import { AdminCertificates } from './AdminCertificates';
+import { AdminBeyondData } from './AdminBeyondData';
 import { AdminMessages } from './AdminMessages';
 import { AdminBackup } from './AdminBackup';
 
@@ -112,12 +114,21 @@ export const AdminLayout = () => {
             </button>
 
             <button
-              onClick={() => setActiveTab('blog')}
+              onClick={() => setActiveTab('certificates')}
               className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-medium transition-colors ${
-                activeTab === 'blog' ? 'bg-white text-black font-bold shadow' : 'text-zinc-400 hover:bg-white/[0.05] hover:text-white'
+                activeTab === 'certificates' ? 'bg-white text-black font-bold shadow' : 'text-zinc-400 hover:bg-white/[0.05] hover:text-white'
               }`}
             >
-              <BookOpen size={15} /> <span>Articles & Certificates</span>
+              <Award size={15} /> <span>Certificates ({data.certificates?.length || 0})</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('beyondData')}
+              className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-medium transition-colors ${
+                activeTab === 'beyondData' ? 'bg-white text-black font-bold shadow' : 'text-zinc-400 hover:bg-white/[0.05] hover:text-white'
+              }`}
+            >
+              <Sparkles size={15} /> <span>Beyond Data ({data.beyondData?.length || 0})</span>
             </button>
 
             <button
@@ -152,7 +163,8 @@ export const AdminLayout = () => {
             {activeTab === 'projects' && <AdminProjects triggerToast={triggerToast} />}
             {activeTab === 'skills' && <AdminSkills triggerToast={triggerToast} />}
             {activeTab === 'timeline' && <AdminJourney triggerToast={triggerToast} />}
-            {activeTab === 'blog' && <AdminBlog triggerToast={triggerToast} />}
+            {activeTab === 'certificates' && <AdminCertificates triggerToast={triggerToast} />}
+            {activeTab === 'beyondData' && <AdminBeyondData triggerToast={triggerToast} />}
             {activeTab === 'messages' && <AdminMessages />}
             {activeTab === 'backup' && <AdminBackup />}
           </div>
