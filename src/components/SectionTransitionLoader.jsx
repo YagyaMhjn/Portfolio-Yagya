@@ -15,7 +15,7 @@ const MOTIVATIONAL_PHRASES = [
 ];
 
 // 1. Growing Bar Graph Visualization
-const BarChartVisualizer = ({ progress }) => {
+const BarChartVisualizer = ({ progress, isLight }) => {
   const bars = [
     { target: 45, delay: '0ms' },
     { target: 70, delay: '80ms' },
@@ -29,38 +29,38 @@ const BarChartVisualizer = ({ progress }) => {
   return (
     <div className="flex flex-col items-center">
       {/* Visualizer Frame */}
-      <div className="w-48 h-24 p-3 rounded-xl bg-zinc-950/90 border border-white/10 flex items-end justify-between gap-2 relative overflow-hidden shadow-[0_0_30px_rgba(255,255,255,0.05)]">
+      <div className={`w-48 h-24 p-3 rounded-xl ${isLight ? 'bg-zinc-100 border border-black/15 shadow-[0_0_20px_rgba(0,0,0,0.05)]' : 'bg-zinc-950/90 border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.05)]'} flex items-end justify-between gap-2 relative overflow-hidden`}>
         {/* Subtle background grid lines */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:12px_12px]" />
+        <div className={`absolute inset-0 ${isLight ? 'bg-[linear-gradient(to_right,#00000008_1px,transparent_1px),linear-gradient(to_bottom,#00000008_1px,transparent_1px)]' : 'bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)]'} bg-[size:12px_12px]`} />
         
         {bars.map((bar, idx) => {
           const currentHeight = Math.min(100, (progress / 100) * bar.target * 1.1);
           return (
             <div key={idx} className="flex-1 flex flex-col items-center h-full justify-end z-10">
               <div
-                className="w-full rounded-t-sm bg-gradient-to-t from-zinc-700 via-zinc-400 to-white transition-all duration-300 ease-out relative"
+                className={`w-full rounded-t-sm ${isLight ? 'bg-gradient-to-t from-zinc-400 via-zinc-700 to-black' : 'bg-gradient-to-t from-zinc-700 via-zinc-400 to-white'} transition-all duration-300 ease-out relative`}
                 style={{
                   height: `${Math.max(8, currentHeight)}%`,
-                  boxShadow: currentHeight > 50 ? '0 0 10px rgba(255,255,255,0.3)' : 'none'
+                  boxShadow: currentHeight > 50 ? (isLight ? '0 0 10px rgba(0,0,0,0.2)' : '0 0 10px rgba(255,255,255,0.3)') : 'none'
                 }}
               >
                 {/* Glowing peak dot */}
-                <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_6px_#fff]" />
+                <div className={`absolute -top-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full ${isLight ? 'bg-black shadow-[0_0_6px_#000]' : 'bg-white shadow-[0_0_6px_#fff]'}`} />
               </div>
             </div>
           );
         })}
       </div>
-      <div className="flex items-center justify-between w-48 mt-1.5 text-[9px] font-mono text-zinc-500">
+      <div className={`flex items-center justify-between w-48 mt-1.5 text-[9px] font-mono ${isLight ? 'text-zinc-600' : 'text-zinc-500'}`}>
         <span>METRIC_STREAM</span>
-        <span className="text-zinc-300">{Math.round(progress)}%</span>
+        <span className={isLight ? 'text-black font-bold' : 'text-zinc-300'}>{Math.round(progress)}%</span>
       </div>
     </div>
   );
 };
 
 // 2. Increasing Line Chart Visualization
-const LineChartVisualizer = ({ progress }) => {
+const LineChartVisualizer = ({ progress, isLight }) => {
   const points = [
     [0, 55],
     [25, 48],
@@ -81,16 +81,16 @@ const LineChartVisualizer = ({ progress }) => {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="w-52 h-24 p-2 rounded-xl bg-zinc-950/90 border border-white/10 relative overflow-hidden shadow-[0_0_30px_rgba(255,255,255,0.05)] flex items-center justify-center">
+      <div className={`w-52 h-24 p-2 rounded-xl ${isLight ? 'bg-zinc-100 border border-black/15 shadow-[0_0_20px_rgba(0,0,0,0.05)]' : 'bg-zinc-950/90 border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.05)]'} relative overflow-hidden flex items-center justify-center`}>
         {/* Grid lines */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:10px_10px]" />
+        <div className={`absolute inset-0 ${isLight ? 'bg-[linear-gradient(to_right,#00000008_1px,transparent_1px),linear-gradient(to_bottom,#00000008_1px,transparent_1px)]' : 'bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)]'} bg-[size:10px_10px]`} />
         
         <svg className="w-full h-full overflow-visible z-10" viewBox="0 0 190 65">
           {/* Gradient fill underneath */}
           {currentPoints.length > 1 && (
             <path
               d={`${pathD} L ${lastPoint[0]} 65 L 0 65 Z`}
-              fill="url(#lineGradient)"
+              fill={isLight ? "url(#lineGradientLight)" : "url(#lineGradientDark)"}
               opacity="0.3"
             />
           )}
@@ -98,7 +98,7 @@ const LineChartVisualizer = ({ progress }) => {
           <path
             d={pathD}
             fill="none"
-            stroke="#ffffff"
+            stroke={isLight ? "#09090b" : "#ffffff"}
             strokeWidth="2.2"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -109,34 +109,38 @@ const LineChartVisualizer = ({ progress }) => {
             cx={lastPoint[0]}
             cy={lastPoint[1]}
             r="3.5"
-            fill="#ffffff"
+            fill={isLight ? "#09090b" : "#ffffff"}
             className="animate-ping opacity-75"
           />
           <circle
             cx={lastPoint[0]}
             cy={lastPoint[1]}
             r="3"
-            fill="#ffffff"
-            filter="drop-shadow(0 0 6px rgba(255,255,255,0.9))"
+            fill={isLight ? "#09090b" : "#ffffff"}
+            filter={isLight ? "drop-shadow(0 0 4px rgba(0,0,0,0.6))" : "drop-shadow(0 0 6px rgba(255,255,255,0.9))"}
           />
           <defs>
-            <linearGradient id="lineGradient" x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id="lineGradientDark" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#ffffff" stopOpacity="0.6" />
               <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
+            </linearGradient>
+            <linearGradient id="lineGradientLight" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#09090b" stopOpacity="0.5" />
+              <stop offset="100%" stopColor="#09090b" stopOpacity="0" />
             </linearGradient>
           </defs>
         </svg>
       </div>
-      <div className="flex items-center justify-between w-52 mt-1.5 text-[9px] font-mono text-zinc-500">
+      <div className={`flex items-center justify-between w-52 mt-1.5 text-[9px] font-mono ${isLight ? 'text-zinc-600' : 'text-zinc-500'}`}>
         <span>GROWTH_TRAJECTORY</span>
-        <span className="text-zinc-300">+{Math.round(progress * 1.42)}%</span>
+        <span className={isLight ? 'text-black font-bold' : 'text-zinc-300'}>+{Math.round(progress * 1.42)}%</span>
       </div>
     </div>
   );
 };
 
 // 3. Popping Bubble Chart Visualization
-const BubbleChartVisualizer = ({ progress }) => {
+const BubbleChartVisualizer = ({ progress, isLight }) => {
   const bubbles = [
     { x: '18%', y: '50%', size: 32, label: 'AI', delay: 10 },
     { x: '42%', y: '32%', size: 44, label: 'SYS', delay: 25 },
@@ -148,9 +152,9 @@ const BubbleChartVisualizer = ({ progress }) => {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="w-52 h-24 rounded-xl bg-zinc-950/90 border border-white/10 relative overflow-hidden shadow-[0_0_30px_rgba(255,255,255,0.05)]">
+      <div className={`w-52 h-24 rounded-xl ${isLight ? 'bg-zinc-100 border border-black/15 shadow-[0_0_20px_rgba(0,0,0,0.05)]' : 'bg-zinc-950/90 border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.05)]'} relative overflow-hidden`}>
         {/* Ambient radial glow */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.06),transparent_70%)]" />
+        <div className={`absolute inset-0 ${isLight ? 'bg-[radial-gradient(circle_at_50%_50%,rgba(0,0,0,0.05),transparent_70%)]' : 'bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.06),transparent_70%)]'}`} />
 
         {/* Popping Bubbles */}
         {bubbles.map((b, idx) => {
@@ -159,7 +163,9 @@ const BubbleChartVisualizer = ({ progress }) => {
           return (
             <div
               key={idx}
-              className="absolute rounded-full flex items-center justify-center border border-white/30 bg-zinc-900/90 text-white font-mono text-[9px] font-bold transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] shadow-[0_0_15px_rgba(255,255,255,0.15)]"
+              className={`absolute rounded-full flex items-center justify-center border ${
+                isLight ? 'border-black/30 bg-white text-black shadow-md' : 'border-white/30 bg-zinc-900/90 text-white shadow-[0_0_15px_rgba(255,255,255,0.15)]'
+              } font-mono text-[9px] font-bold transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)]`}
               style={{
                 left: b.x,
                 top: b.y,
@@ -174,23 +180,23 @@ const BubbleChartVisualizer = ({ progress }) => {
           );
         })}
       </div>
-      <div className="flex items-center justify-between w-52 mt-1.5 text-[9px] font-mono text-zinc-500">
+      <div className={`flex items-center justify-between w-52 mt-1.5 text-[9px] font-mono ${isLight ? 'text-zinc-600' : 'text-zinc-500'}`}>
         <span>CLUSTER_MATRIX</span>
-        <span className="text-zinc-300">{bubbles.filter(b => progress >= b.delay).length} / {bubbles.length}</span>
+        <span className={isLight ? 'text-black font-bold' : 'text-zinc-300'}>{bubbles.filter(b => progress >= b.delay).length} / {bubbles.length}</span>
       </div>
     </div>
   );
 };
 
 // 4. Radial Telemetry Radar
-const RadialRadarVisualizer = ({ progress }) => {
+const RadialRadarVisualizer = ({ progress, isLight }) => {
   const radius = 32;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (progress / 100) * circumference;
 
   return (
     <div className="flex flex-col items-center">
-      <div className="w-48 h-24 p-2 rounded-xl bg-zinc-950/90 border border-white/10 relative overflow-hidden shadow-[0_0_30px_rgba(255,255,255,0.05)] flex items-center justify-center">
+      <div className={`w-48 h-24 p-2 rounded-xl ${isLight ? 'bg-zinc-100 border border-black/15 shadow-[0_0_20px_rgba(0,0,0,0.05)]' : 'bg-zinc-950/90 border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.05)]'} relative overflow-hidden flex items-center justify-center`}>
         {/* Radar Ring */}
         <div className="relative w-20 h-20 flex items-center justify-center">
           <svg className="w-full h-full -rotate-90" viewBox="0 0 80 80">
@@ -200,7 +206,7 @@ const RadialRadarVisualizer = ({ progress }) => {
               cy="40"
               r={radius}
               fill="none"
-              stroke="#27272a"
+              stroke={isLight ? "#d4d4d8" : "#27272a"}
               strokeWidth="4"
             />
             {/* Animated filling circle */}
@@ -209,32 +215,33 @@ const RadialRadarVisualizer = ({ progress }) => {
               cy="40"
               r={radius}
               fill="none"
-              stroke="#ffffff"
+              stroke={isLight ? "#09090b" : "#ffffff"}
               strokeWidth="4"
               strokeDasharray={circumference}
               strokeDashoffset={strokeDashoffset}
               strokeLinecap="round"
               className="transition-all duration-150 ease-out"
-              filter="drop-shadow(0 0 6px rgba(255,255,255,0.6))"
+              filter={isLight ? "drop-shadow(0 0 4px rgba(0,0,0,0.4))" : "drop-shadow(0 0 6px rgba(255,255,255,0.6))"}
             />
           </svg>
 
           {/* Center percentage */}
           <div className="absolute inset-0 flex flex-col items-center justify-center font-mono">
-            <span className="text-xs font-bold text-white">{Math.round(progress)}%</span>
+            <span className={`text-xs font-bold ${isLight ? 'text-black' : 'text-white'}`}>{Math.round(progress)}%</span>
           </div>
         </div>
       </div>
-      <div className="flex items-center justify-between w-48 mt-1.5 text-[9px] font-mono text-zinc-500">
+      <div className={`flex items-center justify-between w-48 mt-1.5 text-[9px] font-mono ${isLight ? 'text-zinc-600' : 'text-zinc-500'}`}>
         <span>RADIAL_TELEMETRY</span>
-        <span className="text-zinc-300">SYNCING</span>
+        <span className={isLight ? 'text-black font-bold' : 'text-zinc-300'}>SYNCING</span>
       </div>
     </div>
   );
 };
 
 export const SectionTransitionLoader = () => {
-  const { activePage } = usePortfolio();
+  const { activePage, theme } = usePortfolio();
+  const isLight = theme === 'light';
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [activeVisualizerIndex, setActiveVisualizerIndex] = useState(0);
@@ -293,33 +300,33 @@ export const SectionTransitionLoader = () => {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-md transition-opacity duration-300 ease-out animate-fadeIn pointer-events-auto select-none"
+      className={`fixed inset-0 z-50 flex items-center justify-center ${isLight ? 'bg-white/80' : 'bg-black/75'} backdrop-blur-md transition-opacity duration-300 ease-out animate-fadeIn pointer-events-auto select-none`}
       aria-live="polite"
     >
-      <div className="glass-card p-6 sm:p-8 rounded-2xl border border-white/15 bg-zinc-950/90 shadow-[0_0_50px_rgba(0,0,0,0.9),0_0_30px_rgba(255,255,255,0.08)] flex flex-col items-center max-w-xs w-full mx-4">
+      <div className={`glass-card p-6 sm:p-8 rounded-2xl border ${isLight ? 'border-black/15 bg-white/95 shadow-[0_0_50px_rgba(0,0,0,0.15)]' : 'border-white/15 bg-zinc-950/90 shadow-[0_0_50px_rgba(0,0,0,0.9),0_0_30px_rgba(255,255,255,0.08)]'} flex flex-col items-center max-w-xs w-full mx-4`}>
         
         {/* Dynamic Randomized Data Visualization */}
         <div className="mb-4 flex items-center justify-center">
-          {activeVisualizerIndex === 0 && <BarChartVisualizer progress={progress} />}
-          {activeVisualizerIndex === 1 && <LineChartVisualizer progress={progress} />}
-          {activeVisualizerIndex === 2 && <BubbleChartVisualizer progress={progress} />}
-          {activeVisualizerIndex === 3 && <RadialRadarVisualizer progress={progress} />}
+          {activeVisualizerIndex === 0 && <BarChartVisualizer progress={progress} isLight={isLight} />}
+          {activeVisualizerIndex === 1 && <LineChartVisualizer progress={progress} isLight={isLight} />}
+          {activeVisualizerIndex === 2 && <BubbleChartVisualizer progress={progress} isLight={isLight} />}
+          {activeVisualizerIndex === 3 && <RadialRadarVisualizer progress={progress} isLight={isLight} />}
         </div>
 
         {/* Dynamic Randomized Motivational Text */}
         <div className="text-center space-y-1">
-          <p className="text-xs sm:text-sm font-bold font-mono text-white tracking-wide">
+          <p className={`text-xs sm:text-sm font-bold font-mono ${isLight ? 'text-black' : 'text-white'} tracking-wide`}>
             {activePhrase}
           </p>
-          <p className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest">
+          <p className={`text-[10px] font-mono ${isLight ? 'text-zinc-600' : 'text-zinc-400'} uppercase tracking-widest`}>
             INITIALIZING SECTION • {Math.round(progress)}%
           </p>
         </div>
 
         {/* Glowing Linear Progress Bar */}
-        <div className="w-full h-1 bg-zinc-900 rounded-full mt-4 overflow-hidden border border-white/5">
+        <div className={`w-full h-1 ${isLight ? 'bg-zinc-200 border-black/10' : 'bg-zinc-900 border-white/5'} rounded-full mt-4 overflow-hidden border`}>
           <div
-            className="h-full bg-gradient-to-r from-zinc-500 via-zinc-200 to-white transition-all duration-100 ease-out rounded-full shadow-[0_0_8px_#ffffff]"
+            className={`h-full ${isLight ? 'bg-gradient-to-r from-zinc-500 via-zinc-800 to-black shadow-[0_0_8px_rgba(0,0,0,0.4)]' : 'bg-gradient-to-r from-zinc-500 via-zinc-200 to-white shadow-[0_0_8px_#ffffff]'} transition-all duration-100 ease-out rounded-full`}
             style={{ width: `${progress}%` }}
           />
         </div>
