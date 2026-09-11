@@ -68,21 +68,23 @@ export const Hero = () => {
             </p>
 
             {/* Interactive Page Switcher CTA Buttons & Expanding Social Handles */}
-            <div className="flex flex-wrap items-center gap-3">
-              <button
-                onClick={() => setActivePage('projects')}
-                className="btn-glow inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white dark:bg-white light:bg-black text-black dark:text-black light:text-white font-semibold text-sm hover:bg-zinc-100 dark:hover:bg-zinc-100 light:hover:bg-zinc-800 transition-all shadow-[0_4px_20px_rgba(255,255,255,0.15)] group h-11"
-              >
-                <span>Explore Work</span>
-                <ArrowUpRight size={15} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-              </button>
-              <button
-                onClick={() => setActivePage('contact')}
-                className="btn-glow inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-zinc-900/90 dark:bg-zinc-900/90 light:bg-white text-zinc-200 dark:text-zinc-200 light:text-zinc-900 border border-white/10 dark:border-white/10 light:border-black/15 font-medium text-sm hover:bg-zinc-800 dark:hover:bg-zinc-800 light:hover:bg-zinc-100 transition-all group h-11"
-              >
-                <Send size={14} className="text-zinc-400 dark:text-zinc-400 light:text-zinc-600 group-hover:text-white dark:group-hover:text-white light:group-hover:text-black group-hover:translate-x-0.5 transition-all" />
-                <span>Get in Touch</span>
-              </button>
+            <div className="flex flex-wrap items-center gap-3 sm:gap-3.5">
+              <div className="flex items-center gap-3 shrink-0">
+                <button
+                  onClick={() => setActivePage('projects')}
+                  className="btn-glow inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white dark:bg-white light:bg-black text-black dark:text-black light:text-white font-semibold text-sm hover:bg-zinc-100 dark:hover:bg-zinc-100 light:hover:bg-zinc-800 transition-all shadow-[0_4px_20px_rgba(255,255,255,0.15)] group h-11"
+                >
+                  <span>Explore Work</span>
+                  <ArrowUpRight size={15} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </button>
+                <button
+                  onClick={() => setActivePage('contact')}
+                  className="btn-glow inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-zinc-900/90 dark:bg-zinc-900/90 light:bg-white text-zinc-200 dark:text-zinc-200 light:text-zinc-900 border border-white/10 dark:border-white/10 light:border-black/15 font-medium text-sm hover:bg-zinc-800 dark:hover:bg-zinc-800 light:hover:bg-zinc-100 transition-all group h-11"
+                >
+                  <Send size={14} className="text-zinc-400 dark:text-zinc-400 light:text-zinc-600 group-hover:text-white dark:group-hover:text-white light:group-hover:text-black group-hover:translate-x-0.5 transition-all" />
+                  <span>Get in Touch</span>
+                </button>
+              </div>
 
               {/* Square (rounded corners) expanding social handles & CV */}
               <SocialBar socials={profile.socials} />
