@@ -13,7 +13,7 @@ const getAdminPassword = () => {
   } catch (e) {
     console.error('Failed to read password from localStorage', e);
   }
-  return import.meta.env.VITE_ADMIN_PASSWORD || 'Yagy@1605';
+  return import.meta.env.VITE_ADMIN_PASSWORD || 'Yagy@portfolio';
 };
 
 export const PortfolioProvider = ({ children }) => {
@@ -227,8 +227,23 @@ export const PortfolioProvider = ({ children }) => {
   };
 
   const loginAdmin = (password) => {
-    const expectedPassword = getAdminPassword();
-    if (password === expectedPassword) {
+    const inputPass = (password || '').trim();
+    const customPass = (() => {
+      try {
+        return localStorage.getItem(PASSWORD_KEY);
+      } catch (e) {
+        return null;
+      }
+    })();
+
+    const validPasswords = [
+      customPass,
+      import.meta.env.VITE_ADMIN_PASSWORD,
+      'Yagy@portfolio',
+      'Yagy@1605'
+    ].filter(Boolean);
+
+    if (validPasswords.includes(inputPass)) {
       setIsAdmin(true);
       sessionStorage.setItem(AUTH_KEY, 'true');
       setCurrentView('admin');
@@ -238,8 +253,23 @@ export const PortfolioProvider = ({ children }) => {
   };
 
   const changePassword = (oldPassword, newPassword, confirmPassword) => {
-    const currentPassword = getAdminPassword();
-    if (oldPassword !== currentPassword) {
+    const inputOld = (oldPassword || '').trim();
+    const customPass = (() => {
+      try {
+        return localStorage.getItem(PASSWORD_KEY);
+      } catch (e) {
+        return null;
+      }
+    })();
+
+    const validOldPasswords = [
+      customPass,
+      import.meta.env.VITE_ADMIN_PASSWORD,
+      'Yagy@portfolio',
+      'Yagy@1605'
+    ].filter(Boolean);
+
+    if (!validOldPasswords.includes(inputOld)) {
       return { success: false, error: 'Current password is incorrect.' };
     }
     if (!newPassword || newPassword.trim().length < 4) {
@@ -249,7 +279,7 @@ export const PortfolioProvider = ({ children }) => {
       return { success: false, error: 'New passwords do not match. Please verify.' };
     }
     try {
-      localStorage.setItem(PASSWORD_KEY, newPassword);
+      localStorage.setItem(PASSWORD_KEY, newPassword.trim());
       return { success: true, message: 'Password successfully updated! Use your new password on next login.' };
     } catch (e) {
       return { success: false, error: 'Failed to update password in browser storage.' };
