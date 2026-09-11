@@ -59,6 +59,22 @@ export const Navbar = () => {
     setTouchStartX(null);
   };
 
+  // Close menu and stay on current screen
+  const handleCloseMenu = () => {
+    setMobileMenuOpen(false);
+  };
+
+  // Select section: slide panel out, fade blur, then show section loading screen
+  const handleSelectSection = (targetId) => {
+    setMobileMenuOpen(false);
+    if (targetId === activePage) return;
+    // Wait for the panel to slide out to the right and blur to fade out (280ms)
+    // before triggering the section transition loader
+    setTimeout(() => {
+      setActivePage(targetId);
+    }, 280);
+  };
+
   return (
     <>
       <header
@@ -72,8 +88,11 @@ export const Navbar = () => {
           {/* Brand */}
           <button
             onClick={() => {
-              setActivePage('home');
-              setMobileMenuOpen(false);
+              if (activePage !== 'home') {
+                handleSelectSection('home');
+              } else {
+                handleCloseMenu();
+              }
             }}
             className={`flex items-center gap-2 group font-semibold text-base sm:text-lg tracking-tight hover:opacity-90 transition-opacity ${
               isLight ? 'text-zinc-900' : 'text-white'
@@ -123,47 +142,59 @@ export const Navbar = () => {
           <div className="lg:hidden flex items-center gap-2">
             <ThemeToggleButton />
             <button
-              onClick={() => setMobileMenuOpen(true)}
+              onClick={() => {
+                if (mobileMenuOpen) {
+                  handleCloseMenu();
+                } else {
+                  setMobileMenuOpen(true);
+                }
+              }}
               className={`p-2 rounded-lg border transition-colors ${
                 isLight
                   ? 'bg-zinc-100 border-zinc-200 text-zinc-700 hover:text-black hover:bg-zinc-200'
                   : 'bg-zinc-900 border-white/10 text-zinc-300 hover:text-white hover:bg-zinc-800'
               }`}
-              aria-label="Open navigation menu"
+              aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
             >
-              <Menu size={18} />
+              {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
             </button>
           </div>
         </div>
       </header>
 
-      {/* Mobile Drawer Backdrop Overlay */}
+      {/* Mobile Drawer Backdrop (Smooth background blur fade in/out) */}
       <div
-        onClick={() => setMobileMenuOpen(false)}
-        className={`lg:hidden fixed inset-0 z-[60] bg-black/70 backdrop-blur-sm transition-opacity duration-300 ease-out ${
-          mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        onClick={handleCloseMenu}
+        className={`lg:hidden fixed inset-0 z-[60] transition-all duration-300 ease-out ${
+          mobileMenuOpen
+            ? 'opacity-100 backdrop-blur-md bg-black/40 dark:bg-black/60 pointer-events-auto visible'
+            : 'opacity-0 backdrop-blur-none bg-transparent pointer-events-none invisible'
         }`}
         aria-hidden="true"
       />
 
-      {/* Mobile Slide-Over Drawer Panel (Smooth Right-to-Left Swipe Entry) */}
+      {/* Mobile Floating Glass-Card Panel (Matches Projects, Certificates & Beyond Data cards) */}
       <div
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        className={`lg:hidden fixed top-0 right-0 bottom-0 z-[70] w-[82vw] max-w-[320px] h-[100dvh] flex flex-col justify-between shadow-[-20px_0_50px_rgba(0,0,0,0.8)] transition-transform duration-300 ease-out will-change-transform ${
+        className={`lg:hidden fixed top-16 right-3 bottom-4 sm:top-20 sm:right-6 sm:bottom-6 z-[70] w-[calc(100vw-24px)] max-w-[320px] rounded-2xl flex flex-col justify-between overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] will-change-transform ${
           isLight
-            ? 'bg-white border-l border-zinc-200 text-zinc-900'
-            : 'bg-[#09090c] border-l border-white/10 text-white'
-        } ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
+            ? 'bg-white/95 border border-black/15 text-zinc-900 backdrop-blur-xl'
+            : 'bg-[#0c0c10]/95 border border-white/15 text-white backdrop-blur-xl'
+        } ${
+          mobileMenuOpen
+            ? 'translate-x-0 opacity-100 pointer-events-auto visible shadow-[0_20px_50px_rgba(0,0,0,0.8)]'
+            : 'translate-x-[120%] opacity-0 pointer-events-none invisible shadow-none'
+        }`}
         role="dialog"
         aria-modal="true"
-        aria-label="Navigation drawer"
+        aria-label="Navigation panel"
       >
-        {/* Drawer Header */}
+        {/* Panel Header */}
         <div
           className={`flex items-center justify-between px-5 py-4 border-b ${
-            isLight ? 'border-zinc-200' : 'border-white/[0.08]'
+            isLight ? 'border-black/10' : 'border-white/[0.08]'
           }`}
         >
           <div className="flex items-center gap-2">
@@ -177,11 +208,11 @@ export const Navbar = () => {
             </span>
           </div>
           <button
-            onClick={() => setMobileMenuOpen(false)}
-            className={`p-2 rounded-lg border transition-colors ${
+            onClick={handleCloseMenu}
+            className={`p-1.5 rounded-lg border transition-colors ${
               isLight
                 ? 'bg-zinc-100 border-zinc-200 text-zinc-600 hover:text-black hover:bg-zinc-200'
-                : 'bg-zinc-900 border-white/10 text-zinc-300 hover:text-white hover:bg-zinc-800'
+                : 'bg-zinc-900 border-white/10 text-zinc-400 hover:text-white hover:bg-zinc-800'
             }`}
             aria-label="Close navigation menu"
           >
@@ -190,23 +221,20 @@ export const Navbar = () => {
         </div>
 
         {/* Navigation Items List */}
-        <div className="flex flex-col gap-1.5 px-3 py-4 overflow-y-auto flex-1">
+        <div className="flex flex-col gap-1.5 px-3 py-3 overflow-y-auto flex-1">
           {navLinks.map((link, idx) => {
             const isActive = activePage === link.id;
             return (
               <button
                 key={link.id}
-                onClick={() => {
-                  setActivePage(link.id);
-                  setMobileMenuOpen(false);
-                }}
+                onClick={() => handleSelectSection(link.id)}
                 className={`group w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
                   isActive
                     ? isLight
                       ? 'bg-black text-white font-bold shadow-md'
                       : 'bg-white text-black font-bold shadow-[0_0_20px_rgba(255,255,255,0.25)]'
                     : isLight
-                    ? 'text-zinc-700 hover:text-black hover:bg-zinc-100'
+                    ? 'text-zinc-700 hover:text-black hover:bg-black/5'
                     : 'text-zinc-300 hover:text-white hover:bg-white/[0.06]'
                 }`}
               >
@@ -241,15 +269,15 @@ export const Navbar = () => {
           })}
         </div>
 
-        {/* Drawer Footer */}
+        {/* Panel Footer */}
         <div
           className={`p-4 border-t ${
             isLight
-              ? 'border-zinc-200 bg-zinc-50/80'
+              ? 'border-black/10 bg-zinc-50/80'
               : 'border-white/[0.08] bg-zinc-900/30'
           }`}
         >
-          <div className="flex items-center gap-2 mb-1.5">
+          <div className="flex items-center gap-2 mb-1">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
