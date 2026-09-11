@@ -898,3 +898,56 @@ textarea {
               color 0.25s cubic-bezier(0.16, 1, 0.3, 1),
               box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+/* ==========================================================================
+   Smooth Flowy Expanding Social Handle Buttons (Hardware-accelerated)
+   ========================================================================== */
+.social-expanding-btn {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  will-change: transform;
+  transition: background-color 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              color 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.social-expanding-btn:hover {
+  transform: translateY(-1.5px) translateZ(0);
+}
+
+.social-expanding-label {
+  display: inline-flex;
+  align-items: center;
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  pointer-events: none;
+  transform: translateZ(0);
+  will-change: max-width, opacity;
+  transition: max-width 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.social-expanding-btn:hover .social-expanding-label,
+.social-expanding-btn:focus-visible .social-expanding-label {
+  max-width: 140px;
+  opacity: 1;
+}
+
+/* Light mode specific styling for expanding social buttons */
+html.light .social-expanding-btn {
+  background-color: #ffffff !important;
+  border-color: rgba(0, 0, 0, 0.16) !important;
+  color: #27272a !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
+}
+
+html.light .social-expanding-btn:hover {
+  background-color: #f4f4f5 !important;
+  border-color: rgba(0, 0, 0, 0.38) !important;
+  color: #09090b !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12) !important;
+}
