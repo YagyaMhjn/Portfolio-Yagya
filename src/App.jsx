@@ -55,10 +55,8 @@ function App() {
         {activePage === 'contact' && <Contact key="contact" />}
       </main>
 
-      {/* Fixed Vertical Social Handles Dock in Lower Right Corner (For all sections except Home) */}
-      {activePage !== 'home' && (
-        <VerticalSocialDock socials={data.profile?.socials} />
-      )}
+      {/* Fixed Vertical Social Handles Dock in Lower Right Corner */}
+      <VerticalSocialDock socials={data.profile?.socials} />
 
       {/* Footer (No public admin button) */}
       <Footer />
