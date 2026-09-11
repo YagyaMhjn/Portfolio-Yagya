@@ -7,7 +7,7 @@ export const initialPortfolioData = {
     status: "Open to Opportunities",
     statusSub: "Specializing in Full-Stack Engineering, Generative AI, and Distributed Cloud Systems.",
     location: "Punjab, India",
-    email: "yagyamahajan16@gmail.com",
+    email: "yagyamhjn@gmail.com",
     avatar: "/profile-avatar.png",
     avatarScale: 127,
     avatarX: 1,
@@ -20,7 +20,7 @@ export const initialPortfolioData = {
       { id: "soc_1", platform: "GitHub", url: "https://github.com/YagyaMhjn", label: "GitHub" },
       { id: "soc_2", platform: "LinkedIn", url: "https://linkedin.com/in/yagya-mahajan", label: "LinkedIn" },
       { id: "soc_3", platform: "Instagram", url: "https://instagram.com/yagyamahajan", label: "Instagram" },
-      { id: "soc_4", platform: "Email", url: "mailto:yagyamahajan16@gmail.com", label: "Email" },
+      { id: "soc_4", platform: "Email", url: "mailto:yagyamhjn@gmail.com", label: "Email" },
       { id: "soc_5", platform: "Download CV", url: "#", label: "Download CV" }
     ],
     primaryTech: [
