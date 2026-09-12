@@ -35,6 +35,24 @@ export const AdminBackup = () => {
 
         <button
           onClick={() => {
+            const fileContent = `export const initialPortfolioData = ${exportData()};\n`;
+            const blob = new Blob([fileContent], { type: 'text/javascript' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'initialData.js';
+            a.click();
+            URL.revokeObjectURL(url);
+            setBackupMsg('Downloaded initialData.js successfully!');
+            setTimeout(() => setBackupMsg(''), 4000);
+          }}
+          className="px-4 py-2.5 rounded-xl bg-blue-600/30 border border-blue-500/40 text-blue-300 font-bold text-xs hover:bg-blue-600/40 transition-all flex items-center gap-1.5"
+        >
+          <Download size={13} /> <span>Download initialData.js</span>
+        </button>
+
+        <button
+          onClick={() => {
             if (window.confirm('Reset all portfolio data to default seed?')) {
               resetToDefault();
               setBackupMsg('Reset to default seed portfolio data.');
