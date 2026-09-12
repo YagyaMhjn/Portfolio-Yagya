@@ -70,29 +70,22 @@ export const Projects = () => {
 
         {/* Card Content Body */}
         <div className="p-6">
-          {/* Category badge + Expanding "Repository" GitHub button without disturbing arrangement */}
-          <div className="relative flex items-center justify-between min-h-[32px] mb-3.5">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 px-2.5 py-1 rounded bg-zinc-900/90 border border-white/[0.06] group-hover:border-white/20 transition-colors whitespace-nowrap overflow-hidden text-ellipsis max-w-[calc(100%-44px)]">
+          {/* Category badge + GitHub button (Fixed, clean icon button with no expansion) */}
+          <div className="flex items-center justify-between gap-3 mb-3.5">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 px-2.5 py-1 rounded bg-zinc-900/90 border border-white/[0.06] group-hover:border-white/20 transition-colors">
               {project.category || 'Engineering'}
             </span>
 
             {project.github && (
-              <div className="relative shrink-0 flex items-center justify-end w-8 h-8">
-                <a
-                  href={project.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="absolute right-0 top-0 inline-flex items-center justify-center h-8 min-w-[32px] px-2 rounded-lg bg-zinc-900/95 hover:bg-zinc-800 border border-white/[0.12] hover:border-white/40 text-zinc-300 hover:text-white transition-all duration-300 ease-out group/gh overflow-hidden shadow-lg cursor-pointer z-10"
-                  title="Repository"
-                >
-                  <span className="shrink-0 flex items-center justify-center text-zinc-300 group-hover/gh:text-white transition-colors">
-                    <GithubIcon size={14} />
-                  </span>
-                  <span className="max-w-0 opacity-0 group-hover/gh:max-w-[100px] group-hover/gh:opacity-100 group-hover/gh:ml-2 transition-all duration-300 ease-out whitespace-nowrap text-[11px] font-mono font-medium">
-                    Repository
-                  </span>
-                </a>
-              </div>
+              <a
+                href={project.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="shrink-0 inline-flex items-center justify-center w-8 h-8 rounded-lg bg-zinc-900/90 hover:bg-zinc-800 border border-white/[0.1] hover:border-white/30 text-zinc-400 hover:text-white transition-all hover:scale-105"
+                title="View GitHub Repository"
+              >
+                <GithubIcon size={15} />
+              </a>
             )}
           </div>
 
