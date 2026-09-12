@@ -43,9 +43,16 @@ export const AdminCertificates = ({ triggerToast }) => {
     e.preventDefault();
     if (!certForm.title.trim()) return;
 
-    const skillsArray = typeof certForm.skills === 'string'
+    const rawSkills = typeof certForm.skills === 'string'
       ? certForm.skills.split(',').map((s) => s.trim()).filter(Boolean)
-      : certForm.skills;
+      : (certForm.skills || []);
+    const seenSkills = new Set();
+    const skillsArray = rawSkills.filter((s) => {
+      const lower = s.toLowerCase();
+      if (seenSkills.has(lower)) return false;
+      seenSkills.add(lower);
+      return true;
+    });
 
     const payload = {
       ...certForm,

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { Plus, Trash2, Edit2, Check, X, Search, Sparkles, Filter, GripVertical, ArrowUp, ArrowDown, ArrowUpDown } from 'lucide-react';
+import { Plus, Trash2, Edit2, Check, X, Search, Sparkles, Filter, GripVertical, ArrowUp, ArrowDown, ArrowUpDown, AlertCircle } from 'lucide-react';
 
 export const AdminSkills = ({ triggerToast }) => {
   const { data, addSkill, updateSkill, deleteSkill, reorderSkills } = usePortfolio();
@@ -28,15 +28,46 @@ export const AdminSkills = ({ triggerToast }) => {
   const [draggedIdx, setDraggedIdx] = useState(null);
   const [dragOverIdx, setDragOverIdx] = useState(null);
 
+  // Duplicate Skill Detection
+  const addNameTrimmed = skillForm.name.trim();
+  const isAddDuplicate = Boolean(
+    addNameTrimmed &&
+    (data.skills || []).some(
+      (s) => s.name?.trim().toLowerCase() === addNameTrimmed.toLowerCase()
+    )
+  );
+
+  const editNameTrimmed = editForm.name.trim();
+  const isEditDuplicate = Boolean(
+    editingSkill &&
+    editNameTrimmed &&
+    (data.skills || []).some(
+      (s) => s.id !== editingSkill.id && s.name?.trim().toLowerCase() === editNameTrimmed.toLowerCase()
+    )
+  );
+
   const handleAddSkill = (e) => {
     e.preventDefault();
-    if (!skillForm.name.trim()) return;
+    if (!addNameTrimmed) return;
+    if (isAddDuplicate) {
+      if (typeof triggerToast === 'function') {
+        triggerToast(`Skill "${addNameTrimmed}" already exists in your matrix.`);
+      }
+      return;
+    }
 
-    addSkill({
-      name: skillForm.name.trim(),
+    const res = addSkill({
+      name: addNameTrimmed,
       category: skillForm.category,
       level: skillForm.category === 'Soft Skills' ? '' : skillForm.level,
     });
+
+    if (res && res.success === false) {
+      if (typeof triggerToast === 'function') {
+        triggerToast(res.error);
+      }
+      return;
+    }
 
     setSkillForm({
       name: '',
@@ -58,13 +89,26 @@ export const AdminSkills = ({ triggerToast }) => {
 
   const handleSaveEdit = (e) => {
     e.preventDefault();
-    if (!editingSkill || !editForm.name.trim()) return;
+    if (!editingSkill || !editNameTrimmed) return;
+    if (isEditDuplicate) {
+      if (typeof triggerToast === 'function') {
+        triggerToast(`Another skill named "${editNameTrimmed}" already exists.`);
+      }
+      return;
+    }
 
-    updateSkill(editingSkill.id, {
-      name: editForm.name.trim(),
+    const res = updateSkill(editingSkill.id, {
+      name: editNameTrimmed,
       category: editForm.category,
       level: editForm.category === 'Soft Skills' ? '' : editForm.level,
     });
+
+    if (res && res.success === false) {
+      if (typeof triggerToast === 'function') {
+        triggerToast(res.error);
+      }
+      return;
+    }
 
     setEditingSkill(null);
     triggerToast();
@@ -210,8 +254,16 @@ export const AdminSkills = ({ triggerToast }) => {
                   placeholder="e.g. Next.js, Kubernetes..."
                   value={skillForm.name}
                   onChange={(e) => setSkillForm({ ...skillForm, name: e.target.value })}
-                  className="glass-input w-full px-3.5 py-2 text-sm"
+                  className={`glass-input w-full px-3.5 py-2 text-sm transition-all ${
+                    isAddDuplicate ? 'border-red-500/80 bg-red-950/20 text-white' : ''
+                  }`}
                 />
+                {isAddDuplicate && (
+                  <p className="mt-1.5 text-xs text-red-400 font-mono flex items-center gap-1.5 animate-fadeIn">
+                    <AlertCircle size={13} className="shrink-0 text-red-400" />
+                    <span>"{addNameTrimmed}" is already in your skills matrix.</span>
+                  </p>
+                )}
               </div>
 
               <div>
@@ -266,7 +318,12 @@ export const AdminSkills = ({ triggerToast }) => {
 
             <button
               type="submit"
-              className="px-5 py-2.5 rounded-xl bg-white text-black font-bold text-xs hover:bg-zinc-200 transition-all flex items-center gap-1.5 shadow-sm"
+              disabled={isAddDuplicate || !addNameTrimmed}
+              className={`px-5 py-2.5 rounded-xl font-bold text-xs transition-all flex items-center gap-1.5 shadow-sm ${
+                isAddDuplicate || !addNameTrimmed
+                  ? 'bg-zinc-800 text-zinc-500 cursor-not-allowed border border-white/5 opacity-60'
+                  : 'bg-white text-black hover:bg-zinc-200'
+              }`}
             >
               <Plus size={14} /> <span>Add Skill</span>
             </button>
@@ -520,8 +577,16 @@ export const AdminSkills = ({ triggerToast }) => {
                   required
                   value={editForm.name}
                   onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
-                  className="glass-input w-full px-3.5 py-2 text-sm"
+                  className={`glass-input w-full px-3.5 py-2 text-sm transition-all ${
+                    isEditDuplicate ? 'border-red-500/80 bg-red-950/20 text-white' : ''
+                  }`}
                 />
+                {isEditDuplicate && (
+                  <p className="mt-1.5 text-xs text-red-400 font-mono flex items-center gap-1.5 animate-fadeIn">
+                    <AlertCircle size={13} className="shrink-0 text-red-400" />
+                    <span>Another skill named "{editNameTrimmed}" already exists.</span>
+                  </p>
+                )}
               </div>
 
               <div>
@@ -583,7 +648,12 @@ export const AdminSkills = ({ triggerToast }) => {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded-xl bg-white text-black font-bold text-xs hover:bg-zinc-200 transition-all flex items-center gap-1.5 shadow-sm"
+                  disabled={isEditDuplicate || !editNameTrimmed}
+                  className={`px-4 py-2 rounded-xl font-bold text-xs transition-all flex items-center gap-1.5 shadow-sm ${
+                    isEditDuplicate || !editNameTrimmed
+                      ? 'bg-zinc-800 text-zinc-500 cursor-not-allowed border border-white/5 opacity-60'
+                      : 'bg-white text-black hover:bg-zinc-200'
+                  }`}
                 >
                   <Check size={14} /> <span>Save Changes</span>
                 </button>

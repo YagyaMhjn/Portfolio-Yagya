@@ -43,9 +43,16 @@ export const AdminProjects = ({ triggerToast }) => {
 
   const handleSave = (e) => {
     e.preventDefault();
-    const tagsArray = typeof projectForm.tags === 'string'
+    const rawTags = typeof projectForm.tags === 'string'
       ? projectForm.tags.split(',').map((t) => t.trim()).filter(Boolean)
-      : projectForm.tags;
+      : (projectForm.tags || []);
+    const seenTags = new Set();
+    const tagsArray = rawTags.filter((t) => {
+      const lower = t.toLowerCase();
+      if (seenTags.has(lower)) return false;
+      seenTags.add(lower);
+      return true;
+    });
 
     if (editingProject) {
       updateProject(editingProject.id, { ...projectForm, tags: tagsArray });

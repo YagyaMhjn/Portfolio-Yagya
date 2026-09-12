@@ -33,27 +33,37 @@ export const normalizeSkillLevel = (category, level) => {
  * Normalizes all technical skills into "Hard Skills" and preserves "Soft Skills".
  */
 export const syncSkillsFromProjectsAndCerts = (skills = [], projects = [], certificates = []) => {
-  const normalizedSkills = (skills || []).map((s) => {
-    const isSoft = s.category?.toLowerCase().includes('soft');
-    return {
-      ...s,
-      category: isSoft ? 'Soft Skills' : 'Hard Skills',
-      level: normalizeSkillLevel(s.category, s.level)
-    };
+  const seenNames = new Set();
+  const normalizedSkills = [];
+
+  // 1. Normalize and deduplicate existing skills (preserve order, keep first unique)
+  (skills || []).forEach((s) => {
+    if (!s || !s.name) return;
+    const cleanName = s.name.trim();
+    const lowerName = cleanName.toLowerCase();
+    if (cleanName && !seenNames.has(lowerName)) {
+      seenNames.add(lowerName);
+      const isSoft = s.category?.toLowerCase().includes('soft');
+      normalizedSkills.push({
+        ...s,
+        name: cleanName,
+        category: isSoft ? 'Soft Skills' : 'Hard Skills',
+        level: normalizeSkillLevel(s.category, s.level)
+      });
+    }
   });
 
-  const existingNames = new Set(normalizedSkills.map((s) => s.name.trim().toLowerCase()));
   const newSkillsToAdd = [];
 
-  // 1. Harvest from projects (project.tags)
+  // 2. Harvest from projects (project.tags)
   (projects || []).forEach((p) => {
     const tags = Array.isArray(p.tags)
       ? p.tags
       : (typeof p.tags === 'string' ? p.tags.split(',') : []);
     tags.forEach((tag) => {
       const cleanTag = tag?.trim();
-      if (cleanTag && !existingNames.has(cleanTag.toLowerCase())) {
-        existingNames.add(cleanTag.toLowerCase());
+      if (cleanTag && !seenNames.has(cleanTag.toLowerCase())) {
+        seenNames.add(cleanTag.toLowerCase());
         newSkillsToAdd.push({
           id: 's_proj_' + Math.random().toString(36).substr(2, 9),
           name: cleanTag,
@@ -64,15 +74,15 @@ export const syncSkillsFromProjectsAndCerts = (skills = [], projects = [], certi
     });
   });
 
-  // 2. Harvest from certificates (cert.skills)
+  // 3. Harvest from certificates (cert.skills)
   (certificates || []).forEach((c) => {
     const certSkills = Array.isArray(c.skills)
       ? c.skills
       : (typeof c.skills === 'string' ? c.skills.split(',') : []);
     certSkills.forEach((skill) => {
       const cleanSkill = skill?.trim();
-      if (cleanSkill && !existingNames.has(cleanSkill.toLowerCase())) {
-        existingNames.add(cleanSkill.toLowerCase());
+      if (cleanSkill && !seenNames.has(cleanSkill.toLowerCase())) {
+        seenNames.add(cleanSkill.toLowerCase());
         newSkillsToAdd.push({
           id: 's_cert_' + Math.random().toString(36).substr(2, 9),
           name: cleanSkill,
@@ -479,22 +489,61 @@ export const PortfolioProvider = ({ children }) => {
 
   // Skills
   const addSkill = (skill) => {
-    const isSoft = skill.category?.toLowerCase().includes('soft');
-    const newSkill = {
-      ...skill,
-      id: 's_' + Date.now(),
-      name: (skill.name || '').trim(),
-      category: isSoft ? 'Soft Skills' : 'Hard Skills',
-      level: isSoft ? '' : normalizeSkillLevel('Hard Skills', skill.level || 'Intermediate')
-    };
-    saveData((prev) => ({
-      ...prev,
-      skills: [...prev.skills, newSkill]
-    }));
+    const cleanName = (skill.name || '').trim();
+    if (!cleanName) return { success: false, error: 'Skill name cannot be empty.' };
+
+    let alreadyExists = false;
+    const lowerName = cleanName.toLowerCase();
+
+    saveData((prev) => {
+      const exists = (prev.skills || []).some(
+        (s) => s.name?.trim().toLowerCase() === lowerName
+      );
+      if (exists) {
+        alreadyExists = true;
+        return prev;
+      }
+      const isSoft = skill.category?.toLowerCase().includes('soft');
+      const newSkill = {
+        ...skill,
+        id: 's_' + Date.now(),
+        name: cleanName,
+        category: isSoft ? 'Soft Skills' : 'Hard Skills',
+        level: isSoft ? '' : normalizeSkillLevel('Hard Skills', skill.level || 'Intermediate')
+      };
+      return {
+        ...prev,
+        skills: [...prev.skills, newSkill]
+      };
+    });
+
+    if (alreadyExists) {
+      return { success: false, error: `Skill "${cleanName}" already exists in your matrix.` };
+    }
+    return { success: true };
   };
 
   const updateSkill = (id, updatedFields) => {
+    let duplicateError = false;
+    let cleanName = undefined;
+
+    if (updatedFields.name !== undefined) {
+      cleanName = updatedFields.name.trim();
+      if (!cleanName) return { success: false, error: 'Skill name cannot be empty.' };
+    }
+
     saveData((prev) => {
+      if (cleanName) {
+        const lowerName = cleanName.toLowerCase();
+        const exists = (prev.skills || []).some(
+          (s) => s.id !== id && s.name?.trim().toLowerCase() === lowerName
+        );
+        if (exists) {
+          duplicateError = true;
+          return prev;
+        }
+      }
+
       const updatedSkills = prev.skills.map((s) => {
         if (s.id !== id) return s;
         const targetCategory = updatedFields.category !== undefined ? updatedFields.category : s.category;
@@ -503,7 +552,7 @@ export const PortfolioProvider = ({ children }) => {
         return {
           ...s,
           ...updatedFields,
-          name: updatedFields.name !== undefined ? updatedFields.name.trim() : s.name,
+          name: cleanName !== undefined ? cleanName : s.name,
           category: isSoft ? 'Soft Skills' : 'Hard Skills',
           level: isSoft ? '' : normalizeSkillLevel('Hard Skills', targetLevel || 'Intermediate')
         };
@@ -513,6 +562,11 @@ export const PortfolioProvider = ({ children }) => {
         skills: updatedSkills
       };
     });
+
+    if (duplicateError) {
+      return { success: false, error: `Another skill named "${cleanName}" already exists.` };
+    }
+    return { success: true };
   };
 
   const deleteSkill = (id) => {
