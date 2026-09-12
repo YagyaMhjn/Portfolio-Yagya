@@ -3,13 +3,18 @@ import { usePortfolio } from '../context/PortfolioContext';
 
 /**
  * InteractiveOwl Component
- * - Firmly perched / seated on top of the 'Get in Touch' button
+ * - Firmly perched on top of the 'Get in Touch' button (claws overlap border)
  * - In Dark Mode: Awake, styled in crisp slate/silver tones for high contrast.
  *   - Idle: looks randomly in different directions with periodic blinking.
- *   - Cursor Proximity (within 195px circular radius): eyes smoothly track the cursor.
+ *   - Cursor Proximity (within 195px circular radius): eyes smoothly track cursor.
  * - In Light Mode: Sleeps, styled in rich warm dark brown tones.
  *   - Sleeping breathing motion and closed curved eyelids.
- *   - Cursor Proximity (within 195px circular radius): stacked 'Z's float up from its head.
+ *   - Cursor Proximity (within 195px circular radius):
+ *     - 0.25s entry delay before first 'Z' emerges.
+ *     - Cycles through sizes: 33%, 66%, and 99%.
+ *     - When cursor leaves radius, NEW 'Z' production stops, while already produced 'Z's
+ *       smoothly complete their trajectory, fade out, and clear naturally.
+ *     - Floating trajectory drifts gently to the right/upwards without reaching the bio text.
  * - Clicking the owl triggers a cute reaction without navigating away.
  * - Size remains constant on hover (no hover scale increase).
  */
@@ -27,7 +32,12 @@ export const InteractiveOwl = ({ className = '' }) => {
   const targetPupil = useRef({ x: 0, y: 0 });
   const [pupilPos, setPupilPos] = useState({ x: 0, y: 0 });
 
-  // Detection radius around owl center (reduced to 195px as requested)
+  // Floating 'Z' particle system
+  const [zParticles, setZParticles] = useState([]);
+  const zCycleRef = useRef(0);
+  const Z_SCALES = [0.33, 0.66, 0.99];
+
+  // Detection radius around owl center
   const TRACKING_RADIUS = 195;
   const MAX_PUPIL_OFFSET = 4.8; // Maximum pupil travel distance in SVG units
 
@@ -121,6 +131,51 @@ export const InteractiveOwl = ({ className = '' }) => {
     return () => clearInterval(blinkInterval);
   }, [isLight]);
 
+  // Clear Z particles immediately if switching to Dark Mode (awake)
+  useEffect(() => {
+    if (!isLight) {
+      setZParticles([]);
+    }
+  }, [isLight]);
+
+  // Floating 'Z' Spawner in Light Mode
+  // - 0.25s entry delay before first spawn
+  // - Cycles through 33%, 66%, 99%
+  // - When cursor leaves radius, stops producing new ones, but existing particles finish their full trajectory and fade out
+  useEffect(() => {
+    if (!isLight || !isInsideRadius) return;
+
+    let spawnInterval = null;
+
+    // 0.25s (250ms) entry delay
+    const entryTimeout = setTimeout(() => {
+      const spawnZ = () => {
+        const scale = Z_SCALES[zCycleRef.current % 3];
+        zCycleRef.current += 1;
+        const particleId = Date.now() + Math.random();
+
+        setZParticles((prev) => [...prev, { id: particleId, scale }]);
+
+        // Particle finishes trajectory in 2.0s and self-cleans
+        setTimeout(() => {
+          setZParticles((prev) => prev.filter((p) => p.id !== particleId));
+        }, 2050);
+      };
+
+      // Spawn initial Z after entry delay
+      spawnZ();
+
+      // Continue producing Z's in rhythm while inside radius
+      spawnInterval = setInterval(spawnZ, 720);
+    }, 250);
+
+    return () => {
+      clearTimeout(entryTimeout);
+      if (spawnInterval) clearInterval(spawnInterval);
+      // NOTE: Existing particles in zParticles are NOT destroyed; they complete their path
+    };
+  }, [isLight, isInsideRadius]);
+
   // Owl click reaction: cute tilt reaction without navigating away or resizing
   const handleOwlClick = (e) => {
     e.stopPropagation();
@@ -138,27 +193,27 @@ export const InteractiveOwl = ({ className = '' }) => {
       } ${className}`}
       title={isLight ? 'Sleeping owl... (Hover near me to see dreams)' : 'Observant owl is watching!'}
     >
-      {/* Floating Animated 'Zzz' in Light Mode when hovered inside radius */}
-      {isLight && isInsideRadius && (
-        <div className="absolute -top-7 right-2 pointer-events-none flex flex-col items-center z-40">
-          <span
-            className="absolute font-mono font-extrabold text-xs text-amber-900/90 select-none animate-owl-z1"
-            style={{ animationDuration: '2.2s', animationIterationCount: 'infinite' }}
-          >
-            z
-          </span>
-          <span
-            className="absolute font-mono font-black text-sm text-amber-950/95 select-none animate-owl-z2"
-            style={{ animationDuration: '2.2s', animationIterationCount: 'infinite', animationDelay: '0.65s' }}
-          >
-            Z
-          </span>
-          <span
-            className="absolute font-mono font-black text-base text-amber-950 select-none animate-owl-z3"
-            style={{ animationDuration: '2.2s', animationIterationCount: 'infinite', animationDelay: '1.3s' }}
-          >
-            Z
-          </span>
+      {/* Floating Animated 'Z' Particles in Light Mode */}
+      {isLight && zParticles.length > 0 && (
+        <div className="absolute -top-4 right-1 pointer-events-none z-40 w-16 h-16 overflow-visible">
+          {zParticles.map((p) => (
+            <span
+              key={p.id}
+              className="absolute pointer-events-none font-mono font-black select-none text-amber-950 animate-owl-z-particle"
+              style={{
+                '--z-scale': p.scale,
+                top: '0px',
+                right: '4px',
+                fontSize: '28px',
+                lineHeight: 1,
+                animationDuration: '2.0s',
+                animationFillMode: 'forwards',
+                animationTimingFunction: 'cubic-bezier(0.25, 1, 0.5, 1)',
+              }}
+            >
+              Z
+            </span>
+          ))}
         </div>
       )}
 

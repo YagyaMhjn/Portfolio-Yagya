@@ -1033,68 +1033,27 @@ html.light .social-expanding-btn:focus-visible {
   transform-origin: bottom center;
 }
 
-@keyframes owl-z-float-1 {
+@keyframes owl-z-particle-float {
   0% {
     opacity: 0;
-    transform: translate(0, 0) scale(0.6);
+    transform: translate(0, 0) scale(calc(var(--z-scale) * 0.75));
   }
-  25% {
-    opacity: 0.85;
-  }
-  75% {
-    opacity: 0.7;
-    transform: translate(8px, -24px) scale(0.95);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(14px, -36px) scale(1.05);
-  }
-}
-
-@keyframes owl-z-float-2 {
-  0% {
-    opacity: 0;
-    transform: translate(0, 0) scale(0.65);
-  }
-  25% {
-    opacity: 0.9;
-  }
-  75% {
-    opacity: 0.75;
-    transform: translate(12px, -30px) scale(1.05);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(20px, -46px) scale(1.15);
-  }
-}
-
-@keyframes owl-z-float-3 {
-  0% {
-    opacity: 0;
-    transform: translate(0, 0) scale(0.7);
-  }
-  25% {
+  16% {
     opacity: 0.95;
+    transform: translate(5px, -6px) scale(var(--z-scale));
   }
   75% {
-    opacity: 0.8;
-    transform: translate(16px, -36px) scale(1.15);
+    opacity: 0.85;
+    transform: translate(14px, -17px) scale(calc(var(--z-scale) * 1.05));
   }
   100% {
     opacity: 0;
-    transform: translate(26px, -56px) scale(1.25);
+    transform: translate(22px, -23px) scale(calc(var(--z-scale) * 1.1));
   }
 }
 
-.animate-owl-z1 {
-  animation: owl-z-float-1 2.4s cubic-bezier(0.25, 1, 0.5, 1) infinite;
-}
-
-.animate-owl-z2 {
-  animation: owl-z-float-2 2.4s cubic-bezier(0.25, 1, 0.5, 1) infinite;
-}
-
-.animate-owl-z3 {
-  animation: owl-z-float-3 2.4s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+.animate-owl-z-particle {
+  animation-name: owl-z-particle-float;
+  transform-origin: center center;
+  will-change: transform, opacity;
 }
