@@ -41,7 +41,7 @@ export const Projects = () => {
   // Arrange projects chronologically (latest first)
   const sortedProjects = sortProjectsLatestFirst(projects || []);
 
-  const { registerCardRef, isCardActive } = useScrollReveal(sortedProjects);
+  const { registerCard } = useScrollReveal(sortedProjects);
 
   const columns = Array.from({ length: numCols }, () => []);
   sortedProjects.forEach((proj, idx) => {
@@ -49,61 +49,65 @@ export const Projects = () => {
   });
 
   const renderProjectCard = (project) => {
-    const active = isCardActive(project.id);
     return (
       <div
         key={project.id}
-        ref={(el) => registerCardRef(project.id, el)}
+        ref={(el) => registerCard(project.id, el, project.mediaRatio)}
         onMouseMove={handleMouseMove}
-        className={`glass-card glass-panel-hover rounded-2xl border overflow-hidden flex flex-col justify-between group relative cursor-default transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] ${
-          active
-            ? 'border-white/30 shadow-[0_20px_40px_rgba(0,0,0,0.85)] ring-1 ring-white/20'
-            : 'border-white/[0.08] hover:border-white/30 hover:shadow-[0_20px_40px_rgba(0,0,0,0.85)]'
-        }`}
+        className="glass-card glass-panel-hover rounded-2xl border border-white/[0.08] hover:border-white/30 hover:shadow-[0_20px_40px_rgba(0,0,0,0.85)] overflow-hidden flex flex-col justify-between group relative cursor-default transition-[border-color,box-shadow] duration-300"
       >
         <div>
           {/* Revealed Top Media on Hover (desktop) or Center Screen on Scroll (mobile/tablet) */}
           {project.media && (
             <div
-              className={`overflow-hidden relative bg-zinc-950 flex items-center justify-center transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] ${
-                active
-                  ? 'max-h-[1600px] opacity-100 shadow-inner'
-                  : 'max-h-0 opacity-0 lg:group-hover:max-h-[1600px] lg:group-hover:opacity-100 lg:delay-[250ms] lg:group-hover:delay-0'
-              }`}
+              className="scroll-reveal-media overflow-hidden relative bg-zinc-950 flex items-center justify-center h-0 lg:h-auto lg:max-h-0 lg:group-hover:max-h-[1600px] lg:opacity-0 lg:group-hover:opacity-100 lg:transition-all lg:duration-500 lg:ease-[cubic-bezier(0.25,1,0.5,1)] lg:delay-[250ms] lg:group-hover:delay-0"
+              style={{ willChange: 'height' }}
             >
-              <div className={`w-full ${project.mediaRatio === '4/3' ? 'aspect-[4/3]' : project.mediaRatio === '1/1' ? 'aspect-square' : project.mediaRatio === '16/9' ? 'aspect-video' : 'h-auto'} relative overflow-hidden flex items-center justify-center`}>
-              <img
-                src={project.media}
-                alt={project.title}
-                style={{
-                  transform: `scale(${((project.mediaScale || 100) / 100)}) translate(${project.mediaX || 0}%, ${project.mediaY || 0}%)`,
-                  transformOrigin: 'center center',
-                  objectFit: project.mediaFit || (project.mediaRatio === 'original' ? 'contain' : 'cover'),
-                }}
-                className={`w-full ${project.mediaRatio === 'original' ? 'h-auto max-h-[700px] object-contain' : project.mediaFit === 'contain' ? 'h-full object-contain' : 'h-full object-cover'} transition-transform duration-500 ease-out`}
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-30 pointer-events-none" />
+              <div className="scroll-reveal-inner w-full relative overflow-hidden flex items-center justify-center transition-transform duration-300 ease-out">
+                <div className={`w-full ${project.mediaRatio === '4/3' ? 'aspect-[4/3]' : project.mediaRatio === '1/1' ? 'aspect-square' : project.mediaRatio === '16/9' ? 'aspect-video' : 'h-auto'} relative overflow-hidden flex items-center justify-center`}>
+                  <img
+                    src={project.media}
+                    alt={project.title}
+                    style={{
+                      transform: `scale(${((project.mediaScale || 100) / 100)}) translate(${project.mediaX || 0}%, ${project.mediaY || 0}%)`,
+                      transformOrigin: 'center center',
+                      objectFit: project.mediaFit || (project.mediaRatio === 'original' ? 'contain' : 'cover'),
+                    }}
+                    className={`scroll-reveal-img w-full ${project.mediaRatio === 'original' ? 'h-auto max-h-[700px] object-contain' : project.mediaFit === 'contain' ? 'h-full object-contain' : 'h-full object-cover'}`}
+                    loading="lazy"
+                  />
+                  {/* Mobile scroll-reveal shadow overlay (simulates emerging from / returning behind panel) */}
+                  <div
+                    className="scroll-reveal-shadow lg:hidden absolute inset-0 pointer-events-none z-10"
+                    style={{
+                      background: 'linear-gradient(to bottom, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.25) 40%, rgba(0,0,0,0.1) 60%, rgba(0,0,0,0.8) 100%)',
+                      boxShadow: 'inset 0 18px 24px -4px rgba(0,0,0,0.95), inset 0 -18px 24px -4px rgba(0,0,0,0.95)',
+                      opacity: 1,
+                      willChange: 'opacity',
+                    }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-30 pointer-events-none" />
+                </div>
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* Card Content Body */}
-        <div className="p-6">
-          {/* Category badge + Dates range + Action buttons (Live Demo & GitHub) */}
-          <div className="flex items-center justify-between gap-3 mb-3.5">
-            <div className="flex items-center gap-1.5 flex-wrap">
-              <span className={`text-[10px] font-mono uppercase tracking-wider text-zinc-400 px-2.5 py-1 rounded bg-zinc-900/90 border transition-colors ${active ? 'border-white/30 text-zinc-300' : 'border-white/[0.06] group-hover:border-white/20'}`}>
-                {project.category || 'Engineering'}
-              </span>
-
-              {(project.dates || project.year) && (
-                <span className={`text-[10px] font-mono text-zinc-400 px-2 py-1 rounded bg-zinc-900/90 border transition-colors flex items-center gap-1 ${active ? 'border-white/30 text-zinc-300' : 'border-white/[0.06] group-hover:border-white/20'}`}>
-                  <Calendar size={11} className="text-zinc-500 shrink-0" />
-                  <span>{project.dates || project.year}</span>
+          {/* Card Content Body */}
+          <div className="p-6">
+            {/* Category badge + Dates range + Action buttons (Live Demo & GitHub) */}
+            <div className="flex items-center justify-between gap-3 mb-3.5">
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 px-2.5 py-1 rounded bg-zinc-900/90 border border-white/[0.06] group-hover:border-white/20 transition-colors">
+                  {project.category || 'Engineering'}
                 </span>
-              )}
-            </div>
+
+                {(project.dates || project.year) && (
+                  <span className="text-[10px] font-mono text-zinc-400 px-2 py-1 rounded bg-zinc-900/90 border border-white/[0.06] group-hover:border-white/20 transition-colors flex items-center gap-1">
+                    <Calendar size={11} className="text-zinc-500 shrink-0" />
+                    <span>{project.dates || project.year}</span>
+                  </span>
+                )}
+              </div>
 
             <div className="flex items-center gap-1.5 shrink-0">
               {project.live && (
@@ -132,7 +136,7 @@ export const Projects = () => {
             </div>
           </div>
 
-          <h3 className={`text-lg font-bold text-white mb-2 transition-colors flex items-center gap-1.5 ${active ? 'text-zinc-100' : 'group-hover:text-zinc-100'}`}>
+          <h3 className="text-lg font-bold text-white mb-2 transition-colors flex items-center gap-1.5 group-hover:text-zinc-100">
             <span>{project.title}</span>
             {project.featured && <Star size={13} className="text-zinc-300 fill-zinc-300 animate-pulse" />}
           </h3>

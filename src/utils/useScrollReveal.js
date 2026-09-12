@@ -1,132 +1,170 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 
 /**
- * Custom hook to dynamically reveal images on cards as they approach the center of the screen
- * during scrolling on mobile and tablet devices (< 1024px width).
+ * Hook for continuous, scroll-responsive reveal and tuck-in of project/certificate media
+ * on mobile and tablet devices (< 1024px).
  *
- * When a card approaches the vertical center of the viewport, its media expands.
- * As the user scrolls past and the card moves above the center, its media smoothly retracts,
- * while the next card below begins revealing its media as it nears the center.
- *
- * Desktop / Laptop (>= 1024px) retains its standard cursor hover interaction.
+ * Behavior:
+ * - As a panel approaches the center of the screen, a percentage of the image reveals
+ *   with a shadow overlay simulating it emerging from behind the panel.
+ * - When the panel is centered in the screen, the image is 100% fully revealed with NO shadow.
+ * - As the panel moves above the center, the image progressively tucks back into the panel
+ *   in direct response to scrolling, with the shadow reappearing.
+ * - Simultaneously, the panel below begins emerging.
+ * - On Laptop / Desktop (>= 1024px), cursor hover interaction is preserved.
  */
 export const useScrollReveal = (items = []) => {
-  const cardRefs = useRef({});
-  const [activeCardIds, setActiveCardIds] = useState(new Set());
-  const [isMobile, setIsMobile] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    return window.innerWidth < 1024;
-  });
+  const cardsData = useRef(new Map());
 
-  // Track responsive breakpoint for mobile / tablet (< 1024px)
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 1024);
-    };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  // Register / unregister card DOM elements
-  const registerCardRef = useCallback((id, el) => {
-    if (el) {
-      cardRefs.current[id] = el;
-    } else {
-      delete cardRefs.current[id];
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!isMobile) {
-      setActiveCardIds(new Set());
+  const registerCard = useCallback((id, el, ratio = 'original') => {
+    if (!el) {
+      cardsData.current.delete(id);
       return;
     }
 
+    const mediaWrapperEl = el.querySelector('.scroll-reveal-media');
+    const mediaInnerEl = el.querySelector('.scroll-reveal-inner');
+    const shadowOverlayEl = el.querySelector('.scroll-reveal-shadow');
+    const imgEl = el.querySelector('.scroll-reveal-img');
+
+    cardsData.current.set(id, {
+      cardEl: el,
+      mediaWrapperEl,
+      mediaInnerEl,
+      shadowOverlayEl,
+      imgEl,
+      ratio: ratio || 'original',
+    });
+  }, []);
+
+  useEffect(() => {
     let ticking = false;
 
-    const calculateActiveCards = () => {
-      const viewportHeight = window.innerHeight;
-      const viewportCenter = viewportHeight / 2;
+    const updateScrollReveal = () => {
+      const isMobile = window.innerWidth < 1024;
 
-      const entries = Object.entries(cardRefs.current);
-      if (entries.length === 0) {
+      if (!isMobile) {
+        // Reset styles for desktop so CSS hover operates cleanly
+        for (const data of cardsData.current.values()) {
+          if (!data) continue;
+          const { cardEl, mediaWrapperEl, mediaInnerEl, shadowOverlayEl } = data;
+          if (mediaWrapperEl) {
+            mediaWrapperEl.style.height = '';
+          }
+          if (mediaInnerEl) {
+            mediaInnerEl.style.transform = '';
+          }
+          if (shadowOverlayEl) {
+            shadowOverlayEl.style.opacity = '';
+          }
+          if (cardEl) {
+            cardEl.classList.remove('border-white/25');
+          }
+        }
         ticking = false;
         return;
       }
 
-      let closestId = null;
-      let minDistance = Infinity;
+      const viewportHeight = window.innerHeight;
+      const viewportCenter = viewportHeight / 2;
+      // Transition range around viewport center (span of ~280px-320px above and below center)
+      const W = Math.min(viewportHeight * 0.44, 320);
 
-      for (const [id, el] of entries) {
-        if (!el) continue;
-        const rect = el.getBoundingClientRect();
+      for (const data of cardsData.current.values()) {
+        if (!data || !data.cardEl || !data.mediaWrapperEl) continue;
+        const { cardEl, mediaWrapperEl, mediaInnerEl, shadowOverlayEl, imgEl, ratio } = data;
 
-        // Must be somewhat visible in viewport
-        if (rect.bottom < 40 || rect.top > viewportHeight - 40) continue;
+        const rect = cardEl.getBoundingClientRect();
 
-        // Use top + fixed offset so measurement is immune to height changes from media expanding
-        const cardRefPoint = rect.top + Math.min(rect.height / 2, 180);
-        const dist = Math.abs(cardRefPoint - viewportCenter);
+        // Card width on mobile
+        const cardWidth = rect.width || (window.innerWidth - 48);
 
-        if (dist < minDistance) {
-          minDistance = dist;
-          closestId = id;
-        }
-      }
-
-      // Check if closest card is within center focus threshold (within 48% of viewport height)
-      if (closestId && minDistance < viewportHeight * 0.48) {
-        const isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
-        const newActive = new Set();
-
-        if (isTablet) {
-          const closestEl = cardRefs.current[closestId];
-          const closestRect = closestEl?.getBoundingClientRect();
-          for (const [id, el] of entries) {
-            if (!el) continue;
-            const rect = el.getBoundingClientRect();
-            // Activate both cards in the same horizontal row on tablet
-            if (Math.abs(rect.top - (closestRect?.top || 0)) < 70) {
-              newActive.add(id);
-            }
-          }
+        // Calculate target full height based on aspect ratio
+        let targetHeight = 220;
+        if (ratio === '16/9') {
+          targetHeight = Math.round(cardWidth * (9 / 16));
+        } else if (ratio === '4/3') {
+          targetHeight = Math.round(cardWidth * (3 / 4));
+        } else if (ratio === '1/1') {
+          targetHeight = Math.round(Math.min(cardWidth, 300));
         } else {
-          newActive.add(closestId);
+          if (imgEl && imgEl.naturalWidth && imgEl.naturalHeight) {
+            const naturalAspect = imgEl.naturalHeight / imgEl.naturalWidth;
+            targetHeight = Math.round(Math.min(cardWidth * naturalAspect, 360));
+          } else {
+            targetHeight = Math.round(cardWidth * 0.62);
+          }
         }
 
-        setActiveCardIds(newActive);
-      } else {
-        setActiveCardIds(new Set());
+        // If card is far off-screen, keep it tucked in
+        if (rect.bottom < -120 || rect.top > viewportHeight + 120) {
+          mediaWrapperEl.style.height = '0px';
+          if (shadowOverlayEl) shadowOverlayEl.style.opacity = '1';
+          if (mediaInnerEl) mediaInnerEl.style.transform = 'translateY(-20px) scale(0.94)';
+          continue;
+        }
+
+        // Reference center of the card when fully revealed (monotonic with rect.top, no feedback loop)
+        const estimatedCardCenter = rect.top + (targetHeight / 2) + 100;
+        const D = Math.abs(estimatedCardCenter - viewportCenter);
+
+        let progress = 0;
+        if (D < W) {
+          const r = Math.max(0, 1 - D / W);
+          // Smoothstep easing: S-curve transition that is slow at the ends and smooth in the middle
+          progress = r * r * (3 - 2 * r);
+        }
+
+        // 1. Reveal height proportional to scroll (0 to targetHeight)
+        const currentHeight = Math.round(progress * targetHeight);
+        mediaWrapperEl.style.height = `${currentHeight}px`;
+
+        // 2. Shadow effect: 1 (full dark shadow) when tucked away, 0 (no shadow) when centered
+        if (shadowOverlayEl) {
+          const shadowOpacity = Math.max(0, Math.min(1, Math.pow(1 - progress, 1.25)));
+          shadowOverlayEl.style.opacity = shadowOpacity.toFixed(3);
+        }
+
+        // 3. Subtle parallax slide & scale: emerges from behind panel into view
+        if (mediaInnerEl) {
+          const translateY = (1 - progress) * -20;
+          const scale = 0.94 + 0.06 * progress;
+          mediaInnerEl.style.transform = `translateY(${translateY.toFixed(1)}px) scale(${scale.toFixed(3)})`;
+        }
+
+        // 4. Subtle border highlight when centered
+        if (cardEl) {
+          if (progress > 0.65) {
+            cardEl.classList.add('border-white/25');
+          } else {
+            cardEl.classList.remove('border-white/25');
+          }
+        }
       }
 
       ticking = false;
     };
 
-    const handleScroll = () => {
+    const onScroll = () => {
       if (!ticking) {
-        window.requestAnimationFrame(calculateActiveCards);
+        window.requestAnimationFrame(updateScrollReveal);
         ticking = true;
       }
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('resize', handleScroll, { passive: true });
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
 
-    // Initial check on mount or when items change
-    calculateActiveCards();
+    // Initial passes to handle immediate viewport placement
+    updateScrollReveal();
+    const timer = setTimeout(updateScrollReveal, 100);
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', handleScroll);
+      clearTimeout(timer);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
     };
-  }, [isMobile, items]);
+  }, [items]);
 
-  const isCardActive = useCallback(
-    (id) => {
-      return isMobile && activeCardIds.has(id);
-    },
-    [isMobile, activeCardIds]
-  );
-
-  return { registerCardRef, isCardActive, isMobile };
+  return { registerCard };
 };
