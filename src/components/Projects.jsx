@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { FolderGit2, Star, ExternalLink } from 'lucide-react';
+import { FolderGit2, Star, ExternalLink, Calendar } from 'lucide-react';
 import { GithubIcon } from './Icons';
 import { ContentRenderer } from './ContentRenderer';
+import { sortProjectsLatestFirst } from '../utils/dateUtils';
 
 const useProjectColumnCount = () => {
   const getCols = () => {
@@ -36,8 +37,11 @@ export const Projects = () => {
     e.currentTarget.style.setProperty('--mouse-y', `${y}px`);
   };
 
+  // Arrange projects chronologically (latest first)
+  const sortedProjects = sortProjectsLatestFirst(projects || []);
+
   const columns = Array.from({ length: numCols }, () => []);
-  (projects || []).forEach((proj, idx) => {
+  sortedProjects.forEach((proj, idx) => {
     columns[idx % numCols].push(proj);
   });
 
@@ -70,11 +74,20 @@ export const Projects = () => {
 
         {/* Card Content Body */}
         <div className="p-6">
-          {/* Category badge + Action buttons (Live Demo & GitHub) */}
+          {/* Category badge + Dates range + Action buttons (Live Demo & GitHub) */}
           <div className="flex items-center justify-between gap-3 mb-3.5">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 px-2.5 py-1 rounded bg-zinc-900/90 border border-white/[0.06] group-hover:border-white/20 transition-colors">
-              {project.category || 'Engineering'}
-            </span>
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 px-2.5 py-1 rounded bg-zinc-900/90 border border-white/[0.06] group-hover:border-white/20 transition-colors">
+                {project.category || 'Engineering'}
+              </span>
+
+              {(project.dates || project.year) && (
+                <span className="text-[10px] font-mono text-zinc-400 px-2 py-1 rounded bg-zinc-900/90 border border-white/[0.06] group-hover:border-white/20 transition-colors flex items-center gap-1">
+                  <Calendar size={11} className="text-zinc-500 shrink-0" />
+                  <span>{project.dates || project.year}</span>
+                </span>
+              )}
+            </div>
 
             <div className="flex items-center gap-1.5 shrink-0">
               {project.live && (

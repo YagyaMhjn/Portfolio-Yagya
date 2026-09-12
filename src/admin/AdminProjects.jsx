@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { Plus, Trash2, Edit2, Image as ImageIcon, Upload, X } from 'lucide-react';
+import { Plus, Trash2, Edit2, Image as ImageIcon, Upload, X, Calendar } from 'lucide-react';
 import { MediaAlignmentStudio } from './MediaAlignmentStudio';
+import { sortProjectsLatestFirst } from '../utils/dateUtils';
 
 export const AdminProjects = ({ triggerToast }) => {
   const { data, addProject, updateProject, deleteProject } = usePortfolio();
@@ -9,6 +10,7 @@ export const AdminProjects = ({ triggerToast }) => {
   const [projectForm, setProjectForm] = useState({
     title: '',
     category: '',
+    dates: '',
     description: '',
     tags: 'React, TypeScript, Tailwind CSS',
     github: '',
@@ -49,6 +51,7 @@ export const AdminProjects = ({ triggerToast }) => {
     setProjectForm({
       title: '',
       category: '',
+      dates: '',
       description: '',
       tags: 'React, TypeScript, Tailwind CSS',
       github: '',
@@ -73,8 +76,8 @@ export const AdminProjects = ({ triggerToast }) => {
         </h3>
 
         <form onSubmit={handleSave} className="space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="sm:col-span-1">
               <label className="block text-xs font-mono text-zinc-400 mb-1">Project Title *</label>
               <input
                 type="text"
@@ -94,6 +97,16 @@ export const AdminProjects = ({ triggerToast }) => {
                 value={projectForm.category}
                 onChange={(e) => setProjectForm({ ...projectForm, category: e.target.value })}
                 className="glass-input w-full px-3.5 py-2 text-sm"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-mono text-zinc-400 mb-1">Dates Range / Year</label>
+              <input
+                type="text"
+                placeholder="e.g. May 2024 - Jul 2024, 2025 - Present, or 2026"
+                value={projectForm.dates || ''}
+                onChange={(e) => setProjectForm({ ...projectForm, dates: e.target.value })}
+                className="glass-input w-full px-3.5 py-2 text-sm font-mono"
               />
             </div>
           </div>
@@ -240,6 +253,7 @@ export const AdminProjects = ({ triggerToast }) => {
                   setProjectForm({
                     title: '',
                     category: '',
+                    dates: '',
                     description: '',
                     tags: 'React, TypeScript, Tailwind CSS',
                     github: '',
@@ -264,9 +278,9 @@ export const AdminProjects = ({ triggerToast }) => {
 
       <div className="space-y-3">
         <h4 className="text-xs font-mono text-zinc-400 uppercase tracking-wider">
-          Existing Projects ({data.projects.length})
+          Existing Projects ({data.projects.length}) • Arranged Latest First
         </h4>
-        {data.projects.map((p) => (
+        {sortProjectsLatestFirst(data.projects).map((p) => (
           <div
             key={p.id}
             className="glass-card p-4 rounded-xl border border-white/[0.06] flex items-center justify-between gap-4"
@@ -287,6 +301,12 @@ export const AdminProjects = ({ triggerToast }) => {
                   <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-900 border border-white/10 text-zinc-400">
                     {p.category}
                   </span>
+                  {(p.dates || p.year) && (
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-900/80 border border-white/10 text-zinc-300 flex items-center gap-1">
+                      <Calendar size={10} className="text-zinc-500 shrink-0" />
+                      <span>{p.dates || p.year}</span>
+                    </span>
+                  )}
                   {p.media && (
                     <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-white/10 text-zinc-300 border border-white/10">
                       Media attached
@@ -303,6 +323,7 @@ export const AdminProjects = ({ triggerToast }) => {
                   setEditingProject(p);
                   setProjectForm({
                     ...p,
+                    dates: p.dates || p.year || '',
                     media: p.media || '',
                     mediaScale: p.mediaScale ?? 100,
                     mediaX: p.mediaX ?? 0,

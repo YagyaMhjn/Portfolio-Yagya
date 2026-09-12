@@ -35,6 +35,7 @@ export const PortfolioProvider = ({ children }) => {
             return {
               ...initP,
               ...p,
+              dates: p.dates !== undefined ? p.dates : (initP?.dates || p.year || initP?.year || ''),
               media: p.media !== undefined ? p.media : (initP?.media || '')
             };
           }),
@@ -312,7 +313,8 @@ export const PortfolioProvider = ({ children }) => {
     const newProject = {
       ...project,
       id: 'p_' + Date.now(),
-      year: project.year || new Date().getFullYear().toString()
+      dates: project.dates || project.year || new Date().getFullYear().toString(),
+      year: project.dates || project.year || new Date().getFullYear().toString()
     };
     saveData((prev) => ({
       ...prev,
