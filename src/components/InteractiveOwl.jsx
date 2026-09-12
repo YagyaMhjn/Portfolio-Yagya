@@ -3,17 +3,18 @@ import { usePortfolio } from '../context/PortfolioContext';
 
 /**
  * InteractiveOwl Component
- * - Silhouette & anatomy matching user's reference image:
- *   - Curved ear tufts with scooped top head line.
- *   - Forehead nested chevron stripes.
- *   - Concentric circular eyes with live cursor tracking in Dark Mode.
- *   - Downward triangular beak.
- *   - Chest hourglass/diamond with nested downward belly chevrons.
- *   - Rich scalloped multi-layered feather scales on both wings.
- *   - Three-toed geometric claws firmly perched on the button top edge.
- * - In Dark Mode: Awake in crisp slate, silver, and graphite with amber iris & tracking pupils.
- * - In Light Mode: Sleeps in rich warm dark brown / chocolate tones with closed geometric eyelids
- *   and progressive floating 'Zzz' particles (33%, 66%, 99%).
+ * - Exact vector reproduction of reference image (media_1789250478378.png):
+ *   - Curved ear horns with dipped head line.
+ *   - Forehead downward-pointing nested chevron crown.
+ *   - Big concentric eyes with live pupil tracking in Dark Mode.
+ *   - Sharp downward orange beak.
+ *   - Chest geometric 'X' division with cream side triangles.
+ *   - Lower belly nested downward chevron pyramid.
+ *   - Rounded teardrop wings with multi-layered scalloped feather scales and crescent inner borders.
+ *   - Two 3-toed golden claws firmly clasping the perch over the button ledge.
+ * - In Dark Mode: Slate, silver, and graphite with amber accents & live tracking pupils.
+ * - In Light Mode: Rich warm dark brown / chocolate with vibrant folk chevrons & scalloped plumage,
+ *   sleeping closed eyelids with breathing motion, and progressive floating 'Zzz' particles.
  * - Non-navigating click interaction.
  */
 export const InteractiveOwl = ({ className = '' }) => {
@@ -37,7 +38,7 @@ export const InteractiveOwl = ({ className = '' }) => {
 
   // Detection radius around owl center
   const TRACKING_RADIUS = 195;
-  const MAX_PUPIL_OFFSET = 4.2; // Maximum pupil travel distance inside eye
+  const MAX_PUPIL_OFFSET = 3.8; // Pupil travel distance inside eye
 
   // Handle cursor movement around the owl
   const handleMouseMove = useCallback((e) => {
@@ -55,7 +56,6 @@ export const InteractiveOwl = ({ className = '' }) => {
       setIsInsideRadius(true);
 
       if (!isLight) {
-        // Calculate angle and scale offset smoothly based on distance
         const angle = Math.atan2(dy, dx);
         const intensity = Math.min(1, dist / 95);
         const targetX = Math.cos(angle) * MAX_PUPIL_OFFSET * intensity;
@@ -77,7 +77,6 @@ export const InteractiveOwl = ({ className = '' }) => {
   useEffect(() => {
     let animId;
     const updatePupil = () => {
-      // Lerp for organic, silky smooth eye motion
       currentPupil.current.x += (targetPupil.current.x - currentPupil.current.x) * 0.18;
       currentPupil.current.y += (targetPupil.current.y - currentPupil.current.y) * 0.18;
 
@@ -98,14 +97,14 @@ export const InteractiveOwl = ({ className = '' }) => {
     if (isLight || isInsideRadius) return;
 
     const glanceOptions = [
-      { x: 0, y: 0 },         // center
-      { x: -3.5, y: -0.5 },    // look left
-      { x: 3.5, y: -0.5 },     // look right
-      { x: 0, y: -3.0 },       // look up
-      { x: 0, y: 3.2 },        // look down at button
-      { x: -2.4, y: 2.2 },     // look down-left
-      { x: 2.4, y: 2.2 },      // look down-right
-      { x: 0, y: 0 },         // center
+      { x: 0, y: 0 },
+      { x: -3.2, y: -0.5 },
+      { x: 3.2, y: -0.5 },
+      { x: 0, y: -2.8 },
+      { x: 0, y: 3.0 },
+      { x: -2.2, y: 2.0 },
+      { x: 2.2, y: 2.0 },
+      { x: 0, y: 0 },
     ];
 
     const interval = setInterval(() => {
@@ -129,7 +128,7 @@ export const InteractiveOwl = ({ className = '' }) => {
     return () => clearInterval(blinkInterval);
   }, [isLight]);
 
-  // Clear Z particles immediately if switching to Dark Mode (awake)
+  // Clear Z particles if switching to Dark Mode
   useEffect(() => {
     if (!isLight) {
       setZParticles([]);
@@ -165,7 +164,7 @@ export const InteractiveOwl = ({ className = '' }) => {
     };
   }, [isLight, isInsideRadius]);
 
-  // Owl click reaction: cute tilt reaction without navigating away or resizing
+  // Owl click reaction: cute tilt reaction without navigating away
   const handleOwlClick = (e) => {
     e.stopPropagation();
     setIsChirping(true);
@@ -177,7 +176,7 @@ export const InteractiveOwl = ({ className = '' }) => {
       ref={owlRef}
       onClick={handleOwlClick}
       /* Firmly perched on top of button with claws overlapping border, enlarged size, NO hover scale */
-      className={`absolute bottom-[calc(100%-8px)] sm:bottom-[calc(100%-10px)] right-5 sm:right-7 z-30 w-[68px] h-[78px] sm:w-[84px] sm:h-[96px] select-none cursor-pointer transition-transform duration-300 ${
+      className={`absolute bottom-[calc(100%-8px)] sm:bottom-[calc(100%-10px)] right-5 sm:right-7 z-30 w-[70px] h-[82px] sm:w-[86px] sm:h-[100px] select-none cursor-pointer transition-transform duration-300 ${
         isChirping ? '-rotate-6' : ''
       } ${className}`}
       title={isLight ? 'Sleeping owl... (Hover near me to see dreams)' : 'Observant owl is watching!'}
@@ -206,238 +205,97 @@ export const InteractiveOwl = ({ className = '' }) => {
         </div>
       )}
 
-      {/* Main Vector SVG Owl (Detailed Chevron & Scalloped Wing Body) */}
+      {/* Main Vector SVG Owl (Exact Reproduction of media_1789250478378.png) */}
       <svg
-        viewBox="0 0 100 120"
+        viewBox="0 0 100 110"
         className={`w-full h-full overflow-visible drop-shadow-lg ${
           isLight ? 'animate-owl-breathe' : ''
         }`}
       >
         {/* ===============================================================
-            1. MAIN BODY SILHOUETTE (Pointed Ear Horns + Organic Flanks)
+            1. MAIN HEAD & BODY SILHOUETTE
            =============================================================== */}
         <path
-          d="M 12 10 
-             C 24 19 36 23 50 23 
-             C 64 23 76 19 88 10 
-             C 85 24 92 38 92 60 
-             C 92 82 89 106 84 106 
-             L 16 106 
-             C 11 106 8 82 8 60 
-             C 8 38 15 24 12 10 Z"
+          d="M 9 4 
+             C 24 13 36 16 50 16 
+             C 64 16 76 13 91 4 
+             C 82 17 87 28 88 44 
+             C 94 56 94 76 86 96 
+             L 14 96 
+             C 6 76 6 56 12 44 
+             C 13 28 18 17 9 4 Z"
           fill={isLight ? '#3e2015' : '#141418'}
-          stroke={isLight ? '#2a150e' : '#333544'}
+          stroke={isLight ? '#2a150e' : '#272936'}
           strokeWidth="1.6"
           strokeLinejoin="round"
         />
 
         {/* ===============================================================
-            2. FOREHEAD NESTED CHEVRON STRIPES
+            2. FOREHEAD NESTED CHEVRON CROWN (Between the Ears, Pointing Down)
            =============================================================== */}
-        {/* Layer 1 (Outer Chevron Band) */}
+        {/* Outer Chevron (Magenta / Slate) */}
         <polygon
-          points="18,17 50,38 82,17 76,14 50,33 24,14"
-          fill={isLight ? '#c25e37' : '#475569'}
+          points="14,9 50,31 86,9 80,6 50,26 20,6"
+          fill={isLight ? '#a82d4a' : '#475569'}
         />
-        {/* Layer 2 (Middle Chevron Band) */}
+        {/* 2nd Chevron (Teal / Medium Slate) */}
         <polygon
-          points="24,14 50,33 76,14 70,11 50,28 30,11"
-          fill={isLight ? '#d97706' : '#64748b'}
+          points="20,6 50,26 80,6 74,4 50,21 26,4"
+          fill={isLight ? '#2a8f8d' : '#64748b'}
         />
-        {/* Layer 3 (Inner Chevron Band) */}
+        {/* 3rd Chevron (Amber Orange / Light Slate) */}
         <polygon
-          points="30,11 50,28 70,11 64,8 50,23 36,8"
-          fill={isLight ? '#fcd34d' : '#94a3b8'}
+          points="26,4 50,21 74,4 68,2 50,16 32,2"
+          fill={isLight ? '#e05a36' : '#94a3b8'}
         />
-        {/* Layer 4 (Top Peak Triangle) */}
+        {/* Center Top Triangle (Yellow Ochre / Silver) */}
         <polygon
-          points="36,8 50,23 64,8"
-          fill={isLight ? '#fef3c7' : '#cbd5e1'}
+          points="32,2 50,16 68,2"
+          fill={isLight ? '#e89b27' : '#cbd5e1'}
         />
 
         {/* ===============================================================
-            3. SCALLOPED WINGS (Left & Right Flanks with Layered Feathers)
+            3. EYES: WHITE CONCENTRIC RINGS & PUPILS
            =============================================================== */}
-        {/* Left Wing Outer Contour Base */}
-        <path
-          d="M 28 54 C 18 54 8 66 8 80 C 8 94 15 106 28 106 C 30 92 30 70 28 54 Z"
-          fill={isLight ? '#543327' : '#1e293b'}
-        />
-        {/* Left Wing Tier 1 (Shoulder Cap) */}
-        <path
-          d="M 12 56 C 20 54 28 56 28 66 C 20 68 12 66 12 56 Z"
-          fill={isLight ? '#c25e37' : '#475569'}
-        />
-        {/* Left Wing Tier 2 (Scalloped Scales) */}
-        <path
-          d="M 10 66 C 18 64 22 74 18 78 C 14 78 10 74 10 66 Z"
-          fill={isLight ? '#d97706' : '#64748b'}
-        />
-        <path
-          d="M 18 66 C 24 64 28 74 24 78 C 20 78 18 74 18 66 Z"
-          fill={isLight ? '#fcd34d' : '#94a3b8'}
-        />
-        {/* Left Wing Tier 3 (Scalloped Scales) */}
-        <path
-          d="M 9 76 C 17 74 21 84 17 88 C 13 88 9 84 9 76 Z"
-          fill={isLight ? '#785928' : '#334155'}
-        />
-        <path
-          d="M 17 76 C 23 74 27 84 23 88 C 19 88 17 84 17 76 Z"
-          fill={isLight ? '#c25e37' : '#475569'}
-        />
-        {/* Left Wing Tier 4 (Lower Feather Scales) */}
-        <path
-          d="M 10 86 C 18 84 22 94 18 98 C 14 98 10 94 10 86 Z"
-          fill={isLight ? '#d97706' : '#64748b'}
-        />
-        <path
-          d="M 18 86 C 24 84 28 94 24 98 C 20 98 18 94 18 86 Z"
-          fill={isLight ? '#fcd34d' : '#94a3b8'}
-        />
-
-        {/* Right Wing Outer Contour Base */}
-        <path
-          d="M 72 54 C 82 54 92 66 92 80 C 92 94 85 106 72 106 C 70 92 70 70 72 54 Z"
-          fill={isLight ? '#543327' : '#1e293b'}
-        />
-        {/* Right Wing Tier 1 (Shoulder Cap) */}
-        <path
-          d="M 88 56 C 80 54 72 56 72 66 C 80 68 88 66 88 56 Z"
-          fill={isLight ? '#c25e37' : '#475569'}
-        />
-        {/* Right Wing Tier 2 (Scalloped Scales) */}
-        <path
-          d="M 90 66 C 82 64 78 74 82 78 C 86 78 90 74 90 66 Z"
-          fill={isLight ? '#d97706' : '#64748b'}
-        />
-        <path
-          d="M 82 66 C 76 64 72 74 76 78 C 80 78 82 74 82 66 Z"
-          fill={isLight ? '#fcd34d' : '#94a3b8'}
-        />
-        {/* Right Wing Tier 3 (Scalloped Scales) */}
-        <path
-          d="M 91 76 C 83 74 79 84 83 88 C 87 88 91 84 91 76 Z"
-          fill={isLight ? '#785928' : '#334155'}
-        />
-        <path
-          d="M 83 76 C 77 74 73 84 77 88 C 81 88 83 84 83 76 Z"
-          fill={isLight ? '#c25e37' : '#475569'}
-        />
-        {/* Right Wing Tier 4 (Lower Feather Scales) */}
-        <path
-          d="M 90 86 C 82 84 78 94 82 98 C 86 98 90 94 90 86 Z"
-          fill={isLight ? '#d97706' : '#64748b'}
-        />
-        <path
-          d="M 82 86 C 76 84 72 94 76 98 C 80 98 82 94 82 86 Z"
-          fill={isLight ? '#fcd34d' : '#94a3b8'}
-        />
-
-        {/* ===============================================================
-            4. CHEST / BELLY SPLIT DIAMOND & NESTED BELLY CHEVRONS
-           =============================================================== */}
-        {/* Upper Chest Split Diamond (Ivory/Cream and Tan / Silver) */}
-        {/* Left Half */}
-        <polygon
-          points="50,60 28,86 50,86"
-          fill={isLight ? '#fef3c7' : '#f1f5f9'}
-        />
-        {/* Right Half */}
-        <polygon
-          points="50,60 72,86 50,86"
-          fill={isLight ? '#fcd34d' : '#cbd5e1'}
-        />
-
-        {/* Lower Belly Nested Chevrons (Mirroring forehead chevrons downwards) */}
-        {/* Layer 1 (Outer Belly Chevron) */}
-        <polygon
-          points="28,86 50,106 72,86 66,86 50,101 34,86"
-          fill={isLight ? '#c25e37' : '#475569'}
-        />
-        {/* Layer 2 (Middle Belly Chevron) */}
-        <polygon
-          points="34,86 50,101 66,86 60,86 50,96 40,86"
-          fill={isLight ? '#d97706' : '#64748b'}
-        />
-        {/* Layer 3 (Inner Belly Triangle) */}
-        <polygon
-          points="40,86 50,96 60,86"
-          fill={isLight ? '#b45309' : '#334155'}
-        />
-
-        {/* ===============================================================
-            5. EYES SYSTEM (Concentric Circles & Live Tracking / Sleeping)
-           =============================================================== */}
-        {/* Outer White Sclera Rings */}
-        <circle cx="32" cy="42" r="15" fill="#ffffff" stroke={isLight ? '#3e2015' : '#1e293b'} strokeWidth="1" />
-        <circle cx="68" cy="42" r="15" fill="#ffffff" stroke={isLight ? '#3e2015' : '#1e293b'} strokeWidth="1" />
+        {/* Left White Sclera Ring */}
+        <circle cx="32" cy="33" r="15" fill="#ffffff" stroke={isLight ? '#3e2015' : '#1e293b'} strokeWidth="1" />
+        {/* Right White Sclera Ring */}
+        <circle cx="68" cy="33" r="15" fill="#ffffff" stroke={isLight ? '#3e2015' : '#1e293b'} strokeWidth="1" />
 
         {isLight || isBlinking ? (
-          /* Sleeping / Blinking State: Sleek Bauhaus Closed Eyelids */
+          /* Sleeping / Blinking Closed Eyelids */
           <g className="transition-opacity duration-300 ease-in-out">
-            {/* Left Closed Eye Slit */}
-            <line
-              x1="20"
-              y1="42"
-              x2="44"
-              y2="42"
-              stroke={isLight ? '#26120b' : '#0f172a'}
-              strokeWidth="3.2"
-              strokeLinecap="round"
-            />
-            <path
-              d="M 22 38 Q 32 34 42 38"
-              fill="none"
-              stroke={isLight ? '#784533' : '#94a3b8'}
-              strokeWidth="1.8"
-              strokeLinecap="round"
-            />
+            <line x1="20" y1="33" x2="44" y2="33" stroke={isLight ? '#26120b' : '#0f172a'} strokeWidth="3.2" strokeLinecap="round" />
+            <path d="M 22 29 Q 32 25 42 29" fill="none" stroke={isLight ? '#784533' : '#94a3b8'} strokeWidth="1.8" strokeLinecap="round" />
 
-            {/* Right Closed Eye Slit */}
-            <line
-              x1="56"
-              y1="42"
-              x2="80"
-              y2="42"
-              stroke={isLight ? '#26120b' : '#0f172a'}
-              strokeWidth="3.2"
-              strokeLinecap="round"
-            />
-            <path
-              d="M 58 38 Q 68 34 78 38"
-              fill="none"
-              stroke={isLight ? '#784533' : '#94a3b8'}
-              strokeWidth="1.8"
-              strokeLinecap="round"
-            />
+            <line x1="56" y1="33" x2="80" y2="33" stroke={isLight ? '#26120b' : '#0f172a'} strokeWidth="3.2" strokeLinecap="round" />
+            <path d="M 58 29 Q 68 25 78 29" fill="none" stroke={isLight ? '#784533' : '#94a3b8'} strokeWidth="1.8" strokeLinecap="round" />
           </g>
         ) : (
-          /* Awake State: Concentric Amber Iris & Black Pupil with Live Glare Tracking */
+          /* Awake Concentric Amber Iris & Black Pupil with Live Glare Tracking */
           <g className="transition-opacity duration-300 ease-in-out">
-            {/* Inner Amber Iris Rings */}
-            <circle cx="32" cy="42" r="10.2" fill="#f59e0b" />
-            <circle cx="68" cy="42" r="10.2" fill="#f59e0b" />
+            <circle cx="32" cy="33" r="10" fill="#f59e0b" />
+            <circle cx="68" cy="33" r="10" fill="#f59e0b" />
 
-            {/* Left Pupil + Specular Catchlight */}
+            {/* Left Pupil */}
             <g transform={`translate(${pupilPos.x}, ${pupilPos.y})`}>
-              <circle cx="32" cy="42" r="6" fill="#09090b" />
-              <circle cx="30.2" cy="40" r="2" fill="#ffffff" />
+              <circle cx="32" cy="33" r="5.8" fill="#09090b" />
+              <circle cx="30.2" cy="31" r="2" fill="#ffffff" />
             </g>
 
-            {/* Right Pupil + Specular Catchlight */}
+            {/* Right Pupil */}
             <g transform={`translate(${pupilPos.x}, ${pupilPos.y})`}>
-              <circle cx="68" cy="42" r="6" fill="#09090b" />
-              <circle cx="66.2" cy="40" r="2" fill="#ffffff" />
+              <circle cx="68" cy="33" r="5.8" fill="#09090b" />
+              <circle cx="66.2" cy="31" r="2" fill="#ffffff" />
             </g>
           </g>
         )}
 
         {/* ===============================================================
-            6. SHARP GEOMETRIC BEAK
+            4. ORANGE TRIANGULAR BEAK
            =============================================================== */}
         <polygon
-          points="50,42 44,52 50,62 56,52"
+          points="44,35 56,35 50,52"
           fill="#f59e0b"
           stroke="#b45309"
           strokeWidth="0.8"
@@ -445,38 +303,151 @@ export const InteractiveOwl = ({ className = '' }) => {
         />
 
         {/* ===============================================================
-            7. GEOMETRIC PERCH BAR & THREE-TOED CLAWS
+            5. CHEST 'X' DIVISION (Cream Side Panels & Dark Center)
            =============================================================== */}
-        {/* Horizontal Perch Crossbar */}
+        {/* Left Side Cream/Ivory Triangle */}
+        <polygon
+          points="25,48 50,65 25,78"
+          fill={isLight ? '#fef3c7' : '#e2e8f0'}
+        />
+        {/* Right Side Cream/Ivory Triangle */}
+        <polygon
+          points="75,48 50,65 75,78"
+          fill={isLight ? '#fde68a' : '#cbd5e1'}
+        />
+        {/* Upper Dark Triangular Sector under Beak */}
+        <polygon
+          points="25,48 50,52 75,48 50,65"
+          fill={isLight ? '#321910' : '#1a1b22'}
+        />
+        {/* Shadow Accent on Left of Beak */}
+        <polygon
+          points="35,49 50,52 50,65"
+          fill={isLight ? '#26120b' : '#0f1015'}
+          opacity="0.45"
+        />
+
+        {/* ===============================================================
+            6. LOWER BELLY NESTED CHEVRON PYRAMID
+           =============================================================== */}
+        {/* Chevron Layer 1 - Top Coral / Amber */}
+        <polygon
+          points="25,78 50,65 75,78 70,82 50,71 30,82"
+          fill={isLight ? '#e05a36' : '#f59e0b'}
+        />
+        {/* Chevron Layer 2 - Teal / Medium Slate */}
+        <polygon
+          points="30,82 50,71 70,82 65,86 50,77 35,86"
+          fill={isLight ? '#2a8f8d' : '#64748b'}
+        />
+        {/* Chevron Layer 3 - Yellow / Silver */}
+        <polygon
+          points="35,86 50,77 65,86 60,90 50,83 40,90"
+          fill={isLight ? '#e89b27' : '#94a3b8'}
+        />
+        {/* Chevron Layer 4 - Teal / Slate */}
+        <polygon
+          points="40,90 50,83 60,90 56,93 50,88 44,93"
+          fill={isLight ? '#2a8f8d' : '#475569'}
+        />
+        {/* Chevron Layer 5 - Bottom Magenta / Deep Slate */}
+        <polygon
+          points="44,93 50,88 56,93 50,96"
+          fill={isLight ? '#a82d4a' : '#334155'}
+        />
+
+        {/* ===============================================================
+            7. SCALLOPED FEATHER WINGS (Left & Right Flanks)
+           =============================================================== */}
+        {/* --- LEFT WING --- */}
+        {/* Left Wing Outer Base Silhouette */}
+        <path
+          d="M 25 48 C 15 48 7 60 7 74 C 7 88 14 96 25 96 C 26 84 26 64 25 48 Z"
+          fill={isLight ? '#541c2c' : '#1e293b'}
+        />
+        {/* Left Wing Inner Crescent Border (Plum/Dark Slate) */}
+        <path
+          d="M 25 48 C 22 62 22 82 25 96 C 20 96 16 88 16 74 C 16 60 20 48 25 48 Z"
+          fill={isLight ? '#421424' : '#0f172a'}
+          opacity="0.85"
+        />
+        {/* Scallop Tier 1 (Magenta Top Cap) */}
+        <path d="M 10 50 C 16 46 24 48 24 58 C 18 60 10 58 10 50 Z" fill={isLight ? '#a82d4a' : '#475569'} />
+        {/* Scallop Tier 2 (Orange & Teal Scales) */}
+        <path d="M 8 58 C 14 56 18 64 14 68 C 10 68 8 64 8 58 Z" fill={isLight ? '#e05a36' : '#f59e0b'} />
+        <path d="M 14 58 C 20 56 24 64 20 68 C 16 68 14 64 14 58 Z" fill={isLight ? '#2a8f8d' : '#64748b'} />
+        {/* Scallop Tier 3 (Olive & Magenta Scales) */}
+        <path d="M 7 66 C 13 64 17 72 13 76 C 9 76 7 72 7 66 Z" fill={isLight ? '#785928' : '#334155'} />
+        <path d="M 13 66 C 19 64 23 72 19 76 C 15 76 13 72 13 66 Z" fill={isLight ? '#a82d4a' : '#475569'} />
+        {/* Scallop Tier 4 (Orange & Teal Scales) */}
+        <path d="M 8 74 C 14 72 18 80 14 84 C 10 84 8 80 8 74 Z" fill={isLight ? '#e05a36' : '#f59e0b'} />
+        <path d="M 14 74 C 20 72 24 80 20 84 C 16 84 14 80 14 74 Z" fill={isLight ? '#2a8f8d' : '#64748b'} />
+        {/* Scallop Tier 5 (Yellow & Magenta Lower Scales) */}
+        <path d="M 9 82 C 15 80 19 88 15 92 C 11 92 9 88 9 82 Z" fill={isLight ? '#e89b27' : '#94a3b8'} />
+        <path d="M 15 82 C 21 80 25 88 21 92 C 17 92 15 88 15 82 Z" fill={isLight ? '#a82d4a' : '#475569'} />
+
+        {/* --- RIGHT WING (Symmetrical) --- */}
+        {/* Right Wing Outer Base Silhouette */}
+        <path
+          d="M 75 48 C 85 48 93 60 93 74 C 93 88 86 96 75 96 C 74 84 74 64 75 48 Z"
+          fill={isLight ? '#541c2c' : '#1e293b'}
+        />
+        {/* Right Wing Inner Crescent Border (Plum/Dark Slate) */}
+        <path
+          d="M 75 48 C 78 62 78 82 75 96 C 80 96 84 88 84 74 C 84 60 80 48 75 48 Z"
+          fill={isLight ? '#421424' : '#0f172a'}
+          opacity="0.85"
+        />
+        {/* Scallop Tier 1 (Magenta Top Cap) */}
+        <path d="M 90 50 C 84 46 76 48 76 58 C 82 60 90 58 90 50 Z" fill={isLight ? '#a82d4a' : '#475569'} />
+        {/* Scallop Tier 2 (Orange & Teal Scales) */}
+        <path d="M 92 58 C 86 56 82 64 86 68 C 90 68 92 64 92 58 Z" fill={isLight ? '#e05a36' : '#f59e0b'} />
+        <path d="M 86 58 C 80 56 76 64 80 68 C 84 68 86 64 86 58 Z" fill={isLight ? '#2a8f8d' : '#64748b'} />
+        {/* Scallop Tier 3 (Olive & Magenta Scales) */}
+        <path d="M 93 66 C 87 64 83 72 87 76 C 91 76 93 72 93 66 Z" fill={isLight ? '#785928' : '#334155'} />
+        <path d="M 87 66 C 81 64 77 72 81 76 C 85 76 87 72 87 66 Z" fill={isLight ? '#a82d4a' : '#475569'} />
+        {/* Scallop Tier 4 (Orange & Teal Scales) */}
+        <path d="M 92 74 C 86 72 82 80 86 84 C 90 84 92 80 92 74 Z" fill={isLight ? '#e05a36' : '#f59e0b'} />
+        <path d="M 86 74 C 80 72 76 80 80 84 C 84 84 86 80 86 74 Z" fill={isLight ? '#2a8f8d' : '#64748b'} />
+        {/* Scallop Tier 5 (Yellow & Magenta Lower Scales) */}
+        <path d="M 91 82 C 85 80 81 88 85 92 C 89 92 91 88 91 82 Z" fill={isLight ? '#e89b27' : '#94a3b8'} />
+        <path d="M 85 82 C 79 80 75 88 79 92 C 83 92 85 88 85 82 Z" fill={isLight ? '#a82d4a' : '#475569'} />
+
+        {/* ===============================================================
+            8. HORIZONTAL PERCH BAR & THREE-TOED GOLDEN CLAWS
+           =============================================================== */}
+        {/* Thin Horizontal Perch Wire/Branch */}
         <rect
-          x="12"
-          y="108"
-          width="76"
-          height="5.5"
-          rx="2"
-          fill={isLight ? '#785928' : '#3f4553'}
+          x="0"
+          y="96"
+          width="100"
+          height="4"
+          fill={isLight ? '#6b7280' : '#3f4553'}
         />
 
         {/* Tail Tip (under perch bar) */}
-        <polygon
-          points="46,113 54,113 50,121"
-          fill={isLight ? '#2a150e' : '#1e293b'}
+        <rect
+          x="48"
+          y="97"
+          width="4"
+          height="5"
+          fill={isLight ? '#2a150e' : '#141418'}
         />
 
-        {/* Left Geometric Claw (3 rounded toes firmly clasping the button) */}
-        <g fill="#fbbf24" stroke="#b45309" strokeWidth="0.8">
-          <rect x="29" y="104" width="14" height="6" rx="2" />
-          <rect x="29" y="109" width="3.8" height="8" rx="1.6" />
-          <rect x="34.1" y="109" width="3.8" height="8.8" rx="1.6" />
-          <rect x="39.2" y="109" width="3.8" height="8" rx="1.6" />
+        {/* Left Three-Toed Claw (Firmly gripping over the perch/button ledge) */}
+        <g fill="#f59e0b" stroke="#b45309" strokeWidth="0.8">
+          <path d="M 31 93 C 31 91 43 91 43 93 L 43 96 L 31 96 Z" />
+          <path d="M 31 96 L 31 103 L 34.5 101 L 34.5 96 Z" />
+          <path d="M 35 96 L 35 104 L 38.5 102 L 38.5 96 Z" />
+          <path d="M 39 96 L 39 103 L 42.5 101 L 42.5 96 Z" />
         </g>
 
-        {/* Right Geometric Claw (3 rounded toes firmly clasping the button) */}
-        <g fill="#fbbf24" stroke="#b45309" strokeWidth="0.8">
-          <rect x="57" y="104" width="14" height="6" rx="2" />
-          <rect x="57" y="109" width="3.8" height="8" rx="1.6" />
-          <rect x="62.1" y="109" width="3.8" height="8.8" rx="1.6" />
-          <rect x="67.2" y="109" width="3.8" height="8" rx="1.6" />
+        {/* Right Three-Toed Claw (Firmly gripping over the perch/button ledge) */}
+        <g fill="#f59e0b" stroke="#b45309" strokeWidth="0.8">
+          <path d="M 57 93 C 57 91 69 91 69 93 L 69 96 L 57 96 Z" />
+          <path d="M 57 96 L 57 103 L 60.5 101 L 60.5 96 Z" />
+          <path d="M 61 96 L 61 104 L 64.5 102 L 64.5 96 Z" />
+          <path d="M 65 96 L 65 103 L 68.5 101 L 68.5 96 Z" />
         </g>
       </svg>
     </div>
