@@ -2,13 +2,14 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
 
 /**
- * InteractiveOwl Component (Mid-Century Modern Geometric Style)
- * - Silhouette based on iconic Bauhaus/Charley Harper geometric owl artwork:
- *   - Triangular ear tufts, rounded head arches, straight body sides.
- *   - Forehead circular emblem.
- *   - Big concentric geometric eyes with live pupil tracking in Dark Mode.
- *   - Downward triangular beak and split dual-triangle chest/belly diamond.
- *   - Segmented color-blocked geometric wings.
+ * InteractiveOwl Component
+ * - Silhouette & anatomy matching user's reference image:
+ *   - Curved ear tufts with scooped top head line.
+ *   - Forehead nested chevron stripes.
+ *   - Concentric circular eyes with live cursor tracking in Dark Mode.
+ *   - Downward triangular beak.
+ *   - Chest hourglass/diamond with nested downward belly chevrons.
+ *   - Rich scalloped multi-layered feather scales on both wings.
  *   - Three-toed geometric claws firmly perched on the button top edge.
  * - In Dark Mode: Awake in crisp slate, silver, and graphite with amber iris & tracking pupils.
  * - In Light Mode: Sleeps in rich warm dark brown / chocolate tones with closed geometric eyelids
@@ -36,7 +37,7 @@ export const InteractiveOwl = ({ className = '' }) => {
 
   // Detection radius around owl center
   const TRACKING_RADIUS = 195;
-  const MAX_PUPIL_OFFSET = 4.2; // Maximum pupil travel distance inside geometric eye
+  const MAX_PUPIL_OFFSET = 4.2; // Maximum pupil travel distance inside eye
 
   // Handle cursor movement around the owl
   const handleMouseMove = useCallback((e) => {
@@ -136,15 +137,11 @@ export const InteractiveOwl = ({ className = '' }) => {
   }, [isLight]);
 
   // Floating 'Z' Spawner in Light Mode
-  // - 0.25s entry delay before first spawn
-  // - Cycles through 33%, 66%, 99%
-  // - When cursor leaves radius, stops producing new ones, but existing particles finish their full trajectory and fade out
   useEffect(() => {
     if (!isLight || !isInsideRadius) return;
 
     let spawnInterval = null;
 
-    // 0.25s (250ms) entry delay
     const entryTimeout = setTimeout(() => {
       const spawnZ = () => {
         const scale = Z_SCALES[zCycleRef.current % 3];
@@ -153,16 +150,12 @@ export const InteractiveOwl = ({ className = '' }) => {
 
         setZParticles((prev) => [...prev, { id: particleId, scale }]);
 
-        // Particle finishes trajectory in 2.0s and self-cleans
         setTimeout(() => {
           setZParticles((prev) => prev.filter((p) => p.id !== particleId));
         }, 2050);
       };
 
-      // Spawn initial Z after entry delay
       spawnZ();
-
-      // Continue producing Z's in rhythm while inside radius
       spawnInterval = setInterval(spawnZ, 720);
     }, 250);
 
@@ -184,10 +177,10 @@ export const InteractiveOwl = ({ className = '' }) => {
       ref={owlRef}
       onClick={handleOwlClick}
       /* Firmly perched on top of button with claws overlapping border, enlarged size, NO hover scale */
-      className={`absolute bottom-[calc(100%-8px)] sm:bottom-[calc(100%-10px)] right-5 sm:right-7 z-30 w-[68px] h-[76px] sm:w-[84px] sm:h-[94px] select-none cursor-pointer transition-transform duration-300 ${
+      className={`absolute bottom-[calc(100%-8px)] sm:bottom-[calc(100%-10px)] right-5 sm:right-7 z-30 w-[68px] h-[78px] sm:w-[84px] sm:h-[96px] select-none cursor-pointer transition-transform duration-300 ${
         isChirping ? '-rotate-6' : ''
       } ${className}`}
-      title={isLight ? 'Sleeping geometric owl... (Hover near me to see dreams)' : 'Observant geometric owl is watching!'}
+      title={isLight ? 'Sleeping owl... (Hover near me to see dreams)' : 'Observant owl is watching!'}
     >
       {/* Floating Animated 'Z' Particles in Light Mode */}
       {isLight && zParticles.length > 0 && (
@@ -213,7 +206,7 @@ export const InteractiveOwl = ({ className = '' }) => {
         </div>
       )}
 
-      {/* Main Vector SVG Owl (Mid-Century Geometric Design) */}
+      {/* Main Vector SVG Owl (Detailed Chevron & Scalloped Wing Body) */}
       <svg
         viewBox="0 0 100 120"
         className={`w-full h-full overflow-visible drop-shadow-lg ${
@@ -221,108 +214,164 @@ export const InteractiveOwl = ({ className = '' }) => {
         }`}
       >
         {/* ===============================================================
-            1. MAIN GEOMETRIC SILHOUETTE (Body + Head + Triangular Ears)
+            1. MAIN BODY SILHOUETTE (Pointed Ear Horns + Organic Flanks)
            =============================================================== */}
         <path
-          d="M 9 8 
-             L 91 8 
-             L 78 22 
-             C 88 32 89 44 89 60 
-             L 89 104 
-             L 11 104 
-             L 11 60 
-             C 11 44 12 32 22 22 
-             Z"
+          d="M 12 10 
+             C 24 19 36 23 50 23 
+             C 64 23 76 19 88 10 
+             C 85 24 92 38 92 60 
+             C 92 82 89 106 84 106 
+             L 16 106 
+             C 11 106 8 82 8 60 
+             C 8 38 15 24 12 10 Z"
           fill={isLight ? '#3e2015' : '#141418'}
           stroke={isLight ? '#2a150e' : '#333544'}
-          strokeWidth="1.5"
+          strokeWidth="1.6"
           strokeLinejoin="round"
         />
 
         {/* ===============================================================
-            2. FOREHEAD CIRCLE
+            2. FOREHEAD NESTED CHEVRON STRIPES
            =============================================================== */}
-        <circle
-          cx="50"
-          cy="16"
-          r="7"
-          fill={isLight ? '#c25e37' : '#94a3b8'}
+        {/* Layer 1 (Outer Chevron Band) */}
+        <polygon
+          points="18,17 50,38 82,17 76,14 50,33 24,14"
+          fill={isLight ? '#c25e37' : '#475569'}
+        />
+        {/* Layer 2 (Middle Chevron Band) */}
+        <polygon
+          points="24,14 50,33 76,14 70,11 50,28 30,11"
+          fill={isLight ? '#d97706' : '#64748b'}
+        />
+        {/* Layer 3 (Inner Chevron Band) */}
+        <polygon
+          points="30,11 50,28 70,11 64,8 50,23 36,8"
+          fill={isLight ? '#fcd34d' : '#94a3b8'}
+        />
+        {/* Layer 4 (Top Peak Triangle) */}
+        <polygon
+          points="36,8 50,23 64,8"
+          fill={isLight ? '#fef3c7' : '#cbd5e1'}
         />
 
         {/* ===============================================================
-            3. GEOMETRIC WINGS (Left & Right Flanks)
+            3. SCALLOPED WINGS (Left & Right Flanks with Layered Feathers)
            =============================================================== */}
-        {/* Left Wing Upper Crescent */}
+        {/* Left Wing Outer Contour Base */}
         <path
-          d="M 11 54 C 23 54 32 66 32 84 L 11 84 Z"
+          d="M 28 54 C 18 54 8 66 8 80 C 8 94 15 106 28 106 C 30 92 30 70 28 54 Z"
+          fill={isLight ? '#543327' : '#1e293b'}
+        />
+        {/* Left Wing Tier 1 (Shoulder Cap) */}
+        <path
+          d="M 12 56 C 20 54 28 56 28 66 C 20 68 12 66 12 56 Z"
           fill={isLight ? '#c25e37' : '#475569'}
         />
-        {/* Left Wing Upper Inner Quadrant */}
-        <rect
-          x="11"
-          y="68"
-          width="10"
-          height="16"
+        {/* Left Wing Tier 2 (Scalloped Scales) */}
+        <path
+          d="M 10 66 C 18 64 22 74 18 78 C 14 78 10 74 10 66 Z"
+          fill={isLight ? '#d97706' : '#64748b'}
+        />
+        <path
+          d="M 18 66 C 24 64 28 74 24 78 C 20 78 18 74 18 66 Z"
+          fill={isLight ? '#fcd34d' : '#94a3b8'}
+        />
+        {/* Left Wing Tier 3 (Scalloped Scales) */}
+        <path
+          d="M 9 76 C 17 74 21 84 17 88 C 13 88 9 84 9 76 Z"
           fill={isLight ? '#785928' : '#334155'}
         />
-        {/* Left Wing Lower Triangle */}
-        <polygon
-          points="11,84 32,84 11,104"
+        <path
+          d="M 17 76 C 23 74 27 84 23 88 C 19 88 17 84 17 76 Z"
+          fill={isLight ? '#c25e37' : '#475569'}
+        />
+        {/* Left Wing Tier 4 (Lower Feather Scales) */}
+        <path
+          d="M 10 86 C 18 84 22 94 18 98 C 14 98 10 94 10 86 Z"
           fill={isLight ? '#d97706' : '#64748b'}
+        />
+        <path
+          d="M 18 86 C 24 84 28 94 24 98 C 20 98 18 94 18 86 Z"
+          fill={isLight ? '#fcd34d' : '#94a3b8'}
         />
 
-        {/* Right Wing Upper Crescent */}
+        {/* Right Wing Outer Contour Base */}
         <path
-          d="M 89 54 C 77 54 68 66 68 84 L 89 84 Z"
+          d="M 72 54 C 82 54 92 66 92 80 C 92 94 85 106 72 106 C 70 92 70 70 72 54 Z"
+          fill={isLight ? '#543327' : '#1e293b'}
+        />
+        {/* Right Wing Tier 1 (Shoulder Cap) */}
+        <path
+          d="M 88 56 C 80 54 72 56 72 66 C 80 68 88 66 88 56 Z"
           fill={isLight ? '#c25e37' : '#475569'}
         />
-        {/* Right Wing Upper Inner Quadrant */}
-        <rect
-          x="79"
-          y="68"
-          width="10"
-          height="16"
+        {/* Right Wing Tier 2 (Scalloped Scales) */}
+        <path
+          d="M 90 66 C 82 64 78 74 82 78 C 86 78 90 74 90 66 Z"
+          fill={isLight ? '#d97706' : '#64748b'}
+        />
+        <path
+          d="M 82 66 C 76 64 72 74 76 78 C 80 78 82 74 82 66 Z"
+          fill={isLight ? '#fcd34d' : '#94a3b8'}
+        />
+        {/* Right Wing Tier 3 (Scalloped Scales) */}
+        <path
+          d="M 91 76 C 83 74 79 84 83 88 C 87 88 91 84 91 76 Z"
           fill={isLight ? '#785928' : '#334155'}
         />
-        {/* Right Wing Lower Triangle */}
-        <polygon
-          points="89,84 68,84 89,104"
+        <path
+          d="M 83 76 C 77 74 73 84 77 88 C 81 88 83 84 83 76 Z"
+          fill={isLight ? '#c25e37' : '#475569'}
+        />
+        {/* Right Wing Tier 4 (Lower Feather Scales) */}
+        <path
+          d="M 90 86 C 82 84 78 94 82 98 C 86 98 90 94 90 86 Z"
           fill={isLight ? '#d97706' : '#64748b'}
+        />
+        <path
+          d="M 82 86 C 76 84 72 94 76 98 C 80 98 82 94 82 86 Z"
+          fill={isLight ? '#fcd34d' : '#94a3b8'}
         />
 
         {/* ===============================================================
-            4. CHEST / BELLY SPLIT DIAMOND MOSAIC
+            4. CHEST / BELLY SPLIT DIAMOND & NESTED BELLY CHEVRONS
            =============================================================== */}
-        {/* Upper Inverted Triangle (White/Cream & Tan split) */}
-        {/* Left Half (Crisp White/Cream) */}
-        <polygon
-          points="50,56 32,84 50,84"
-          fill={isLight ? '#fef3c7' : '#f1f5f9'}
-        />
-        {/* Right Half (Peach/Tan / Silver) */}
-        <polygon
-          points="50,56 68,84 50,84"
-          fill={isLight ? '#fcd34d' : '#cbd5e1'}
-        />
-
-        {/* Lower Triangle (Terracotta & Ochre / Slate split) */}
+        {/* Upper Chest Split Diamond (Ivory/Cream and Tan / Silver) */}
         {/* Left Half */}
         <polygon
-          points="32,84 50,84 50,104"
-          fill={isLight ? '#c25e37' : '#64748b'}
+          points="50,60 28,86 50,86"
+          fill={isLight ? '#fef3c7' : '#f1f5f9'}
         />
         {/* Right Half */}
         <polygon
-          points="68,84 50,84 50,104"
-          fill={isLight ? '#b45309' : '#475569'}
+          points="50,60 72,86 50,86"
+          fill={isLight ? '#fcd34d' : '#cbd5e1'}
+        />
+
+        {/* Lower Belly Nested Chevrons (Mirroring forehead chevrons downwards) */}
+        {/* Layer 1 (Outer Belly Chevron) */}
+        <polygon
+          points="28,86 50,106 72,86 66,86 50,101 34,86"
+          fill={isLight ? '#c25e37' : '#475569'}
+        />
+        {/* Layer 2 (Middle Belly Chevron) */}
+        <polygon
+          points="34,86 50,101 66,86 60,86 50,96 40,86"
+          fill={isLight ? '#d97706' : '#64748b'}
+        />
+        {/* Layer 3 (Inner Belly Triangle) */}
+        <polygon
+          points="40,86 50,96 60,86"
+          fill={isLight ? '#b45309' : '#334155'}
         />
 
         {/* ===============================================================
             5. EYES SYSTEM (Concentric Circles & Live Tracking / Sleeping)
            =============================================================== */}
         {/* Outer White Sclera Rings */}
-        <circle cx="32" cy="38" r="15.5" fill="#ffffff" stroke={isLight ? '#3e2015' : '#1e293b'} strokeWidth="1" />
-        <circle cx="68" cy="38" r="15.5" fill="#ffffff" stroke={isLight ? '#3e2015' : '#1e293b'} strokeWidth="1" />
+        <circle cx="32" cy="42" r="15" fill="#ffffff" stroke={isLight ? '#3e2015' : '#1e293b'} strokeWidth="1" />
+        <circle cx="68" cy="42" r="15" fill="#ffffff" stroke={isLight ? '#3e2015' : '#1e293b'} strokeWidth="1" />
 
         {isLight || isBlinking ? (
           /* Sleeping / Blinking State: Sleek Bauhaus Closed Eyelids */
@@ -330,16 +379,15 @@ export const InteractiveOwl = ({ className = '' }) => {
             {/* Left Closed Eye Slit */}
             <line
               x1="20"
-              y1="38"
+              y1="42"
               x2="44"
-              y2="38"
+              y2="42"
               stroke={isLight ? '#26120b' : '#0f172a'}
-              strokeWidth="3.4"
+              strokeWidth="3.2"
               strokeLinecap="round"
             />
-            {/* Left Eyelid Curved Fold */}
             <path
-              d="M 22 35 Q 32 30 42 35"
+              d="M 22 38 Q 32 34 42 38"
               fill="none"
               stroke={isLight ? '#784533' : '#94a3b8'}
               strokeWidth="1.8"
@@ -349,16 +397,15 @@ export const InteractiveOwl = ({ className = '' }) => {
             {/* Right Closed Eye Slit */}
             <line
               x1="56"
-              y1="38"
+              y1="42"
               x2="80"
-              y2="38"
+              y2="42"
               stroke={isLight ? '#26120b' : '#0f172a'}
-              strokeWidth="3.4"
+              strokeWidth="3.2"
               strokeLinecap="round"
             />
-            {/* Right Eyelid Curved Fold */}
             <path
-              d="M 58 35 Q 68 30 78 35"
+              d="M 58 38 Q 68 34 78 38"
               fill="none"
               stroke={isLight ? '#784533' : '#94a3b8'}
               strokeWidth="1.8"
@@ -369,19 +416,19 @@ export const InteractiveOwl = ({ className = '' }) => {
           /* Awake State: Concentric Amber Iris & Black Pupil with Live Glare Tracking */
           <g className="transition-opacity duration-300 ease-in-out">
             {/* Inner Amber Iris Rings */}
-            <circle cx="32" cy="38" r="10.5" fill="#f59e0b" />
-            <circle cx="68" cy="38" r="10.5" fill="#f59e0b" />
+            <circle cx="32" cy="42" r="10.2" fill="#f59e0b" />
+            <circle cx="68" cy="42" r="10.2" fill="#f59e0b" />
 
             {/* Left Pupil + Specular Catchlight */}
             <g transform={`translate(${pupilPos.x}, ${pupilPos.y})`}>
-              <circle cx="32" cy="38" r="6.2" fill="#09090b" />
-              <circle cx="30.2" cy="36" r="2.1" fill="#ffffff" />
+              <circle cx="32" cy="42" r="6" fill="#09090b" />
+              <circle cx="30.2" cy="40" r="2" fill="#ffffff" />
             </g>
 
             {/* Right Pupil + Specular Catchlight */}
             <g transform={`translate(${pupilPos.x}, ${pupilPos.y})`}>
-              <circle cx="68" cy="38" r="6.2" fill="#09090b" />
-              <circle cx="66.2" cy="36" r="2.1" fill="#ffffff" />
+              <circle cx="68" cy="42" r="6" fill="#09090b" />
+              <circle cx="66.2" cy="40" r="2" fill="#ffffff" />
             </g>
           </g>
         )}
@@ -390,7 +437,7 @@ export const InteractiveOwl = ({ className = '' }) => {
             6. SHARP GEOMETRIC BEAK
            =============================================================== */}
         <polygon
-          points="50,38 45,46 50,56 55,46"
+          points="50,42 44,52 50,62 56,52"
           fill="#f59e0b"
           stroke="#b45309"
           strokeWidth="0.8"
@@ -400,11 +447,11 @@ export const InteractiveOwl = ({ className = '' }) => {
         {/* ===============================================================
             7. GEOMETRIC PERCH BAR & THREE-TOED CLAWS
            =============================================================== */}
-        {/* Horizontal Perch Crossbar (as in artwork) */}
+        {/* Horizontal Perch Crossbar */}
         <rect
-          x="14"
+          x="12"
           y="108"
-          width="72"
+          width="76"
           height="5.5"
           rx="2"
           fill={isLight ? '#785928' : '#3f4553'}
@@ -418,9 +465,7 @@ export const InteractiveOwl = ({ className = '' }) => {
 
         {/* Left Geometric Claw (3 rounded toes firmly clasping the button) */}
         <g fill="#fbbf24" stroke="#b45309" strokeWidth="0.8">
-          {/* Main Foot Pad */}
           <rect x="29" y="104" width="14" height="6" rx="2" />
-          {/* 3 Toes extending over perch/button */}
           <rect x="29" y="109" width="3.8" height="8" rx="1.6" />
           <rect x="34.1" y="109" width="3.8" height="8.8" rx="1.6" />
           <rect x="39.2" y="109" width="3.8" height="8" rx="1.6" />
@@ -428,9 +473,7 @@ export const InteractiveOwl = ({ className = '' }) => {
 
         {/* Right Geometric Claw (3 rounded toes firmly clasping the button) */}
         <g fill="#fbbf24" stroke="#b45309" strokeWidth="0.8">
-          {/* Main Foot Pad */}
           <rect x="57" y="104" width="14" height="6" rx="2" />
-          {/* 3 Toes extending over perch/button */}
           <rect x="57" y="109" width="3.8" height="8" rx="1.6" />
           <rect x="62.1" y="109" width="3.8" height="8.8" rx="1.6" />
           <rect x="67.2" y="109" width="3.8" height="8" rx="1.6" />
