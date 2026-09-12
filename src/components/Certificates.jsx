@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
 import { ExternalLink, Shield } from 'lucide-react';
 import { sortCertificatesLatestFirst } from '../utils/dateUtils';
+import { useScrollReveal } from '../utils/useScrollReveal';
 
 const useCertColumnCount = () => {
   const getCols = () => {
@@ -36,22 +37,37 @@ export const Certificates = () => {
   // Arrange certificates chronologically (latest first)
   const sortedCertificates = sortCertificatesLatestFirst(certificates || []);
 
+  const { registerCardRef, isCardActive } = useScrollReveal(sortedCertificates);
+
   const columns = Array.from({ length: numCols }, () => []);
   sortedCertificates.forEach((cert, idx) => {
     columns[idx % numCols].push(cert);
   });
 
-  const renderCertCard = (cert) => (
-    <div
-      key={cert.id}
-      onMouseMove={handleMouseMove}
-      className="glass-card glass-panel-hover rounded-2xl border border-white/[0.08] hover:border-white/30 overflow-hidden flex flex-col justify-between group cursor-default transition-all duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.85)] relative"
-    >
-      <div>
-        {/* Revealed Top Certificate Media on Hover (Expands smoothly to full natural height without clipping) */}
-        {cert.media && (
-          <div className="max-h-0 opacity-0 group-hover:max-h-[1600px] group-hover:opacity-100 transition-all duration-500 delay-[250ms] group-hover:duration-400 group-hover:delay-0 ease-[cubic-bezier(0.25,1,0.5,1)] overflow-hidden relative bg-zinc-950 flex items-center justify-center">
-            <div className={`w-full ${cert.mediaRatio === '4/3' ? 'aspect-[4/3]' : cert.mediaRatio === '1/1' ? 'aspect-square' : cert.mediaRatio === '16/9' ? 'aspect-video' : 'h-auto'} relative overflow-hidden flex items-center justify-center`}>
+  const renderCertCard = (cert) => {
+    const active = isCardActive(cert.id);
+    return (
+      <div
+        key={cert.id}
+        ref={(el) => registerCardRef(cert.id, el)}
+        onMouseMove={handleMouseMove}
+        className={`glass-card glass-panel-hover rounded-2xl border overflow-hidden flex flex-col justify-between group cursor-default transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] relative ${
+          active
+            ? 'border-white/30 shadow-[0_20px_40px_rgba(0,0,0,0.85)] ring-1 ring-white/20'
+            : 'border-white/[0.08] hover:border-white/30 hover:shadow-[0_20px_40px_rgba(0,0,0,0.85)]'
+        }`}
+      >
+        <div>
+          {/* Revealed Top Certificate Media on Hover (desktop) or Center Screen on Scroll (mobile/tablet) */}
+          {cert.media && (
+            <div
+              className={`overflow-hidden relative bg-zinc-950 flex items-center justify-center transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] ${
+                active
+                  ? 'max-h-[1600px] opacity-100 shadow-inner'
+                  : 'max-h-0 opacity-0 lg:group-hover:max-h-[1600px] lg:group-hover:opacity-100 lg:delay-[250ms] lg:group-hover:delay-0'
+              }`}
+            >
+              <div className={`w-full ${cert.mediaRatio === '4/3' ? 'aspect-[4/3]' : cert.mediaRatio === '1/1' ? 'aspect-square' : cert.mediaRatio === '16/9' ? 'aspect-video' : 'h-auto'} relative overflow-hidden flex items-center justify-center`}>
               <img
                 src={cert.media}
                 alt={cert.title}
@@ -92,7 +108,7 @@ export const Certificates = () => {
             )}
           </div>
 
-          <h3 className="text-lg font-bold text-white mb-2 group-hover:text-zinc-100 transition-colors">
+          <h3 className={`text-lg font-bold text-white mb-2 transition-colors ${active ? 'text-zinc-100' : 'group-hover:text-zinc-100'}`}>
             {cert.title}
           </h3>
 
@@ -113,6 +129,7 @@ export const Certificates = () => {
       </div>
     </div>
   );
+};
 
   return (
     <div className="pt-20 sm:pt-24 pb-16 relative animate-fadeIn">

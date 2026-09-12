@@ -4,6 +4,7 @@ import { FolderGit2, Star, ExternalLink, Calendar } from 'lucide-react';
 import { GithubIcon } from './Icons';
 import { ContentRenderer } from './ContentRenderer';
 import { sortProjectsLatestFirst } from '../utils/dateUtils';
+import { useScrollReveal } from '../utils/useScrollReveal';
 
 const useProjectColumnCount = () => {
   const getCols = () => {
@@ -40,22 +41,37 @@ export const Projects = () => {
   // Arrange projects chronologically (latest first)
   const sortedProjects = sortProjectsLatestFirst(projects || []);
 
+  const { registerCardRef, isCardActive } = useScrollReveal(sortedProjects);
+
   const columns = Array.from({ length: numCols }, () => []);
   sortedProjects.forEach((proj, idx) => {
     columns[idx % numCols].push(proj);
   });
 
-  const renderProjectCard = (project) => (
-    <div
-      key={project.id}
-      onMouseMove={handleMouseMove}
-      className="glass-card glass-panel-hover rounded-2xl border border-white/[0.08] hover:border-white/30 overflow-hidden flex flex-col justify-between group relative cursor-default transition-all duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.85)]"
-    >
-      <div>
-        {/* Revealed Top Media on Hover (Expands smoothly to full natural height without clipping) */}
-        {project.media && (
-          <div className="max-h-0 opacity-0 group-hover:max-h-[1600px] group-hover:opacity-100 transition-all duration-500 delay-[250ms] group-hover:duration-400 group-hover:delay-0 ease-[cubic-bezier(0.25,1,0.5,1)] overflow-hidden relative bg-zinc-950 flex items-center justify-center">
-            <div className={`w-full ${project.mediaRatio === '4/3' ? 'aspect-[4/3]' : project.mediaRatio === '1/1' ? 'aspect-square' : project.mediaRatio === '16/9' ? 'aspect-video' : 'h-auto'} relative overflow-hidden flex items-center justify-center`}>
+  const renderProjectCard = (project) => {
+    const active = isCardActive(project.id);
+    return (
+      <div
+        key={project.id}
+        ref={(el) => registerCardRef(project.id, el)}
+        onMouseMove={handleMouseMove}
+        className={`glass-card glass-panel-hover rounded-2xl border overflow-hidden flex flex-col justify-between group relative cursor-default transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] ${
+          active
+            ? 'border-white/30 shadow-[0_20px_40px_rgba(0,0,0,0.85)] ring-1 ring-white/20'
+            : 'border-white/[0.08] hover:border-white/30 hover:shadow-[0_20px_40px_rgba(0,0,0,0.85)]'
+        }`}
+      >
+        <div>
+          {/* Revealed Top Media on Hover (desktop) or Center Screen on Scroll (mobile/tablet) */}
+          {project.media && (
+            <div
+              className={`overflow-hidden relative bg-zinc-950 flex items-center justify-center transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] ${
+                active
+                  ? 'max-h-[1600px] opacity-100 shadow-inner'
+                  : 'max-h-0 opacity-0 lg:group-hover:max-h-[1600px] lg:group-hover:opacity-100 lg:delay-[250ms] lg:group-hover:delay-0'
+              }`}
+            >
+              <div className={`w-full ${project.mediaRatio === '4/3' ? 'aspect-[4/3]' : project.mediaRatio === '1/1' ? 'aspect-square' : project.mediaRatio === '16/9' ? 'aspect-video' : 'h-auto'} relative overflow-hidden flex items-center justify-center`}>
               <img
                 src={project.media}
                 alt={project.title}
@@ -77,12 +93,12 @@ export const Projects = () => {
           {/* Category badge + Dates range + Action buttons (Live Demo & GitHub) */}
           <div className="flex items-center justify-between gap-3 mb-3.5">
             <div className="flex items-center gap-1.5 flex-wrap">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 px-2.5 py-1 rounded bg-zinc-900/90 border border-white/[0.06] group-hover:border-white/20 transition-colors">
+              <span className={`text-[10px] font-mono uppercase tracking-wider text-zinc-400 px-2.5 py-1 rounded bg-zinc-900/90 border transition-colors ${active ? 'border-white/30 text-zinc-300' : 'border-white/[0.06] group-hover:border-white/20'}`}>
                 {project.category || 'Engineering'}
               </span>
 
               {(project.dates || project.year) && (
-                <span className="text-[10px] font-mono text-zinc-400 px-2 py-1 rounded bg-zinc-900/90 border border-white/[0.06] group-hover:border-white/20 transition-colors flex items-center gap-1">
+                <span className={`text-[10px] font-mono text-zinc-400 px-2 py-1 rounded bg-zinc-900/90 border transition-colors flex items-center gap-1 ${active ? 'border-white/30 text-zinc-300' : 'border-white/[0.06] group-hover:border-white/20'}`}>
                   <Calendar size={11} className="text-zinc-500 shrink-0" />
                   <span>{project.dates || project.year}</span>
                 </span>
@@ -116,7 +132,7 @@ export const Projects = () => {
             </div>
           </div>
 
-          <h3 className="text-lg font-bold text-white mb-2 group-hover:text-zinc-100 transition-colors flex items-center gap-1.5">
+          <h3 className={`text-lg font-bold text-white mb-2 transition-colors flex items-center gap-1.5 ${active ? 'text-zinc-100' : 'group-hover:text-zinc-100'}`}>
             <span>{project.title}</span>
             {project.featured && <Star size={13} className="text-zinc-300 fill-zinc-300 animate-pulse" />}
           </h3>
@@ -139,6 +155,7 @@ export const Projects = () => {
       </div>
     </div>
   );
+};
 
   return (
     <div className="pt-20 sm:pt-24 pb-16 relative animate-fadeIn">
