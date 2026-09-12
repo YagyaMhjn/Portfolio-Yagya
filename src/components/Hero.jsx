@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
 import { Send, Clock, ArrowUpRight } from 'lucide-react';
+import { InteractiveOwl } from './InteractiveOwl';
 
 export const Hero = () => {
   const { data, setActivePage } = usePortfolio();
@@ -62,12 +63,12 @@ export const Hero = () => {
             </h1>
 
             {/* Bio Paragraph */}
-            <p className="text-base sm:text-lg text-zinc-300 dark:text-zinc-300 light:text-zinc-700 max-w-2xl leading-relaxed mb-7 font-light">
+            <p className="text-base sm:text-lg text-zinc-300 dark:text-zinc-300 light:text-zinc-700 max-w-2xl leading-relaxed mb-12 sm:mb-14 font-light">
               {profile.bio}
             </p>
 
             {/* Interactive Page Switcher CTA Buttons */}
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3.5 pt-1">
               <button
                 onClick={() => setActivePage('projects')}
                 className="btn-glow inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white dark:bg-white light:bg-black text-black dark:text-black light:text-white font-semibold text-sm hover:bg-zinc-100 dark:hover:bg-zinc-100 light:hover:bg-zinc-800 transition-all shadow-[0_4px_20px_rgba(255,255,255,0.15)] group h-11"
@@ -75,13 +76,18 @@ export const Hero = () => {
                 <span>Explore Work</span>
                 <ArrowUpRight size={15} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </button>
-              <button
-                onClick={() => setActivePage('contact')}
-                className="btn-glow inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-zinc-900/90 dark:bg-zinc-900/90 light:bg-white text-zinc-200 dark:text-zinc-200 light:text-zinc-900 border border-white/10 dark:border-white/10 light:border-black/15 font-medium text-sm hover:bg-zinc-800 dark:hover:bg-zinc-800 light:hover:bg-zinc-100 transition-all group h-11"
-              >
-                <Send size={14} className="text-zinc-400 dark:text-zinc-400 light:text-zinc-600 group-hover:text-white dark:group-hover:text-white light:group-hover:text-black group-hover:translate-x-0.5 transition-all" />
-                <span>Get in Touch</span>
-              </button>
+              
+              {/* Get in Touch Button with Perched Interactive Owl */}
+              <div className="relative inline-flex items-center">
+                <InteractiveOwl />
+                <button
+                  onClick={() => setActivePage('contact')}
+                  className="btn-glow inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-zinc-900/90 dark:bg-zinc-900/90 light:bg-white text-zinc-200 dark:text-zinc-200 light:text-zinc-900 border border-white/10 dark:border-white/10 light:border-black/15 font-medium text-sm hover:bg-zinc-800 dark:hover:bg-zinc-800 light:hover:bg-zinc-100 transition-all group h-11"
+                >
+                  <Send size={14} className="text-zinc-400 dark:text-zinc-400 light:text-zinc-600 group-hover:text-white dark:group-hover:text-white light:group-hover:text-black group-hover:translate-x-0.5 transition-all" />
+                  <span>Get in Touch</span>
+                </button>
+              </div>
             </div>
           </div>
 

@@ -1015,3 +1015,86 @@ html.light .social-expanding-btn:focus-visible {
   color: #09090b !important;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12) !important;
 }
+
+/* ==========================================================================
+   Interactive Owl Animations (Sleeping breathing & Floating Z's)
+   ========================================================================== */
+@keyframes owl-breathe {
+  0%, 100% {
+    transform: translateY(0px) scale(1, 1);
+  }
+  50% {
+    transform: translateY(-1.4px) scale(1.025, 0.98);
+  }
+}
+
+.animate-owl-breathe {
+  animation: owl-breathe 3.6s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
+@keyframes owl-z-float-1 {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.6);
+  }
+  25% {
+    opacity: 0.85;
+  }
+  75% {
+    opacity: 0.7;
+    transform: translate(8px, -24px) scale(0.95);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(14px, -36px) scale(1.05);
+  }
+}
+
+@keyframes owl-z-float-2 {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.65);
+  }
+  25% {
+    opacity: 0.9;
+  }
+  75% {
+    opacity: 0.75;
+    transform: translate(12px, -30px) scale(1.05);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(20px, -46px) scale(1.15);
+  }
+}
+
+@keyframes owl-z-float-3 {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.7);
+  }
+  25% {
+    opacity: 0.95;
+  }
+  75% {
+    opacity: 0.8;
+    transform: translate(16px, -36px) scale(1.15);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(26px, -56px) scale(1.25);
+  }
+}
+
+.animate-owl-z1 {
+  animation: owl-z-float-1 2.4s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+
+.animate-owl-z2 {
+  animation: owl-z-float-2 2.4s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+
+.animate-owl-z3 {
+  animation: owl-z-float-3 2.4s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
