@@ -6,8 +6,10 @@ import { useScrollReveal } from '../utils/useScrollReveal';
 
 const useCertColumnCount = () => {
   const getCols = () => {
-    if (typeof window === 'undefined') return 2;
-    return window.innerWidth >= 768 ? 2 : 1;
+    if (typeof window === 'undefined') return 3;
+    if (window.innerWidth >= 1024) return 3;
+    if (window.innerWidth >= 768) return 2;
+    return 1;
   };
 
   const [cols, setCols] = useState(getCols);
@@ -153,7 +155,7 @@ export const Certificates = () => {
         </div>
 
         {/* Certificates Independent Columns Layout (Zero row gap across columns) */}
-        <div className={`grid ${numCols === 1 ? 'grid-cols-1' : 'grid-cols-2'} gap-6 items-start`}>
+        <div className={`grid ${numCols === 3 ? 'grid-cols-3' : numCols === 2 ? 'grid-cols-2' : 'grid-cols-1'} gap-6 items-start`}>
           {columns.map((col, colIdx) => (
             <div key={colIdx} className="flex flex-col gap-6">
               {col.map((cert) => renderCertCard(cert))}
