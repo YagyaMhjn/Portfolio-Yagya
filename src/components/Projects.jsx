@@ -70,27 +70,29 @@ export const Projects = () => {
 
         {/* Card Content Body */}
         <div className="p-6">
-          {/* Category badge + Expanding "Show Repository" GitHub button */}
-          <div className="flex items-center justify-between gap-2 mb-3.5">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 px-2.5 py-1 rounded bg-zinc-900/90 border border-white/[0.06] group-hover:border-white/20 transition-colors">
+          {/* Category badge + Expanding "Repository" GitHub button without disturbing arrangement */}
+          <div className="relative flex items-center justify-between min-h-[32px] mb-3.5">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 px-2.5 py-1 rounded bg-zinc-900/90 border border-white/[0.06] group-hover:border-white/20 transition-colors whitespace-nowrap overflow-hidden text-ellipsis max-w-[calc(100%-44px)]">
               {project.category || 'Engineering'}
             </span>
 
             {project.github && (
-              <a
-                href={project.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center h-8 min-w-[32px] px-2 rounded-lg bg-zinc-900/90 hover:bg-zinc-800 border border-white/[0.12] hover:border-white/40 text-zinc-300 hover:text-white transition-all duration-300 ease-out group/gh overflow-hidden shadow-sm cursor-pointer"
-                title="Show Repository"
-              >
-                <span className="shrink-0 flex items-center justify-center text-zinc-300 group-hover/gh:text-white transition-colors">
-                  <GithubIcon size={14} />
-                </span>
-                <span className="max-w-0 opacity-0 group-hover/gh:max-w-[140px] group-hover/gh:opacity-100 group-hover/gh:ml-2 transition-all duration-300 ease-out whitespace-nowrap text-[11px] font-mono font-medium">
-                  Show Repository
-                </span>
-              </a>
+              <div className="relative shrink-0 flex items-center justify-end w-8 h-8">
+                <a
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="absolute right-0 top-0 inline-flex items-center justify-center h-8 min-w-[32px] px-2 rounded-lg bg-zinc-900/95 hover:bg-zinc-800 border border-white/[0.12] hover:border-white/40 text-zinc-300 hover:text-white transition-all duration-300 ease-out group/gh overflow-hidden shadow-lg cursor-pointer z-10"
+                  title="Repository"
+                >
+                  <span className="shrink-0 flex items-center justify-center text-zinc-300 group-hover/gh:text-white transition-colors">
+                    <GithubIcon size={14} />
+                  </span>
+                  <span className="max-w-0 opacity-0 group-hover/gh:max-w-[100px] group-hover/gh:opacity-100 group-hover/gh:ml-2 transition-all duration-300 ease-out whitespace-nowrap text-[11px] font-mono font-medium">
+                    Repository
+                  </span>
+                </a>
+              </div>
             )}
           </div>
 
