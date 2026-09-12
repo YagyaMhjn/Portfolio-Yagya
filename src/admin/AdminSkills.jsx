@@ -1,120 +1,440 @@
 import React, { useState } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { Plus, Trash2 } from 'lucide-react';
+import { Plus, Trash2, Edit2, Check, X, Search, Sparkles, Filter } from 'lucide-react';
 
 export const AdminSkills = ({ triggerToast }) => {
-  const { data, addSkill, deleteSkill, addCategory } = usePortfolio();
+  const { data, addSkill, updateSkill, deleteSkill } = usePortfolio();
+
+  // Add Form State
   const [skillForm, setSkillForm] = useState({
     name: '',
-    category: data.categories.find((c) => c !== 'All') || 'Hard Skills',
-    level: 'Advanced',
+    category: 'Hard Skills',
+    level: 'Intermediate',
   });
-  const [newCatName, setNewCatName] = useState('');
+
+  // Edit Modal State
+  const [editingSkill, setEditingSkill] = useState(null);
+  const [editForm, setEditForm] = useState({
+    name: '',
+    category: 'Hard Skills',
+    level: 'Intermediate',
+  });
+
+  // Filter & Search State
+  const [searchTerm, setSearchTerm] = useState('');
+  const [activeFilter, setActiveFilter] = useState('All');
+
+  const handleAddSkill = (e) => {
+    e.preventDefault();
+    if (!skillForm.name.trim()) return;
+
+    addSkill({
+      name: skillForm.name.trim(),
+      category: skillForm.category,
+      level: skillForm.category === 'Soft Skills' ? '' : skillForm.level,
+    });
+
+    setSkillForm({
+      name: '',
+      category: 'Hard Skills',
+      level: 'Intermediate',
+    });
+    triggerToast();
+  };
+
+  const startEditing = (skill) => {
+    setEditingSkill(skill);
+    const isSoft = skill.category?.toLowerCase().includes('soft');
+    setEditForm({
+      name: skill.name,
+      category: isSoft ? 'Soft Skills' : 'Hard Skills',
+      level: isSoft ? '' : (skill.level || 'Intermediate'),
+    });
+  };
+
+  const handleSaveEdit = (e) => {
+    e.preventDefault();
+    if (!editingSkill || !editForm.name.trim()) return;
+
+    updateSkill(editingSkill.id, {
+      name: editForm.name.trim(),
+      category: editForm.category,
+      level: editForm.category === 'Soft Skills' ? '' : editForm.level,
+    });
+
+    setEditingSkill(null);
+    triggerToast();
+  };
+
+  const filteredSkills = (data.skills || []).filter((s) => {
+    const isSoft = s.category?.toLowerCase().includes('soft');
+    const matchesCategory =
+      activeFilter === 'All'
+        ? true
+        : activeFilter === 'Soft Skills'
+        ? isSoft
+        : !isSoft;
+
+    const matchesSearch =
+      !searchTerm || s.name.toLowerCase().includes(searchTerm.toLowerCase());
+
+    return matchesCategory && matchesSearch;
+  });
+
+  const hardCount = (data.skills || []).filter((s) => !s.category?.toLowerCase().includes('soft')).length;
+  const softCount = (data.skills || []).filter((s) => s.category?.toLowerCase().includes('soft')).length;
+
+  const getLevelBadgeClass = (level) => {
+    switch (level) {
+      case 'Proficient':
+        return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30';
+      case 'Intermediate':
+        return 'bg-blue-500/10 text-blue-400 border-blue-500/30';
+      case 'Novice':
+        return 'bg-amber-500/10 text-amber-400 border-amber-500/30';
+      default:
+        return 'bg-zinc-500/10 text-zinc-400 border-zinc-500/30';
+    }
+  };
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="glass-card p-6 rounded-2xl border border-white/[0.08]">
-          <h3 className="text-base font-bold text-white mb-4 font-mono">Add Technology</h3>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              if (!skillForm.name.trim()) return;
-              addSkill(skillForm);
-              setSkillForm({ ...skillForm, name: '' });
-              triggerToast();
-            }}
-            className="space-y-3"
-          >
-            <div>
-              <label className="block text-xs font-mono text-zinc-400 mb-1">Skill Name *</label>
-              <input
-                type="text"
-                required
-                placeholder="e.g. Next.js, Kubernetes..."
-                value={skillForm.name}
-                onChange={(e) => setSkillForm({ ...skillForm, name: e.target.value })}
-                className="glass-input w-full px-3.5 py-2 text-sm"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-mono text-zinc-400 mb-1">Category</label>
-              <select
-                value={skillForm.category}
-                onChange={(e) => setSkillForm({ ...skillForm, category: e.target.value })}
-                className="glass-input w-full px-3.5 py-2 text-sm bg-zinc-900"
-              >
-                {data.categories.filter((c) => c !== 'All').map((c) => (
-                  <option key={c} value={c}>{c}</option>
-                ))}
-              </select>
-            </div>
-            <button
-              type="submit"
-              className="px-4 py-2 rounded-xl bg-white text-black font-bold text-xs hover:bg-zinc-200 transition-all flex items-center gap-1.5"
-            >
-              <Plus size={13} /> <span>Add Skill</span>
-            </button>
-          </form>
-        </div>
+      {/* Top Section: Add Skill Form & Auto-Sync Info */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Add Skill Form */}
+        <div className="lg:col-span-2 glass-card p-6 rounded-2xl border border-white/[0.08]">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-base font-bold text-white font-mono flex items-center gap-2">
+              <Plus size={16} className="text-zinc-400" />
+              <span>Add New Skill</span>
+            </h3>
+            <span className="text-[11px] font-mono text-zinc-500 uppercase tracking-wider">
+              Manual Entry
+            </span>
+          </div>
 
-        <div className="glass-card p-6 rounded-2xl border border-white/[0.08]">
-          <h3 className="text-base font-bold text-white mb-4 font-mono">Custom Category</h3>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              if (!newCatName.trim()) return;
-              addCategory(newCatName.trim());
-              setNewCatName('');
-              triggerToast();
-            }}
-            className="space-y-3"
-          >
-            <div>
-              <label className="block text-xs font-mono text-zinc-400 mb-1">New Category Title</label>
-              <input
-                type="text"
-                required
-                placeholder="e.g. Mobile Development"
-                value={newCatName}
-                onChange={(e) => setNewCatName(e.target.value)}
-                className="glass-input w-full px-3.5 py-2 text-sm"
-              />
-            </div>
-            <button
-              type="submit"
-              className="px-4 py-2 rounded-xl bg-zinc-900 border border-white/10 text-white font-medium text-xs hover:bg-zinc-800 transition-all flex items-center gap-1.5"
-            >
-              <Plus size={13} /> <span>Create Category</span>
-            </button>
-          </form>
-        </div>
-      </div>
-
-      <div className="glass-card p-6 rounded-2xl border border-white/[0.08]">
-        <h4 className="text-xs font-mono text-zinc-400 uppercase tracking-wider mb-4">
-          Active Skills Matrix ({data.skills.length})
-        </h4>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {data.skills.map((s) => (
-            <div
-              key={s.id}
-              className="p-3 rounded-xl bg-zinc-900/60 border border-white/[0.06] flex items-center justify-between"
-            >
+          <form onSubmit={handleAddSkill} className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <div className="text-xs font-bold text-white">{s.name}</div>
-                <div className="text-[10px] font-mono text-zinc-400">{s.category}</div>
+                <label className="block text-xs font-mono text-zinc-400 mb-1">
+                  Skill Name *
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Next.js, Kubernetes..."
+                  value={skillForm.name}
+                  onChange={(e) => setSkillForm({ ...skillForm, name: e.target.value })}
+                  className="glass-input w-full px-3.5 py-2 text-sm"
+                />
               </div>
-              <button
-                onClick={() => deleteSkill(s.id)}
-                className="p-1 rounded-lg text-zinc-500 hover:text-red-400"
-              >
-                <Trash2 size={12} />
-              </button>
+
+              <div>
+                <label className="block text-xs font-mono text-zinc-400 mb-1">
+                  Category
+                </label>
+                <select
+                  value={skillForm.category}
+                  onChange={(e) => {
+                    const newCat = e.target.value;
+                    setSkillForm({
+                      ...skillForm,
+                      category: newCat,
+                      level: newCat === 'Soft Skills' ? '' : (skillForm.level || 'Intermediate'),
+                    });
+                  }}
+                  className="glass-input w-full px-3.5 py-2 text-sm bg-zinc-900"
+                >
+                  <option value="Hard Skills">Hard Skills</option>
+                  <option value="Soft Skills">Soft Skills</option>
+                </select>
+              </div>
             </div>
-          ))}
+
+            {skillForm.category === 'Hard Skills' ? (
+              <div>
+                <label className="block text-xs font-mono text-zinc-400 mb-1">
+                  Proficiency Level
+                </label>
+                <div className="grid grid-cols-3 gap-2">
+                  {['Novice', 'Intermediate', 'Proficient'].map((lvl) => (
+                    <button
+                      type="button"
+                      key={lvl}
+                      onClick={() => setSkillForm({ ...skillForm, level: lvl })}
+                      className={`py-2 px-3 rounded-xl text-xs font-mono transition-all border ${
+                        skillForm.level === lvl
+                          ? `${getLevelBadgeClass(lvl)} font-bold shadow-sm`
+                          : 'bg-zinc-900/60 text-zinc-400 border-white/[0.08] hover:border-white/20'
+                      }`}
+                    >
+                      {lvl}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <div className="p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.06] text-xs font-mono text-zinc-400">
+                ✦ Soft skills do not have a proficiency level.
+              </div>
+            )}
+
+            <button
+              type="submit"
+              className="px-5 py-2.5 rounded-xl bg-white text-black font-bold text-xs hover:bg-zinc-200 transition-all flex items-center gap-1.5 shadow-sm"
+            >
+              <Plus size={14} /> <span>Add Skill</span>
+            </button>
+          </form>
+        </div>
+
+        {/* Live Auto-Sync Info Card */}
+        <div className="glass-card p-6 rounded-2xl border border-white/[0.08] flex flex-col justify-between">
+          <div>
+            <div className="flex items-center gap-2 mb-2 text-white font-mono font-bold text-sm">
+              <Sparkles size={16} className="text-amber-400" />
+              <span>Smart Sync Active</span>
+            </div>
+            <p className="text-xs text-zinc-400 leading-relaxed">
+              Any technologies added to <span className="text-zinc-200 font-medium">Projects</span> or <span className="text-zinc-200 font-medium">Certificates</span> are automatically harvested and listed here as Hard Skills.
+            </p>
+            <p className="text-xs text-zinc-400 leading-relaxed mt-2.5">
+              Click the <Edit2 size={11} className="inline mx-0.5 text-zinc-300" /> button on any incoming or existing skill to edit its name, category, or proficiency level.
+            </p>
+          </div>
+
+          <div className="mt-4 pt-4 border-t border-white/[0.08] grid grid-cols-2 gap-2 text-center">
+            <div className="p-2.5 rounded-xl bg-zinc-900/80 border border-white/[0.06]">
+              <div className="text-base font-bold text-white font-mono">{hardCount}</div>
+              <div className="text-[10px] font-mono text-zinc-400 uppercase">Hard Skills</div>
+            </div>
+            <div className="p-2.5 rounded-xl bg-zinc-900/80 border border-white/[0.06]">
+              <div className="text-base font-bold text-white font-mono">{softCount}</div>
+              <div className="text-[10px] font-mono text-zinc-400 uppercase">Soft Skills</div>
+            </div>
+          </div>
         </div>
       </div>
+
+      {/* Active Skills Matrix */}
+      <div className="glass-card p-6 rounded-2xl border border-white/[0.08]">
+        {/* Controls: Header, Category Filter & Search Bar */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-4 border-b border-white/[0.06]">
+          <div>
+            <h4 className="text-sm font-bold text-white font-mono flex items-center gap-2">
+              <span>Skills Matrix</span>
+              <span className="text-xs px-2 py-0.5 rounded-full bg-white/10 text-zinc-300 font-mono">
+                {filteredSkills.length} of {data.skills?.length || 0}
+              </span>
+            </h4>
+            <p className="text-xs text-zinc-400 mt-0.5">
+              Click the edit icon to adjust level or category for any skill.
+            </p>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2.5">
+            {/* Search Input */}
+            <div className="relative">
+              <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" />
+              <input
+                type="text"
+                placeholder="Search skills..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="glass-input pl-8 pr-3 py-1.5 text-xs w-44 sm:w-56"
+              />
+              {searchTerm && (
+                <button
+                  onClick={() => setSearchTerm('')}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white"
+                >
+                  <X size={12} />
+                </button>
+              )}
+            </div>
+
+            {/* Filter Buttons */}
+            <div className="flex items-center gap-1 bg-zinc-900/90 p-1 rounded-xl border border-white/[0.08]">
+              {[
+                { id: 'All', label: 'All' },
+                { id: 'Hard Skills', label: 'Hard' },
+                { id: 'Soft Skills', label: 'Soft' },
+              ].map((f) => (
+                <button
+                  key={f.id}
+                  onClick={() => setActiveFilter(f.id)}
+                  className={`px-3 py-1 rounded-lg text-xs font-mono transition-all ${
+                    activeFilter === f.id
+                      ? 'bg-white text-black font-bold'
+                      : 'text-zinc-400 hover:text-white'
+                  }`}
+                >
+                  {f.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Skills Grid */}
+        {filteredSkills.length === 0 ? (
+          <div className="text-center py-12 text-zinc-500 text-xs font-mono">
+            No skills match your filter or search criteria.
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+            {filteredSkills.map((s) => {
+              const isSoft = s.category?.toLowerCase().includes('soft');
+              return (
+                <div
+                  key={s.id}
+                  className="p-3.5 rounded-xl bg-zinc-900/60 border border-white/[0.06] hover:border-white/20 transition-all flex items-center justify-between group"
+                >
+                  <div className="min-w-0 pr-2">
+                    <div className="text-xs font-bold text-white truncate group-hover:text-zinc-100">
+                      {s.name}
+                    </div>
+                    <div className="flex items-center gap-1.5 mt-1">
+                      <span className="text-[10px] font-mono text-zinc-400">
+                        {isSoft ? 'Soft Skill' : 'Hard Skill'}
+                      </span>
+                      {!isSoft && s.level && (
+                        <span
+                          className={`text-[9px] px-1.5 py-0.2 rounded font-mono border ${getLevelBadgeClass(
+                            s.level
+                          )}`}
+                        >
+                          {s.level}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-1 shrink-0">
+                    <button
+                      onClick={() => startEditing(s)}
+                      title="Edit Skill"
+                      className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/10 transition-colors"
+                    >
+                      <Edit2 size={13} />
+                    </button>
+                    <button
+                      onClick={() => deleteSkill(s.id)}
+                      title="Delete Skill"
+                      className="p-1.5 rounded-lg text-zinc-500 hover:text-red-400 hover:bg-red-500/10 transition-colors"
+                    >
+                      <Trash2 size={13} />
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+
+      {/* Edit Skill Modal */}
+      {editingSkill && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
+          <div className="glass-card w-full max-w-md p-6 rounded-2xl border border-white/20 shadow-2xl relative bg-zinc-950">
+            <button
+              onClick={() => setEditingSkill(null)}
+              className="absolute top-4 right-4 p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/10 transition-colors"
+            >
+              <X size={16} />
+            </button>
+
+            <h3 className="text-base font-bold text-white font-mono mb-1 flex items-center gap-2">
+              <Edit2 size={15} className="text-zinc-400" />
+              <span>Edit Skill</span>
+            </h3>
+            <p className="text-xs text-zinc-400 mb-5">
+              Modify the attributes of <span className="text-white font-semibold">{editingSkill.name}</span>.
+            </p>
+
+            <form onSubmit={handleSaveEdit} className="space-y-4">
+              <div>
+                <label className="block text-xs font-mono text-zinc-400 mb-1">
+                  Skill Name *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={editForm.name}
+                  onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
+                  className="glass-input w-full px-3.5 py-2 text-sm"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-mono text-zinc-400 mb-1">
+                  Category
+                </label>
+                <select
+                  value={editForm.category}
+                  onChange={(e) => {
+                    const newCat = e.target.value;
+                    setEditForm({
+                      ...editForm,
+                      category: newCat,
+                      level: newCat === 'Soft Skills' ? '' : (editForm.level || 'Intermediate'),
+                    });
+                  }}
+                  className="glass-input w-full px-3.5 py-2 text-sm bg-zinc-900"
+                >
+                  <option value="Hard Skills">Hard Skills</option>
+                  <option value="Soft Skills">Soft Skills</option>
+                </select>
+              </div>
+
+              {editForm.category === 'Hard Skills' ? (
+                <div>
+                  <label className="block text-xs font-mono text-zinc-400 mb-1">
+                    Proficiency Level
+                  </label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {['Novice', 'Intermediate', 'Proficient'].map((lvl) => (
+                      <button
+                        type="button"
+                        key={lvl}
+                        onClick={() => setEditForm({ ...editForm, level: lvl })}
+                        className={`py-2 px-3 rounded-xl text-xs font-mono transition-all border ${
+                          editForm.level === lvl
+                            ? `${getLevelBadgeClass(lvl)} font-bold shadow-sm`
+                            : 'bg-zinc-900/60 text-zinc-400 border-white/[0.08] hover:border-white/20'
+                        }`}
+                      >
+                        {lvl}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.06] text-xs font-mono text-zinc-400">
+                  ✦ Soft skills do not have a proficiency level.
+                </div>
+              )}
+
+              <div className="flex items-center justify-end gap-2 pt-3 border-t border-white/[0.08]">
+                <button
+                  type="button"
+                  onClick={() => setEditingSkill(null)}
+                  className="px-4 py-2 rounded-xl bg-zinc-900 border border-white/10 text-zinc-300 font-medium text-xs hover:bg-zinc-800 transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 rounded-xl bg-white text-black font-bold text-xs hover:bg-zinc-200 transition-all flex items-center gap-1.5 shadow-sm"
+                >
+                  <Check size={14} /> <span>Save Changes</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
+

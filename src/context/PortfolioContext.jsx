@@ -8,6 +8,27 @@ const AUTH_KEY = 'yagya_portfolio_admin_auth';
 const PASSWORD_KEY = 'yagya_portfolio_admin_password';
 
 /**
+ * Normalizes skill levels:
+ * - Hard Skills: "Novice", "Intermediate", "Proficient" (defaults to "Intermediate")
+ * - Soft Skills: "" (no level)
+ */
+export const normalizeSkillLevel = (category, level) => {
+  if (category?.toLowerCase().includes('soft')) {
+    return '';
+  }
+  if (!level) return 'Intermediate';
+  const clean = String(level).trim();
+  if (clean === 'Novice' || clean === 'Intermediate' || clean === 'Proficient') {
+    return clean;
+  }
+  const lower = clean.toLowerCase();
+  if (lower.includes('nov') || lower.includes('beg')) return 'Novice';
+  if (lower.includes('inter') || lower.includes('mid')) return 'Intermediate';
+  if (lower.includes('prof') || lower.includes('adv') || lower.includes('exp')) return 'Proficient';
+  return 'Intermediate';
+};
+
+/**
  * Automatically synchronizes all skill tags from projects and certificates into the skillset.
  * Normalizes all technical skills into "Hard Skills" and preserves "Soft Skills".
  */
@@ -16,7 +37,8 @@ export const syncSkillsFromProjectsAndCerts = (skills = [], projects = [], certi
     const isSoft = s.category?.toLowerCase().includes('soft');
     return {
       ...s,
-      category: isSoft ? 'Soft Skills' : 'Hard Skills'
+      category: isSoft ? 'Soft Skills' : 'Hard Skills',
+      level: normalizeSkillLevel(s.category, s.level)
     };
   });
 
@@ -36,7 +58,7 @@ export const syncSkillsFromProjectsAndCerts = (skills = [], projects = [], certi
           id: 's_proj_' + Math.random().toString(36).substr(2, 9),
           name: cleanTag,
           category: 'Hard Skills',
-          level: 'Advanced'
+          level: 'Intermediate'
         });
       }
     });
@@ -55,7 +77,7 @@ export const syncSkillsFromProjectsAndCerts = (skills = [], projects = [], certi
           id: 's_cert_' + Math.random().toString(36).substr(2, 9),
           name: cleanSkill,
           category: 'Hard Skills',
-          level: 'Advanced'
+          level: 'Intermediate'
         });
       }
     });
@@ -461,13 +483,36 @@ export const PortfolioProvider = ({ children }) => {
     const newSkill = {
       ...skill,
       id: 's_' + Date.now(),
+      name: (skill.name || '').trim(),
       category: isSoft ? 'Soft Skills' : 'Hard Skills',
-      level: skill.level || 'Advanced'
+      level: isSoft ? '' : normalizeSkillLevel('Hard Skills', skill.level || 'Intermediate')
     };
     saveData((prev) => ({
       ...prev,
       skills: [...prev.skills, newSkill]
     }));
+  };
+
+  const updateSkill = (id, updatedFields) => {
+    saveData((prev) => {
+      const updatedSkills = prev.skills.map((s) => {
+        if (s.id !== id) return s;
+        const targetCategory = updatedFields.category !== undefined ? updatedFields.category : s.category;
+        const isSoft = targetCategory?.toLowerCase().includes('soft');
+        const targetLevel = updatedFields.level !== undefined ? updatedFields.level : s.level;
+        return {
+          ...s,
+          ...updatedFields,
+          name: updatedFields.name !== undefined ? updatedFields.name.trim() : s.name,
+          category: isSoft ? 'Soft Skills' : 'Hard Skills',
+          level: isSoft ? '' : normalizeSkillLevel('Hard Skills', targetLevel || 'Intermediate')
+        };
+      });
+      return {
+        ...prev,
+        skills: updatedSkills
+      };
+    });
   };
 
   const deleteSkill = (id) => {
@@ -659,6 +704,7 @@ export const PortfolioProvider = ({ children }) => {
         updateProject,
         deleteProject,
         addSkill,
+        updateSkill,
         deleteSkill,
         addCategory,
         deleteCategory,

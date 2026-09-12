@@ -74,9 +74,11 @@ export const Skillset = () => {
                 <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 group-hover:text-zinc-300">
                   {skill.category}
                 </span>
-                <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/[0.05] text-zinc-300 font-mono border border-white/[0.05] group-hover:border-white/20">
-                  {skill.level || 'Expert'}
-                </span>
+                {!skill.category?.toLowerCase().includes('soft') && skill.level && (
+                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/[0.05] text-zinc-300 font-mono border border-white/[0.05] group-hover:border-white/20">
+                    {skill.level}
+                  </span>
+                )}
               </div>
               <div className="text-sm font-semibold text-zinc-100 group-hover:text-white group-hover:translate-x-0.5 transition-all">
                 {skill.name}
