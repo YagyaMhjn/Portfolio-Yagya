@@ -3,6 +3,7 @@ import { usePortfolio } from '../context/PortfolioContext';
 import { Plus, Trash2, Edit2, Image as ImageIcon, Upload, X, Calendar } from 'lucide-react';
 import { MediaAlignmentStudio } from './MediaAlignmentStudio';
 import { sortProjectsLatestFirst } from '../utils/dateUtils';
+import { compressImageFile } from '../utils/imageCompressor';
 
 export const AdminProjects = ({ triggerToast }) => {
   const { data, addProject, updateProject, deleteProject } = usePortfolio();
@@ -24,14 +25,19 @@ export const AdminProjects = ({ triggerToast }) => {
     featured: false,
   });
 
-  const handleFileUpload = (e) => {
+  const handleFileUpload = async (e) => {
     const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProjectForm((prev) => ({ ...prev, media: reader.result }));
-      };
-      reader.readAsDataURL(file);
+      try {
+        const compressedDataUrl = await compressImageFile(file);
+        setProjectForm((prev) => ({ ...prev, media: compressedDataUrl }));
+      } catch (err) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setProjectForm((prev) => ({ ...prev, media: reader.result }));
+        };
+        reader.readAsDataURL(file);
+      }
     }
   };
 

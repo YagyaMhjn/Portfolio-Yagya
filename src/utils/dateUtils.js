@@ -73,3 +73,22 @@ export const sortProjectsLatestFirst = (projects = []) => {
     return 0;
   });
 };
+
+/**
+ * Sorts an array of certificates latest first based on date / dates / year.
+ */
+export const sortCertificatesLatestFirst = (certificates = []) => {
+  return [...certificates].sort((a, b) => {
+    const dateA = a.date || a.dates || a.year || '';
+    const dateB = b.date || b.dates || b.year || '';
+    const scoreA = parseDateScore(dateA);
+    const scoreB = parseDateScore(dateB);
+
+    if (scoreB !== scoreA) {
+      return scoreB - scoreA;
+    }
+
+    return 0;
+  });
+};
+

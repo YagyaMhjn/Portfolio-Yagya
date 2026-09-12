@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
 import { ExternalLink, Shield } from 'lucide-react';
+import { sortCertificatesLatestFirst } from '../utils/dateUtils';
 
 const useCertColumnCount = () => {
   const getCols = () => {
@@ -32,8 +33,11 @@ export const Certificates = () => {
     e.currentTarget.style.setProperty('--mouse-y', `${y}px`);
   };
 
+  // Arrange certificates chronologically (latest first)
+  const sortedCertificates = sortCertificatesLatestFirst(certificates || []);
+
   const columns = Array.from({ length: numCols }, () => []);
-  (certificates || []).forEach((cert, idx) => {
+  sortedCertificates.forEach((cert, idx) => {
     columns[idx % numCols].push(cert);
   });
 

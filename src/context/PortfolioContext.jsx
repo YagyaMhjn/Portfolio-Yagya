@@ -1,10 +1,68 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { initialPortfolioData } from '../data/initialData';
+import { idbSet, idbGet } from '../utils/storage';
 
 const PortfolioContext = createContext(null);
 const STORAGE_KEY = 'yagya_portfolio_data_v2';
 const AUTH_KEY = 'yagya_portfolio_admin_auth';
 const PASSWORD_KEY = 'yagya_portfolio_admin_password';
+
+/**
+ * Automatically synchronizes all skill tags from projects and certificates into the skillset.
+ * Normalizes all technical skills into "Hard Skills" and preserves "Soft Skills".
+ */
+export const syncSkillsFromProjectsAndCerts = (skills = [], projects = [], certificates = []) => {
+  const normalizedSkills = (skills || []).map((s) => {
+    const isSoft = s.category?.toLowerCase().includes('soft');
+    return {
+      ...s,
+      category: isSoft ? 'Soft Skills' : 'Hard Skills'
+    };
+  });
+
+  const existingNames = new Set(normalizedSkills.map((s) => s.name.trim().toLowerCase()));
+  const newSkillsToAdd = [];
+
+  // 1. Harvest from projects (project.tags)
+  (projects || []).forEach((p) => {
+    const tags = Array.isArray(p.tags)
+      ? p.tags
+      : (typeof p.tags === 'string' ? p.tags.split(',') : []);
+    tags.forEach((tag) => {
+      const cleanTag = tag?.trim();
+      if (cleanTag && !existingNames.has(cleanTag.toLowerCase())) {
+        existingNames.add(cleanTag.toLowerCase());
+        newSkillsToAdd.push({
+          id: 's_proj_' + Math.random().toString(36).substr(2, 9),
+          name: cleanTag,
+          category: 'Hard Skills',
+          level: 'Advanced'
+        });
+      }
+    });
+  });
+
+  // 2. Harvest from certificates (cert.skills)
+  (certificates || []).forEach((c) => {
+    const certSkills = Array.isArray(c.skills)
+      ? c.skills
+      : (typeof c.skills === 'string' ? c.skills.split(',') : []);
+    certSkills.forEach((skill) => {
+      const cleanSkill = skill?.trim();
+      if (cleanSkill && !existingNames.has(cleanSkill.toLowerCase())) {
+        existingNames.add(cleanSkill.toLowerCase());
+        newSkillsToAdd.push({
+          id: 's_cert_' + Math.random().toString(36).substr(2, 9),
+          name: cleanSkill,
+          category: 'Hard Skills',
+          level: 'Advanced'
+        });
+      }
+    });
+  });
+
+  return [...normalizedSkills, ...newSkillsToAdd];
+};
 
 const getAdminPassword = () => {
   try {
@@ -22,31 +80,43 @@ export const PortfolioProvider = ({ children }) => {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
+        const projectsList = (parsed.projects || initialPortfolioData.projects).map((p) => {
+          const initP = initialPortfolioData.projects.find((ip) => ip.id === p.id);
+          return {
+            ...initP,
+            ...p,
+            dates: p.dates !== undefined ? p.dates : (initP?.dates || p.year || initP?.year || ''),
+            media: p.media !== undefined ? p.media : (initP?.media || '')
+          };
+        });
+
+        const certsList = (parsed.certificates || initialPortfolioData.certificates).map((c) => {
+          const initC = initialPortfolioData.certificates.find((ic) => ic.id === c.id);
+          return {
+            ...initC,
+            ...c,
+            media: c.media !== undefined ? c.media : (initC?.media || '')
+          };
+        });
+
+        const syncedSkills = syncSkillsFromProjectsAndCerts(
+          parsed.skills || initialPortfolioData.skills,
+          projectsList,
+          certsList
+        );
+
         return {
           ...initialPortfolioData,
           ...parsed,
+          categories: ['All', 'Hard Skills', 'Soft Skills'],
+          skills: syncedSkills,
           profile: {
             ...initialPortfolioData.profile,
             ...(parsed.profile || {}),
             socials: parsed.profile?.socials || initialPortfolioData.profile.socials || []
           },
-          projects: (parsed.projects || initialPortfolioData.projects).map((p) => {
-            const initP = initialPortfolioData.projects.find((ip) => ip.id === p.id);
-            return {
-              ...initP,
-              ...p,
-              dates: p.dates !== undefined ? p.dates : (initP?.dates || p.year || initP?.year || ''),
-              media: p.media !== undefined ? p.media : (initP?.media || '')
-            };
-          }),
-          certificates: (parsed.certificates || initialPortfolioData.certificates).map((c) => {
-            const initC = initialPortfolioData.certificates.find((ic) => ic.id === c.id);
-            return {
-              ...initC,
-              ...c,
-              media: c.media !== undefined ? c.media : (initC?.media || '')
-            };
-          }),
+          projects: projectsList,
+          certificates: certsList,
           beyondData: (parsed.beyondData || initialPortfolioData.beyondData).map((b) => {
             const initB = initialPortfolioData.beyondData.find((ib) => ib.id === b.id);
             return {
@@ -68,7 +138,13 @@ export const PortfolioProvider = ({ children }) => {
     } catch (e) {
       console.error('Failed to load portfolio data from localStorage', e);
     }
-    return initialPortfolioData;
+    const initialProjects = initialPortfolioData.projects;
+    const initialCerts = initialPortfolioData.certificates;
+    return {
+      ...initialPortfolioData,
+      categories: ['All', 'Hard Skills', 'Soft Skills'],
+      skills: syncSkillsFromProjectsAndCerts(initialPortfolioData.skills, initialProjects, initialCerts)
+    };
   });
 
   const [isAdmin, setIsAdmin] = useState(() => {
@@ -223,13 +299,45 @@ export const PortfolioProvider = ({ children }) => {
     }
   }, [activePage, currentView]);
 
+  // Restore larger/newer dataset from IndexedDB on startup (overcomes 5MB localStorage cap)
+  useEffect(() => {
+    const restoreFromIdb = async () => {
+      try {
+        const idbData = await idbGet(STORAGE_KEY);
+        if (idbData && idbData.certificates && Array.isArray(idbData.certificates)) {
+          setData((prev) => {
+            if (idbData.certificates.length > (prev.certificates?.length || 0)) {
+              const updatedSkills = syncSkillsFromProjectsAndCerts(
+                idbData.skills || prev.skills,
+                idbData.projects || prev.projects,
+                idbData.certificates
+              );
+              return {
+                ...prev,
+                ...idbData,
+                categories: ['All', 'Hard Skills', 'Soft Skills'],
+                skills: updatedSkills
+              };
+            }
+            return prev;
+          });
+        }
+      } catch (err) {
+        console.warn('Failed to restore from IndexedDB', err);
+      }
+    };
+    restoreFromIdb();
+  }, []);
+
   const saveData = (updater) => {
     setData((prev) => {
       const next = typeof updater === 'function' ? updater(prev) : { ...prev, ...updater };
+      // Always persist to IndexedDB asynchronously (handles unlimited data & images)
+      idbSet(STORAGE_KEY, next);
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
       } catch (e) {
-        console.error('Failed to save to localStorage', e);
+        console.warn('localStorage set exceeded quota, successfully persisted in IndexedDB instead.', e);
       }
       return next;
     });
@@ -309,6 +417,7 @@ export const PortfolioProvider = ({ children }) => {
   };
 
   // Projects
+  // Projects
   const addProject = (project) => {
     const newProject = {
       ...project,
@@ -316,17 +425,27 @@ export const PortfolioProvider = ({ children }) => {
       dates: project.dates || project.year || new Date().getFullYear().toString(),
       year: project.dates || project.year || new Date().getFullYear().toString()
     };
-    saveData((prev) => ({
-      ...prev,
-      projects: [newProject, ...prev.projects]
-    }));
+    saveData((prev) => {
+      const updatedProjects = [newProject, ...prev.projects];
+      const updatedSkills = syncSkillsFromProjectsAndCerts(prev.skills, updatedProjects, prev.certificates);
+      return {
+        ...prev,
+        projects: updatedProjects,
+        skills: updatedSkills
+      };
+    });
   };
 
   const updateProject = (id, updatedFields) => {
-    saveData((prev) => ({
-      ...prev,
-      projects: prev.projects.map((p) => (p.id === id ? { ...p, ...updatedFields } : p))
-    }));
+    saveData((prev) => {
+      const updatedProjects = prev.projects.map((p) => (p.id === id ? { ...p, ...updatedFields } : p));
+      const updatedSkills = syncSkillsFromProjectsAndCerts(prev.skills, updatedProjects, prev.certificates);
+      return {
+        ...prev,
+        projects: updatedProjects,
+        skills: updatedSkills
+      };
+    });
   };
 
   const deleteProject = (id) => {
@@ -338,7 +457,13 @@ export const PortfolioProvider = ({ children }) => {
 
   // Skills
   const addSkill = (skill) => {
-    const newSkill = { ...skill, id: 's_' + Date.now() };
+    const isSoft = skill.category?.toLowerCase().includes('soft');
+    const newSkill = {
+      ...skill,
+      id: 's_' + Date.now(),
+      category: isSoft ? 'Soft Skills' : 'Hard Skills',
+      level: skill.level || 'Advanced'
+    };
     saveData((prev) => ({
       ...prev,
       skills: [...prev.skills, newSkill]
@@ -399,16 +524,20 @@ export const PortfolioProvider = ({ children }) => {
       id: 'c_' + Date.now(),
       skills: typeof cert.skills === 'string' ? cert.skills.split(',').map((s) => s.trim()).filter(Boolean) : (cert.skills || [])
     };
-    saveData((prev) => ({
-      ...prev,
-      certificates: [newCert, ...(prev.certificates || [])]
-    }));
+    saveData((prev) => {
+      const updatedCerts = [newCert, ...(prev.certificates || [])];
+      const updatedSkills = syncSkillsFromProjectsAndCerts(prev.skills, prev.projects, updatedCerts);
+      return {
+        ...prev,
+        certificates: updatedCerts,
+        skills: updatedSkills
+      };
+    });
   };
 
   const updateCertificate = (id, updatedFields) => {
-    saveData((prev) => ({
-      ...prev,
-      certificates: (prev.certificates || []).map((c) =>
+    saveData((prev) => {
+      const updatedCerts = (prev.certificates || []).map((c) =>
         c.id === id
           ? {
               ...c,
@@ -418,8 +547,14 @@ export const PortfolioProvider = ({ children }) => {
                 : (updatedFields.skills || c.skills || [])
             }
           : c
-      )
-    }));
+      );
+      const updatedSkills = syncSkillsFromProjectsAndCerts(prev.skills, prev.projects, updatedCerts);
+      return {
+        ...prev,
+        certificates: updatedCerts,
+        skills: updatedSkills
+      };
+    });
   };
 
   const deleteCertificate = (id) => {

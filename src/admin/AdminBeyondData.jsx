@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
 import { Plus, Trash2, Edit2, Image as ImageIcon, Upload, X } from 'lucide-react';
 import { MediaAlignmentStudio } from './MediaAlignmentStudio';
+import { compressImageFile } from '../utils/imageCompressor';
 
 export const AdminBeyondData = ({ triggerToast }) => {
   const { data, addBeyondData, updateBeyondData, deleteBeyondData } = usePortfolio();
@@ -21,14 +22,19 @@ export const AdminBeyondData = ({ triggerToast }) => {
     mediaRatio: '16/9',
   });
 
-  const handleFileUpload = (e) => {
+  const handleFileUpload = async (e) => {
     const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setForm((prev) => ({ ...prev, media: reader.result }));
-      };
-      reader.readAsDataURL(file);
+      try {
+        const compressedDataUrl = await compressImageFile(file);
+        setForm((prev) => ({ ...prev, media: compressedDataUrl }));
+      } catch (err) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setForm((prev) => ({ ...prev, media: reader.result }));
+        };
+        reader.readAsDataURL(file);
+      }
     }
   };
 

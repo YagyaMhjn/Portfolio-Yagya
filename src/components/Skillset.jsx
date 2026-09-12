@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { Cpu, Terminal, Layers } from 'lucide-react';
-import { SocialBar } from './SocialHandleButton';
 
 export const Skillset = () => {
   const { data } = usePortfolio();
-  const { skills, categories, profile } = data;
+  const { skills } = data;
   const [activeCategory, setActiveCategory] = useState('All');
+
+  const categories = [
+    { id: 'All', label: 'ALL' },
+    { id: 'Hard Skills', label: 'HARD SKILLS' },
+    { id: 'Soft Skills', label: 'SOFT SKILLS' },
+  ];
 
   const handleMouseMove = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -16,9 +20,12 @@ export const Skillset = () => {
     e.currentTarget.style.setProperty('--mouse-y', `${y}px`);
   };
 
-  const filteredSkills = skills.filter((skill) => {
+  const filteredSkills = (skills || []).filter((skill) => {
     if (activeCategory === 'All') return true;
-    return skill.category === activeCategory;
+    const cat = skill.category?.toLowerCase() || '';
+    if (activeCategory === 'Soft Skills') return cat.includes('soft');
+    if (activeCategory === 'Hard Skills') return !cat.includes('soft');
+    return true;
   });
 
   return (
@@ -38,25 +45,25 @@ export const Skillset = () => {
           </p>
         </div>
 
-        {/* Category Filter Tabs */}
+        {/* Category Filter Tabs: ALL, HARD SKILLS, SOFT SKILLS */}
         <div className="flex flex-wrap justify-center md:justify-start gap-2 mb-10">
           {categories.map((cat) => (
             <button
-              key={cat}
-              onClick={() => setActiveCategory(cat)}
-              className={`px-4 py-2 rounded-xl text-xs font-medium transition-all ${
-                activeCategory === cat
+              key={cat.id}
+              onClick={() => setActiveCategory(cat.id)}
+              className={`px-4 py-2 rounded-xl text-xs font-mono uppercase tracking-wider transition-all ${
+                activeCategory === cat.id
                   ? 'bg-white text-black font-bold shadow-[0_0_15px_rgba(255,255,255,0.2)] scale-105'
                   : 'bg-zinc-900/90 text-zinc-400 border border-white/[0.08] hover:text-white hover:border-white/30 hover:scale-105'
               }`}
             >
-              {cat}
+              {cat.label}
             </button>
           ))}
         </div>
 
         {/* Skills Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4 mb-12">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4">
           {filteredSkills.map((skill) => (
             <div
               key={skill.id}
@@ -78,49 +85,9 @@ export const Skillset = () => {
           ))}
         </div>
 
-        {/* Architecture & Engineering Standards Banner */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div
-            onMouseMove={handleMouseMove}
-            className="glass-card glass-panel-hover p-5 rounded-xl border border-white/[0.06] flex items-start gap-3 cursor-default"
-          >
-            <div className="p-2 rounded-lg bg-zinc-900 border border-white/10 text-white mt-0.5 group-hover:border-white/30 transition-colors">
-              <Cpu size={16} />
-            </div>
-            <div>
-              <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-1 font-mono">Microservices & APIs</h4>
-              <p className="text-xs text-zinc-400 font-light leading-relaxed">High-performance REST & WebSocket streaming backends engineered with FastAPI and Node.js.</p>
-            </div>
-          </div>
-
-          <div
-            onMouseMove={handleMouseMove}
-            className="glass-card glass-panel-hover p-5 rounded-xl border border-white/[0.06] flex items-start gap-3 cursor-default"
-          >
-            <div className="p-2 rounded-lg bg-zinc-900 border border-white/10 text-white mt-0.5 group-hover:border-white/30 transition-colors">
-              <Terminal size={16} />
-            </div>
-            <div>
-              <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-1 font-mono">AI & LLM Orchestration</h4>
-              <p className="text-xs text-zinc-400 font-light leading-relaxed">Multi-agent pipelines, RAG retrieval with vector indices, and intelligent autonomous workflows.</p>
-            </div>
-          </div>
-
-          <div
-            onMouseMove={handleMouseMove}
-            className="glass-card glass-panel-hover p-5 rounded-xl border border-white/[0.06] flex items-start gap-3 cursor-default"
-          >
-            <div className="p-2 rounded-lg bg-zinc-900 border border-white/10 text-white mt-0.5 group-hover:border-white/30 transition-colors">
-              <Layers size={16} />
-            </div>
-            <div>
-              <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-1 font-mono">Responsive Web Architecture</h4>
-              <p className="text-xs text-zinc-400 font-light leading-relaxed">Monochromatic dark layouts, ultra-fast client-side caching, and strict component modularity.</p>
-            </div>
-          </div>
-        </div>
-
       </div>
     </div>
   );
 };
+
+export default Skillset;

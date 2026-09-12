@@ -6,7 +6,7 @@ export const AdminSkills = ({ triggerToast }) => {
   const { data, addSkill, deleteSkill, addCategory } = usePortfolio();
   const [skillForm, setSkillForm] = useState({
     name: '',
-    category: data.categories[1] || 'Frontend',
+    category: data.categories.find((c) => c !== 'All') || 'Hard Skills',
     level: 'Advanced',
   });
   const [newCatName, setNewCatName] = useState('');

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
 import { Plus, Trash2, Edit2, Image as ImageIcon, Upload, X } from 'lucide-react';
 import { MediaAlignmentStudio } from './MediaAlignmentStudio';
+import { compressImageFile } from '../utils/imageCompressor';
+import { sortCertificatesLatestFirst } from '../utils/dateUtils';
 
 export const AdminCertificates = ({ triggerToast }) => {
   const { data, addCertificate, updateCertificate, deleteCertificate } = usePortfolio();
@@ -20,14 +22,20 @@ export const AdminCertificates = ({ triggerToast }) => {
     skills: 'Machine Learning, Cloud Architecture',
   });
 
-  const handleFileUpload = (e) => {
+  const handleFileUpload = async (e) => {
     const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setCertForm((prev) => ({ ...prev, media: reader.result }));
-      };
-      reader.readAsDataURL(file);
+      try {
+        const compressedDataUrl = await compressImageFile(file);
+        setCertForm((prev) => ({ ...prev, media: compressedDataUrl }));
+      } catch (err) {
+        console.error('Failed to compress certificate file', err);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setCertForm((prev) => ({ ...prev, media: reader.result }));
+        };
+        reader.readAsDataURL(file);
+      }
     }
   };
 
@@ -240,9 +248,9 @@ export const AdminCertificates = ({ triggerToast }) => {
 
       <div className="space-y-3">
         <h4 className="text-xs font-mono text-zinc-400 uppercase tracking-wider">
-          Active Certificates ({data.certificates?.length || 0})
+          Active Certificates ({data.certificates?.length || 0}) • Arranged Latest First
         </h4>
-        {data.certificates?.map((c) => (
+        {sortCertificatesLatestFirst(data.certificates || []).map((c) => (
           <div
             key={c.id}
             className="glass-card p-4 rounded-xl border border-white/[0.06] flex items-center justify-between gap-4"
