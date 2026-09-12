@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { Plus, Trash2, Edit2, Image as ImageIcon, Upload, X, Calendar } from 'lucide-react';
+import { Plus, Trash2, Edit2, Image as ImageIcon, Upload, X, Calendar, AlertCircle } from 'lucide-react';
 import { MediaAlignmentStudio } from './MediaAlignmentStudio';
 import { sortProjectsLatestFirst } from '../utils/dateUtils';
 import { compressImageFile } from '../utils/imageCompressor';
+import { deduplicateSkills, findDuplicateSkills } from '../utils/skillUtils';
 
 export const AdminProjects = ({ triggerToast }) => {
   const { data, addProject, updateProject, deleteProject } = usePortfolio();
@@ -25,6 +26,8 @@ export const AdminProjects = ({ triggerToast }) => {
     featured: false,
   });
 
+  const duplicateTags = findDuplicateSkills(projectForm.tags);
+
   const handleFileUpload = async (e) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -43,16 +46,7 @@ export const AdminProjects = ({ triggerToast }) => {
 
   const handleSave = (e) => {
     e.preventDefault();
-    const rawTags = typeof projectForm.tags === 'string'
-      ? projectForm.tags.split(',').map((t) => t.trim()).filter(Boolean)
-      : (projectForm.tags || []);
-    const seenTags = new Set();
-    const tagsArray = rawTags.filter((t) => {
-      const lower = t.toLowerCase();
-      if (seenTags.has(lower)) return false;
-      seenTags.add(lower);
-      return true;
-    });
+    const tagsArray = deduplicateSkills(projectForm.tags);
 
     if (editingProject) {
       updateProject(editingProject.id, { ...projectForm, tags: tagsArray });
@@ -131,8 +125,18 @@ export const AdminProjects = ({ triggerToast }) => {
               placeholder="React, TypeScript, FastAPI, PostgreSQL"
               value={projectForm.tags}
               onChange={(e) => setProjectForm({ ...projectForm, tags: e.target.value })}
-              className="glass-input w-full px-3.5 py-2 text-sm font-mono"
+              className={`glass-input w-full px-3.5 py-2 text-sm font-mono transition-colors ${
+                duplicateTags.length > 0 ? 'border-amber-500/70 focus:border-amber-400' : ''
+              }`}
             />
+            {duplicateTags.length > 0 && (
+              <div className="flex items-center gap-1.5 mt-1.5 text-[11px] font-mono text-amber-400">
+                <AlertCircle size={12} className="shrink-0" />
+                <span>
+                  Duplicate skill in this project: {duplicateTags.map((d) => `"${d}"`).join(', ')}. Each skill can only be listed once per project panel.
+                </span>
+              </div>
+            )}
           </div>
 
           <div>

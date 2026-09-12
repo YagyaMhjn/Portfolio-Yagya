@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { Plus, Trash2, Edit2, Image as ImageIcon, Upload, X } from 'lucide-react';
+import { Plus, Trash2, Edit2, Image as ImageIcon, Upload, X, AlertCircle } from 'lucide-react';
 import { MediaAlignmentStudio } from './MediaAlignmentStudio';
 import { compressImageFile } from '../utils/imageCompressor';
 import { sortCertificatesLatestFirst } from '../utils/dateUtils';
+import { deduplicateSkills, findDuplicateSkills } from '../utils/skillUtils';
 
 export const AdminCertificates = ({ triggerToast }) => {
   const { data, addCertificate, updateCertificate, deleteCertificate } = usePortfolio();
@@ -21,6 +22,8 @@ export const AdminCertificates = ({ triggerToast }) => {
     mediaRatio: '16/9',
     skills: 'Machine Learning, Cloud Architecture',
   });
+
+  const duplicateSkills = findDuplicateSkills(certForm.skills);
 
   const handleFileUpload = async (e) => {
     const file = e.target.files?.[0];
@@ -43,16 +46,7 @@ export const AdminCertificates = ({ triggerToast }) => {
     e.preventDefault();
     if (!certForm.title.trim()) return;
 
-    const rawSkills = typeof certForm.skills === 'string'
-      ? certForm.skills.split(',').map((s) => s.trim()).filter(Boolean)
-      : (certForm.skills || []);
-    const seenSkills = new Set();
-    const skillsArray = rawSkills.filter((s) => {
-      const lower = s.toLowerCase();
-      if (seenSkills.has(lower)) return false;
-      seenSkills.add(lower);
-      return true;
-    });
+    const skillsArray = deduplicateSkills(certForm.skills);
 
     const payload = {
       ...certForm,
@@ -213,8 +207,18 @@ export const AdminCertificates = ({ triggerToast }) => {
               placeholder="Neural Networks, Python, Cloud Systems"
               value={Array.isArray(certForm.skills) ? certForm.skills.join(', ') : certForm.skills}
               onChange={(e) => setCertForm({ ...certForm, skills: e.target.value })}
-              className="glass-input w-full px-3.5 py-2 text-sm font-mono"
+              className={`glass-input w-full px-3.5 py-2 text-sm font-mono transition-colors ${
+                duplicateSkills.length > 0 ? 'border-amber-500/70 focus:border-amber-400' : ''
+              }`}
             />
+            {duplicateSkills.length > 0 && (
+              <div className="flex items-center gap-1.5 mt-1.5 text-[11px] font-mono text-amber-400">
+                <AlertCircle size={12} className="shrink-0" />
+                <span>
+                  Duplicate skill in this certificate: {duplicateSkills.map((d) => `"${d}"`).join(', ')}. Each skill can only be listed once per certificate panel.
+                </span>
+              </div>
+            )}
           </div>
 
           <div className="flex gap-2">
