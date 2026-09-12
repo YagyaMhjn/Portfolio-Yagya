@@ -29,9 +29,9 @@ export const ContentRenderer = ({ content, className = '' }) => {
       return (
         <ul className={`space-y-2 mb-4 ${className}`}>
           {inlineItems.map((item, idx) => (
-            <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-zinc-300/90 leading-relaxed font-light">
-              <span className="shrink-0 text-amber-400 font-bold select-none text-xs mt-1">✦</span>
-              <span>{item}</span>
+            <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed font-normal dark:font-light">
+              <span className="shrink-0 text-amber-500 dark:text-amber-400 font-bold select-none text-xs mt-1">✦</span>
+              <span className="text-zinc-700 dark:text-zinc-300">{item}</span>
             </li>
           ))}
         </ul>
@@ -56,9 +56,9 @@ export const ContentRenderer = ({ content, className = '' }) => {
       return (
         <ul className={`space-y-2 mb-4 ${className}`}>
           {items.map((item, idx) => (
-            <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-zinc-300/90 leading-relaxed font-light">
-              <span className="shrink-0 text-amber-400 font-bold select-none text-xs mt-1">✦</span>
-              <span>{item}</span>
+            <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed font-normal dark:font-light">
+              <span className="shrink-0 text-amber-500 dark:text-amber-400 font-bold select-none text-xs mt-1">✦</span>
+              <span className="text-zinc-700 dark:text-zinc-300">{item}</span>
             </li>
           ))}
         </ul>
@@ -68,7 +68,7 @@ export const ContentRenderer = ({ content, className = '' }) => {
 
   // Fallback to standard paragraph with whitespace pre-line
   return (
-    <p className={`text-xs sm:text-sm text-zinc-400 leading-relaxed font-light mb-4 whitespace-pre-line ${className}`}>
+    <p className={`text-xs sm:text-sm text-zinc-700 dark:text-zinc-400 leading-relaxed font-normal dark:font-light mb-4 whitespace-pre-line ${className}`}>
       {content}
     </p>
   );

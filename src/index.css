@@ -259,14 +259,30 @@ html.light p {
   color: #3f3f46 !important;
 }
 
+/* Bullet points and list items in light mode (crisp, high contrast dark charcoal) */
+html.light ul li {
+  color: #27272a !important;
+}
+
+html.light ul li span {
+  color: #27272a !important;
+}
+
+html.light ul li span.text-amber-400,
+html.light ul li span.text-amber-500 {
+  color: #d97706 !important;
+}
+
 html.light .text-white {
   color: #09090b;
 }
 
 html.light .text-zinc-100,
 html.light .text-zinc-200,
-html.light .text-zinc-300 {
-  color: #18181b !important;
+html.light .text-zinc-300,
+html.light [class*="text-zinc-300"],
+html.light [class*="text-zinc-700"] {
+  color: #27272a !important;
 }
 
 html.light .text-zinc-400 {
@@ -307,7 +323,7 @@ html.light header nav {
 }
 
 html.light header nav button {
-  color: #52525b !important;
+  color: #52525b;
 }
 
 html.light header nav button:hover {
@@ -316,10 +332,42 @@ html.light header nav button:hover {
 }
 
 /* Active Nav Pill: Inverted to Deep Black Background with Pure White Text */
+html.light header nav button.bg-black,
 html.light header nav button.bg-white {
   background: #09090b !important;
   color: #ffffff !important;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Ensure active mobile drawer buttons and active black pills retain white text */
+html.light button.bg-black,
+html.light a.bg-black {
+  background-color: #09090b !important;
+  color: #ffffff !important;
+}
+
+html.light button.bg-black *,
+html.light a.bg-black * {
+  color: #ffffff !important;
+}
+
+html.light button.bg-black .text-zinc-400,
+html.light button.bg-black .text-zinc-500 {
+  color: #a1a1aa !important;
+}
+
+/* Light mode Theme Toggle Button */
+html.light .theme-toggle-btn {
+  background-color: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.16) !important;
+  color: #18181b !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
+}
+
+html.light .theme-toggle-btn:hover {
+  background-color: #f4f4f5 !important;
+  border-color: rgba(0, 0, 0, 0.35) !important;
+  color: #000000 !important;
 }
 
 /* Primary CTA Buttons (e.g. "Explore Work", "Send Message" - Inverted to Solid Black with White Text) */

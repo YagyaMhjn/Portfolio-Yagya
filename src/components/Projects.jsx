@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { FolderGit2, Star } from 'lucide-react';
+import { FolderGit2, Star, ExternalLink } from 'lucide-react';
 import { GithubIcon } from './Icons';
 import { ContentRenderer } from './ContentRenderer';
 
@@ -70,23 +70,37 @@ export const Projects = () => {
 
         {/* Card Content Body */}
         <div className="p-6">
-          {/* Category badge + GitHub button (Fixed, clean icon button with no expansion) */}
+          {/* Category badge + Action buttons (Live Demo & GitHub) */}
           <div className="flex items-center justify-between gap-3 mb-3.5">
             <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 px-2.5 py-1 rounded bg-zinc-900/90 border border-white/[0.06] group-hover:border-white/20 transition-colors">
               {project.category || 'Engineering'}
             </span>
 
-            {project.github && (
-              <a
-                href={project.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="shrink-0 inline-flex items-center justify-center w-8 h-8 rounded-lg bg-zinc-900/90 hover:bg-zinc-800 border border-white/[0.1] hover:border-white/30 text-zinc-400 hover:text-white transition-all hover:scale-105"
-                title="View GitHub Repository"
-              >
-                <GithubIcon size={15} />
-              </a>
-            )}
+            <div className="flex items-center gap-1.5 shrink-0">
+              {project.live && (
+                <a
+                  href={project.live}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="shrink-0 inline-flex items-center justify-center w-8 h-8 rounded-lg bg-zinc-900/90 hover:bg-zinc-800 border border-white/[0.1] hover:border-white/30 text-zinc-400 hover:text-white transition-all hover:scale-105"
+                  title="Live Demo"
+                >
+                  <ExternalLink size={14} />
+                </a>
+              )}
+
+              {project.github && (
+                <a
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="shrink-0 inline-flex items-center justify-center w-8 h-8 rounded-lg bg-zinc-900/90 hover:bg-zinc-800 border border-white/[0.1] hover:border-white/30 text-zinc-400 hover:text-white transition-all hover:scale-105"
+                  title="View GitHub Repository"
+                >
+                  <GithubIcon size={15} />
+                </a>
+              )}
+            </div>
           </div>
 
           <h3 className="text-lg font-bold text-white mb-2 group-hover:text-zinc-100 transition-colors flex items-center gap-1.5">
