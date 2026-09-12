@@ -181,20 +181,20 @@ export const InteractiveOwl = ({ className = '' }) => {
       } ${className}`}
       title={isLight ? 'Sleeping owl... (Hover near me to see dreams)' : 'Observant owl is watching!'}
     >
-      {/* Floating Animated 'Z' in a Single Wavy Horizontal Line (Uniform Small Size) */}
+      {/* Floating Animated 'Z' in a Single Wavy Line (Matching User Drawn S-Path) */}
       {isLight && zParticles.length > 0 && (
-        <div className="absolute top-2 -right-3 pointer-events-none z-40 w-24 h-10 overflow-visible">
+        <div className="absolute top-6 sm:top-7 -right-1 pointer-events-none z-40 overflow-visible">
           {zParticles.map((p) => (
             <span
               key={p.id}
               className="absolute pointer-events-none font-mono font-bold select-none text-amber-950 text-[11px] animate-owl-z-wavy"
               style={{
-                top: '4px',
+                top: '0px',
                 left: '0px',
                 lineHeight: 1,
-                animationDuration: '2.0s',
+                animationDuration: '2.1s',
                 animationFillMode: 'forwards',
-                animationTimingFunction: 'ease-in-out',
+                animationTimingFunction: 'cubic-bezier(0.36, 0, 0.66, 1)',
               }}
             >
               z
