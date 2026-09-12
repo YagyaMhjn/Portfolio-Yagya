@@ -124,14 +124,17 @@ export const AdminBeyondData = ({ triggerToast }) => {
           </div>
 
           <div>
-            <label className="block text-xs font-mono text-zinc-400 mb-1">Description *</label>
+            <div className="flex items-center justify-between mb-1">
+              <label className="block text-xs font-mono text-zinc-400">Description / Key Pointers *</label>
+              <span className="text-[10px] font-mono text-zinc-500">Tip: Use bullet points (• or -) or newlines</span>
+            </div>
             <textarea
-              rows={3}
+              rows={4}
               required
-              placeholder="Describe the initiative, responsibilities, and achievements..."
+              placeholder="• Organized university technical hackathon&#10;• Mentored 200+ aspiring engineers&#10;• Spearheaded community workshops"
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
-              className="glass-input w-full px-3.5 py-2 text-sm"
+              className="glass-input w-full px-3.5 py-2 text-sm leading-relaxed"
             />
           </div>
 

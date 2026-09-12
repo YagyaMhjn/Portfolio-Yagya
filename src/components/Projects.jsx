@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
 import { FolderGit2, Star } from 'lucide-react';
 import { GithubIcon } from './Icons';
+import { ContentRenderer } from './ContentRenderer';
 
 const useProjectColumnCount = () => {
   const getCols = () => {
@@ -47,10 +48,10 @@ export const Projects = () => {
       className="glass-card glass-panel-hover rounded-2xl border border-white/[0.08] hover:border-white/30 overflow-hidden flex flex-col justify-between group relative cursor-default transition-all duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.85)]"
     >
       <div>
-        {/* Revealed Top Media on Hover (Expands smoothly from 0 height with increased length, supporting 16:9 widescreen or original ratio) */}
+        {/* Revealed Top Media on Hover (Expands smoothly to full natural height without clipping) */}
         {project.media && (
-          <div className="max-h-0 opacity-0 group-hover:max-h-72 sm:group-hover:max-h-80 group-hover:opacity-100 transition-all duration-500 delay-[350ms] group-hover:duration-300 group-hover:delay-0 ease-[cubic-bezier(0.25,1,0.5,1)] overflow-hidden relative bg-zinc-950 flex items-center justify-center">
-            <div className={`w-full ${project.mediaRatio === '4/3' ? 'aspect-[4/3]' : project.mediaRatio === '1/1' ? 'aspect-square' : project.mediaRatio === 'original' ? 'max-h-72' : 'aspect-video'} relative overflow-hidden flex items-center justify-center`}>
+          <div className="max-h-0 opacity-0 group-hover:max-h-[1600px] group-hover:opacity-100 transition-all duration-500 delay-[250ms] group-hover:duration-400 group-hover:delay-0 ease-[cubic-bezier(0.25,1,0.5,1)] overflow-hidden relative bg-zinc-950 flex items-center justify-center">
+            <div className={`w-full ${project.mediaRatio === '4/3' ? 'aspect-[4/3]' : project.mediaRatio === '1/1' ? 'aspect-square' : project.mediaRatio === '16/9' ? 'aspect-video' : 'h-auto'} relative overflow-hidden flex items-center justify-center`}>
               <img
                 src={project.media}
                 alt={project.title}
@@ -59,7 +60,7 @@ export const Projects = () => {
                   transformOrigin: 'center center',
                   objectFit: project.mediaFit || (project.mediaRatio === 'original' ? 'contain' : 'cover'),
                 }}
-                className={`w-full h-full ${project.mediaFit === 'contain' ? 'object-contain' : 'object-cover'} transition-transform duration-500 ease-out`}
+                className={`w-full ${project.mediaRatio === 'original' ? 'h-auto max-h-[700px] object-contain' : project.mediaFit === 'contain' ? 'h-full object-contain' : 'h-full object-cover'} transition-transform duration-500 ease-out`}
                 loading="lazy"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-30 pointer-events-none" />
@@ -98,9 +99,7 @@ export const Projects = () => {
             {project.featured && <Star size={13} className="text-zinc-300 fill-zinc-300 animate-pulse" />}
           </h3>
 
-          <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed font-light mb-4">
-            {project.description}
-          </p>
+          <ContentRenderer content={project.description} />
 
           {/* Tech stack tags */}
           <div className="flex flex-wrap gap-1.5 pt-4 border-t border-white/[0.06]">

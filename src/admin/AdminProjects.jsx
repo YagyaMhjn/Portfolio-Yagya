@@ -110,14 +110,17 @@ export const AdminProjects = ({ triggerToast }) => {
           </div>
 
           <div>
-            <label className="block text-xs font-mono text-zinc-400 mb-1">Description *</label>
+            <div className="flex items-center justify-between mb-1">
+              <label className="block text-xs font-mono text-zinc-400">Description / Key Pointers *</label>
+              <span className="text-[10px] font-mono text-zinc-500">Tip: Use bullet points (• or -) or newlines</span>
+            </div>
             <textarea
-              rows={2}
+              rows={4}
               required
-              placeholder="Brief summary of architecture and impact..."
+              placeholder="• Analyzed data trends and system throughput&#10;• Designed scalable microservices architecture&#10;• Reduced latency by 40%"
               value={projectForm.description}
               onChange={(e) => setProjectForm({ ...projectForm, description: e.target.value })}
-              className="glass-input w-full px-3.5 py-2 text-sm"
+              className="glass-input w-full px-3.5 py-2 text-sm leading-relaxed"
             />
           </div>
 

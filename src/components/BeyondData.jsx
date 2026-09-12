@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
 import { Trophy, Users, Megaphone, GitPullRequest, Bookmark } from 'lucide-react';
 import { SocialBar } from './SocialHandleButton';
+import { ContentRenderer } from './ContentRenderer';
 
 export const BeyondData = () => {
   const { data } = usePortfolio();
@@ -100,14 +101,12 @@ export const BeyondData = () => {
                   <span>{item.organization}</span>
                 </div>
 
-                <p className="text-xs sm:text-sm text-zinc-300 font-light leading-relaxed mb-4">
-                  {item.description}
-                </p>
+                <ContentRenderer content={item.description} className="text-zinc-300" />
 
-                {/* Media attached directly to description (Increased length, supporting 16:9 widescreen or original ratio) */}
+                {/* Media attached directly to description (Variable length, adapting to natural image size) */}
                 {item.media && (
                   <div className={`rounded-xl overflow-hidden border border-white/[0.08] bg-zinc-950/80 w-full mb-6 flex items-center justify-center relative ${
-                    item.mediaRatio === '4/3' ? 'aspect-[4/3]' : item.mediaRatio === '1/1' ? 'aspect-square' : item.mediaRatio === 'original' ? 'max-h-80' : 'aspect-video'
+                    item.mediaRatio === '4/3' ? 'aspect-[4/3]' : item.mediaRatio === '1/1' ? 'aspect-square' : item.mediaRatio === '16/9' ? 'aspect-video' : 'h-auto max-h-[700px]'
                   }`}>
                     <img
                       src={item.media}
@@ -117,7 +116,7 @@ export const BeyondData = () => {
                         transformOrigin: 'center center',
                         objectFit: item.mediaFit || (item.mediaRatio === 'original' ? 'contain' : 'cover'),
                       }}
-                      className={`w-full h-full ${item.mediaFit === 'contain' ? 'object-contain' : 'object-cover'} transition-transform duration-500 ease-out`}
+                      className={`w-full ${item.mediaRatio === 'original' ? 'h-auto max-h-[700px] object-contain' : item.mediaFit === 'contain' ? 'h-full object-contain' : 'h-full object-cover'} transition-transform duration-500 ease-out`}
                       loading="lazy"
                     />
                   </div>
