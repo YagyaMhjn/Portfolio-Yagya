@@ -4,7 +4,7 @@ import { idbSet, idbGet } from '../utils/storage';
 import { deduplicateSkills, isSkillNameDuplicate } from '../utils/skillUtils';
 
 const PortfolioContext = createContext(null);
-const STORAGE_KEY = 'yagya_portfolio_data_v2';
+const STORAGE_KEY = 'yagya_portfolio_data_v3';
 const AUTH_KEY = 'yagya_portfolio_admin_auth';
 const PASSWORD_KEY = 'yagya_portfolio_admin_password';
 
