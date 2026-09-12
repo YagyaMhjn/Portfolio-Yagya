@@ -7,7 +7,7 @@ export const AdminProjects = ({ triggerToast }) => {
   const [editingProject, setEditingProject] = useState(null);
   const [projectForm, setProjectForm] = useState({
     title: '',
-    category: 'Frontend',
+    category: '',
     description: '',
     tags: 'React, TypeScript, Tailwind CSS',
     github: '',
@@ -42,7 +42,7 @@ export const AdminProjects = ({ triggerToast }) => {
 
     setProjectForm({
       title: '',
-      category: 'Frontend',
+      category: '',
       description: '',
       tags: 'React, TypeScript, Tailwind CSS',
       github: '',
@@ -76,16 +76,14 @@ export const AdminProjects = ({ triggerToast }) => {
             </div>
             <div>
               <label className="block text-xs font-mono text-zinc-400 mb-1">Category *</label>
-              <select
+              <input
+                type="text"
+                required
+                placeholder="e.g. Frontend, Backend & Cloud, AI / ML"
                 value={projectForm.category}
                 onChange={(e) => setProjectForm({ ...projectForm, category: e.target.value })}
-                className="glass-input w-full px-3.5 py-2 text-sm bg-zinc-900 text-white"
-              >
-                <option value="Frontend">Frontend</option>
-                <option value="Backend & Cloud">Backend & Cloud</option>
-                <option value="AI & Data Science">AI & Data Science</option>
-                <option value="Tools & Systems">Tools & Systems</option>
-              </select>
+                className="glass-input w-full px-3.5 py-2 text-sm"
+              />
             </div>
           </div>
 
@@ -224,7 +222,7 @@ export const AdminProjects = ({ triggerToast }) => {
                   setEditingProject(null);
                   setProjectForm({
                     title: '',
-                    category: 'Frontend',
+                    category: '',
                     description: '',
                     tags: 'React, TypeScript, Tailwind CSS',
                     github: '',
