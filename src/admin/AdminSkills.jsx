@@ -431,7 +431,7 @@ export const AdminSkills = ({ triggerToast }) => {
             No skills match your filter or search criteria.
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-3.5">
             {filteredSkills.map((s, idx) => {
               const isSoft = s.category?.toLowerCase().includes('soft');
               const isDragOver = dragOverIdx === idx;
@@ -445,88 +445,95 @@ export const AdminSkills = ({ triggerToast }) => {
                   onDragOver={(e) => handleDragOver(e, idx)}
                   onDragLeave={(e) => handleDragLeave(e, idx)}
                   onDrop={(e) => handleDrop(e, idx)}
-                  className={`p-3 rounded-xl bg-zinc-900/70 border transition-all flex items-center justify-between group cursor-grab active:cursor-grabbing select-none ${
+                  className={`p-3.5 rounded-xl bg-zinc-900/70 border transition-all flex flex-col justify-between gap-3 group cursor-grab active:cursor-grabbing select-none hover:border-white/20 hover:bg-zinc-900/90 ${
                     isDragOver
                       ? 'border-white/60 bg-white/10 ring-2 ring-white/30 scale-102'
                       : isBeingDragged
                       ? 'opacity-40 border-dashed border-white/30'
-                      : 'border-white/[0.07] hover:border-white/20'
+                      : 'border-white/[0.07]'
                   }`}
                 >
-                  <div className="flex items-center gap-2 min-w-0 pr-2">
-                    {/* Drag Handle */}
-                    <div
-                      title="Drag to rearrange"
-                      className="text-zinc-600 group-hover:text-zinc-400 cursor-grab active:cursor-grabbing shrink-0"
-                    >
-                      <GripVertical size={14} />
+                  {/* Top Row: Drag Handle, Full Skill Name (never cut off), and Index Badge */}
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex items-start gap-2 min-w-0 flex-1">
+                      <div
+                        title="Drag to rearrange"
+                        className="text-zinc-600 group-hover:text-zinc-400 cursor-grab active:cursor-grabbing shrink-0 mt-0.5"
+                      >
+                        <GripVertical size={14} />
+                      </div>
+
+                      <span className="text-sm font-bold text-white group-hover:text-zinc-100 leading-snug break-words">
+                        {s.name}
+                      </span>
                     </div>
 
-                    <div className="min-w-0">
-                      <div className="text-xs font-bold text-white truncate group-hover:text-zinc-100 flex items-center gap-1.5">
-                        <span className="truncate">{s.name}</span>
-                        <span className="text-[10px] font-mono text-zinc-500 font-normal">#{idx + 1}</span>
-                      </div>
-                      <div className="flex items-center gap-1.5 mt-1">
-                        <span className="text-[10px] font-mono text-zinc-400">
-                          {isSoft ? 'Soft Skill' : 'Hard Skill'}
-                        </span>
-                        {!isSoft && s.level && (
-                          <span
-                            className={`text-[9px] px-1.5 py-0.2 rounded font-mono border ${getLevelBadgeClass(
-                              s.level
-                            )}`}
-                          >
-                            {s.level}
-                          </span>
-                        )}
-                      </div>
-                    </div>
+                    <span className="text-[10px] font-mono text-zinc-500 shrink-0 px-1.5 py-0.5 rounded bg-white/[0.04] border border-white/[0.06]">
+                      #{idx + 1}
+                    </span>
                   </div>
 
-                  {/* Actions: Move Up, Move Down, Edit, Delete */}
-                  <div className="flex items-center gap-1 shrink-0">
-                    {/* Move Up */}
-                    <button
-                      type="button"
-                      disabled={idx === 0}
-                      onClick={() => handleMoveSkill(idx, -1)}
-                      title="Move Up"
-                      className="p-1 rounded-lg text-zinc-500 hover:text-white hover:bg-white/10 disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-zinc-500 transition-colors"
-                    >
-                      <ArrowUp size={12} />
-                    </button>
+                  {/* Bottom Row: Category + Level Badge on left, Actions on right */}
+                  <div className="flex items-center justify-between gap-2 pt-2 border-t border-white/[0.04]">
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <span className="text-[10px] font-mono text-zinc-400">
+                        {isSoft ? 'Soft Skill' : 'Hard Skill'}
+                      </span>
+                      {!isSoft && s.level && (
+                        <span
+                          className={`text-[9px] px-1.5 py-0.5 rounded font-mono border font-medium ${getLevelBadgeClass(
+                            s.level
+                          )}`}
+                        >
+                          {s.level}
+                        </span>
+                      )}
+                    </div>
 
-                    {/* Move Down */}
-                    <button
-                      type="button"
-                      disabled={idx === filteredSkills.length - 1}
-                      onClick={() => handleMoveSkill(idx, 1)}
-                      title="Move Down"
-                      className="p-1 rounded-lg text-zinc-500 hover:text-white hover:bg-white/10 disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-zinc-500 transition-colors"
-                    >
-                      <ArrowDown size={12} />
-                    </button>
+                    {/* Actions: Move Up, Move Down, Edit, Delete */}
+                    <div className="flex items-center gap-1 shrink-0">
+                      {/* Move Up */}
+                      <button
+                        type="button"
+                        disabled={idx === 0}
+                        onClick={() => handleMoveSkill(idx, -1)}
+                        title="Move Up"
+                        className="p-1 rounded-lg text-zinc-400 hover:text-white hover:bg-white/10 disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-zinc-600 transition-colors"
+                      >
+                        <ArrowUp size={12} />
+                      </button>
 
-                    {/* Edit */}
-                    <button
-                      type="button"
-                      onClick={() => startEditing(s)}
-                      title="Edit Skill"
-                      className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/10 transition-colors ml-0.5"
-                    >
-                      <Edit2 size={13} />
-                    </button>
+                      {/* Move Down */}
+                      <button
+                        type="button"
+                        disabled={idx === filteredSkills.length - 1}
+                        onClick={() => handleMoveSkill(idx, 1)}
+                        title="Move Down"
+                        className="p-1 rounded-lg text-zinc-400 hover:text-white hover:bg-white/10 disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-zinc-600 transition-colors"
+                      >
+                        <ArrowDown size={12} />
+                      </button>
 
-                    {/* Delete */}
-                    <button
-                      type="button"
-                      onClick={() => deleteSkill(s.id)}
-                      title="Delete Skill"
-                      className="p-1.5 rounded-lg text-zinc-500 hover:text-red-400 hover:bg-red-500/10 transition-colors"
-                    >
-                      <Trash2 size={13} />
-                    </button>
+                      {/* Edit */}
+                      <button
+                        type="button"
+                        onClick={() => startEditing(s)}
+                        title="Edit Skill"
+                        className="p-1.5 rounded-lg text-zinc-300 hover:text-white hover:bg-white/10 transition-colors"
+                      >
+                        <Edit2 size={13} />
+                      </button>
+
+                      {/* Delete */}
+                      <button
+                        type="button"
+                        onClick={() => deleteSkill(s.id)}
+                        title="Delete Skill"
+                        className="p-1.5 rounded-lg text-zinc-500 hover:text-red-400 hover:bg-red-500/10 transition-colors"
+                      >
+                        <Trash2 size={13} />
+                      </button>
+                    </div>
                   </div>
                 </div>
               );
