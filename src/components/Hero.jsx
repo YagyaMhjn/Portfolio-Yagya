@@ -63,12 +63,12 @@ export const Hero = () => {
             </h1>
 
             {/* Bio Paragraph */}
-            <p className="text-base sm:text-lg text-zinc-300 dark:text-zinc-300 light:text-zinc-700 max-w-2xl leading-relaxed mb-12 sm:mb-14 font-light">
+            <p className="text-base sm:text-lg text-zinc-300 dark:text-zinc-300 light:text-zinc-700 max-w-2xl leading-relaxed mb-14 sm:mb-16 font-light">
               {profile.bio}
             </p>
 
             {/* Interactive Page Switcher CTA Buttons */}
-            <div className="flex flex-wrap items-center gap-3.5 pt-1">
+            <div className="flex flex-wrap items-center gap-3.5 pt-2 sm:pt-3">
               <button
                 onClick={() => setActivePage('projects')}
                 className="btn-glow inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white dark:bg-white light:bg-black text-black dark:text-black light:text-white font-semibold text-sm hover:bg-zinc-100 dark:hover:bg-zinc-100 light:hover:bg-zinc-800 transition-all shadow-[0_4px_20px_rgba(255,255,255,0.15)] group h-11"
