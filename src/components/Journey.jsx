@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { Briefcase, GraduationCap } from 'lucide-react';
+import { Briefcase, GraduationCap, MapPin } from 'lucide-react';
 import { SocialBar } from './SocialHandleButton';
+import { ContentRenderer } from './ContentRenderer';
 
 export const Journey = () => {
   const { data } = usePortfolio();
@@ -102,17 +103,26 @@ export const Journey = () => {
                     </span>
                   </div>
 
-                  <div className="text-sm font-medium text-zinc-400 mb-3 flex items-center gap-1.5">
+                  <div className="text-sm font-medium text-zinc-400 mb-3 flex flex-wrap items-center gap-1.5">
                     <span>{item.company}</span>
+                    {item.location && (
+                      <>
+                        <span className="text-zinc-600">•</span>
+                        <span className="inline-flex items-center gap-1 text-xs font-mono text-zinc-400">
+                          <MapPin size={12} className="text-zinc-500" />
+                          <span>{item.location}</span>
+                        </span>
+                      </>
+                    )}
                     <span className="text-zinc-600">•</span>
                     <span className="text-xs uppercase tracking-wider font-mono text-zinc-500">
                       {isExp ? 'Professional' : 'Academic'}
                     </span>
                   </div>
 
-                  <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed font-light">
-                    {item.description}
-                  </p>
+                  {item.description && (
+                    <ContentRenderer content={item.description} />
+                  )}
                 </div>
               </div>
             );

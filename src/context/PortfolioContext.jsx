@@ -54,6 +54,14 @@ export const PortfolioProvider = ({ children }) => {
               media: b.media !== undefined ? b.media : (initB?.media || '')
             };
           }),
+          timeline: (parsed.timeline || initialPortfolioData.timeline).map((t) => {
+            const initT = initialPortfolioData.timeline.find((it) => it.id === t.id);
+            return {
+              ...initT,
+              ...t,
+              location: t.location !== undefined ? t.location : (initT?.location || '')
+            };
+          }),
         };
       }
     } catch (e) {

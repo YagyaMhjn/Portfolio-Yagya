@@ -159,6 +159,7 @@ export const initialPortfolioData = {
       id: "t1",
       title: "Full-Stack & AI Systems Engineer",
       company: "InnovateTech Systems",
+      location: "Punjab, India",
       dates: "2024 - Present",
       type: "experience",
       description: "Leading the development of high-scale web platforms and autonomous AI agent workflows. Implemented distributed microservices and reduced API latency by 42%."
@@ -167,6 +168,7 @@ export const initialPortfolioData = {
       id: "t2",
       title: "Software Developer Intern",
       company: "Nexus Software Labs",
+      location: "Remote",
       dates: "2023 - 2024",
       type: "experience",
       description: "Engineered responsive full-stack applications with React, Node.js, and PostgreSQL. Built WebSocket real-time communication modules and CI/CD pipelines."
@@ -175,6 +177,7 @@ export const initialPortfolioData = {
       id: "t3",
       title: "Bachelor of Technology in Computer Science",
       company: "Punjab Technical University",
+      location: "Punjab, India",
       dates: "2020 - 2024",
       type: "education",
       description: "Graduated with Honors. Specialized in Algorithms, Distributed Systems, Software Engineering, and Machine Learning architectures."
