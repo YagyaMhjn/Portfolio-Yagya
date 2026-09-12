@@ -1017,43 +1017,46 @@ html.light .social-expanding-btn:focus-visible {
 }
 
 /* ==========================================================================
-   Interactive Owl Animations (Sleeping breathing & Floating Z's)
+   Interactive Owl Animations (Fixed-base breathing & Horizontal Wavy Z's)
    ========================================================================== */
-@keyframes owl-breathe {
+@keyframes owl-chest-breathe {
   0%, 100% {
-    transform: translateY(0px) scale(1, 1);
+    transform: scaleY(1);
   }
   50% {
-    transform: translateY(-1.4px) scale(1.025, 0.98);
+    transform: scaleY(1.02);
   }
 }
 
-.animate-owl-breathe {
-  animation: owl-breathe 3.6s ease-in-out infinite;
-  transform-origin: bottom center;
+.animate-owl-chest-breathe {
+  animation: owl-chest-breathe 3.6s ease-in-out infinite;
+  transform-origin: 50px 96px; /* Base of body where it meets the claws on the button */
 }
 
-@keyframes owl-z-particle-float {
+@keyframes owl-z-wavy-line {
   0% {
     opacity: 0;
-    transform: translate(0, 0) scale(calc(var(--z-scale) * 0.75));
+    transform: translate(0px, 0px);
   }
   16% {
     opacity: 0.95;
-    transform: translate(5px, -6px) scale(var(--z-scale));
+    transform: translate(9px, -3px);
   }
-  75% {
+  48% {
     opacity: 0.85;
-    transform: translate(14px, -17px) scale(calc(var(--z-scale) * 1.05));
+    transform: translate(24px, 3px);
+  }
+  80% {
+    opacity: 0.75;
+    transform: translate(38px, -3px);
   }
   100% {
     opacity: 0;
-    transform: translate(22px, -23px) scale(calc(var(--z-scale) * 1.1));
+    transform: translate(52px, 0px);
   }
 }
 
-.animate-owl-z-particle {
-  animation-name: owl-z-particle-float;
-  transform-origin: center center;
+.animate-owl-z-wavy {
+  animation-name: owl-z-wavy-line;
   will-change: transform, opacity;
 }
