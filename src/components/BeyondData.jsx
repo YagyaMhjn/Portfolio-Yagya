@@ -104,13 +104,20 @@ export const BeyondData = () => {
                   {item.description}
                 </p>
 
-                {/* Media attached directly to description (No pop-up effect) */}
+                {/* Media attached directly to description (Increased length, supporting 16:9 widescreen or original ratio) */}
                 {item.media && (
-                  <div className="rounded-xl overflow-hidden border border-white/[0.08] bg-zinc-950/60 h-44 sm:h-52 w-full mb-6">
+                  <div className={`rounded-xl overflow-hidden border border-white/[0.08] bg-zinc-950/80 w-full mb-6 flex items-center justify-center relative ${
+                    item.mediaRatio === '4/3' ? 'aspect-[4/3]' : item.mediaRatio === '1/1' ? 'aspect-square' : item.mediaRatio === 'original' ? 'max-h-80' : 'aspect-video'
+                  }`}>
                     <img
                       src={item.media}
                       alt={item.title}
-                      className="w-full h-full object-cover"
+                      style={{
+                        transform: `scale(${((item.mediaScale || 100) / 100)}) translate(${item.mediaX || 0}%, ${item.mediaY || 0}%)`,
+                        transformOrigin: 'center center',
+                        objectFit: item.mediaFit || (item.mediaRatio === 'original' ? 'contain' : 'cover'),
+                      }}
+                      className={`w-full h-full ${item.mediaFit === 'contain' ? 'object-contain' : 'object-cover'} transition-transform duration-500 ease-out`}
                       loading="lazy"
                     />
                   </div>

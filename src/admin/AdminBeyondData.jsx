@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
 import { Plus, Trash2, Edit2, Image as ImageIcon, Upload, X } from 'lucide-react';
+import { MediaAlignmentStudio } from './MediaAlignmentStudio';
 
 export const AdminBeyondData = ({ triggerToast }) => {
   const { data, addBeyondData, updateBeyondData, deleteBeyondData } = usePortfolio();
@@ -13,6 +14,11 @@ export const AdminBeyondData = ({ triggerToast }) => {
     description: '',
     highlight: '',
     media: '',
+    mediaScale: 100,
+    mediaX: 0,
+    mediaY: 0,
+    mediaFit: 'cover',
+    mediaRatio: '16/9',
   });
 
   const handleFileUpload = (e) => {
@@ -45,6 +51,11 @@ export const AdminBeyondData = ({ triggerToast }) => {
       description: '',
       highlight: '',
       media: '',
+      mediaScale: 100,
+      mediaX: 0,
+      mediaY: 0,
+      mediaFit: 'cover',
+      mediaRatio: '16/9',
     });
     triggerToast();
   };
@@ -170,17 +181,20 @@ export const AdminBeyondData = ({ triggerToast }) => {
               </div>
             </div>
 
-            {/* Media Preview */}
+            {/* Interactive Image Framing & Alignment Studio */}
             {form.media && (
-              <div className="relative mt-2 rounded-lg overflow-hidden border border-white/10 bg-zinc-950 h-32 w-full max-w-sm">
-                <img
-                  src={form.media}
-                  alt="Beyond Data Media Preview"
-                  className="w-full h-full object-cover"
+              <div className="pt-2">
+                <MediaAlignmentStudio
+                  media={form.media}
+                  mediaScale={form.mediaScale || 100}
+                  mediaX={form.mediaX || 0}
+                  mediaY={form.mediaY || 0}
+                  mediaFit={form.mediaFit || 'cover'}
+                  mediaRatio={form.mediaRatio || '16/9'}
+                  onChange={(alignData) => setForm((prev) => ({ ...prev, ...alignData }))}
+                  title="Entry Media Framing Studio"
+                  subtitle="Preview your initiative photo. Adjust zoom, positioning, and aspect ratio (16:9 widescreen or original) to frame it perfectly."
                 />
-                <div className="absolute top-2 right-2 px-2 py-0.5 rounded bg-black/70 text-[10px] font-mono text-zinc-300">
-                  Preview
-                </div>
               </div>
             )}
           </div>
@@ -217,6 +231,11 @@ export const AdminBeyondData = ({ triggerToast }) => {
                     description: '',
                     highlight: '',
                     media: '',
+                    mediaScale: 100,
+                    mediaX: 0,
+                    mediaY: 0,
+                    mediaFit: 'cover',
+                    mediaRatio: '16/9',
                   });
                 }}
                 className="px-4 py-2 rounded-xl bg-zinc-900 text-zinc-300 text-xs border border-white/10 hover:bg-zinc-800"
@@ -269,6 +288,11 @@ export const AdminBeyondData = ({ triggerToast }) => {
                   setForm({
                     ...item,
                     media: item.media || '',
+                    mediaScale: item.mediaScale ?? 100,
+                    mediaX: item.mediaX ?? 0,
+                    mediaY: item.mediaY ?? 0,
+                    mediaFit: item.mediaFit || 'cover',
+                    mediaRatio: item.mediaRatio || '16/9',
                   });
                 }}
                 className="p-1.5 rounded-lg bg-zinc-900 border border-white/10 text-zinc-300 hover:text-white"

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
 import { Plus, Trash2, Edit2, Image as ImageIcon, Upload, X } from 'lucide-react';
+import { MediaAlignmentStudio } from './MediaAlignmentStudio';
 
 export const AdminCertificates = ({ triggerToast }) => {
   const { data, addCertificate, updateCertificate, deleteCertificate } = usePortfolio();
@@ -11,6 +12,11 @@ export const AdminCertificates = ({ triggerToast }) => {
     date: new Date().getFullYear().toString(),
     credentialUrl: '',
     media: '',
+    mediaScale: 100,
+    mediaX: 0,
+    mediaY: 0,
+    mediaFit: 'contain',
+    mediaRatio: '16/9',
     skills: 'Machine Learning, Cloud Architecture',
   });
 
@@ -51,6 +57,11 @@ export const AdminCertificates = ({ triggerToast }) => {
       date: new Date().getFullYear().toString(),
       credentialUrl: '',
       media: '',
+      mediaScale: 100,
+      mediaX: 0,
+      mediaY: 0,
+      mediaFit: 'contain',
+      mediaRatio: '16/9',
       skills: 'Machine Learning, Cloud Architecture',
     });
     triggerToast();
@@ -160,17 +171,20 @@ export const AdminCertificates = ({ triggerToast }) => {
               </div>
             </div>
 
-            {/* Media Preview */}
+            {/* Interactive Image Framing & Alignment Studio */}
             {certForm.media && (
-              <div className="relative mt-2 rounded-lg overflow-hidden border border-white/10 bg-zinc-950 h-32 w-full max-w-sm">
-                <img
-                  src={certForm.media}
-                  alt="Certificate Media Preview"
-                  className="w-full h-full object-cover"
+              <div className="pt-2">
+                <MediaAlignmentStudio
+                  media={certForm.media}
+                  mediaScale={certForm.mediaScale || 100}
+                  mediaX={certForm.mediaX || 0}
+                  mediaY={certForm.mediaY || 0}
+                  mediaFit={certForm.mediaFit || 'contain'}
+                  mediaRatio={certForm.mediaRatio || '16/9'}
+                  onChange={(alignData) => setCertForm((prev) => ({ ...prev, ...alignData }))}
+                  title="Certificate Media Framing Studio"
+                  subtitle="Preview your certificate badge or snapshot. Choose 16:9 widescreen or original ratio, and zoom or drag to fit."
                 />
-                <div className="absolute top-2 right-2 px-2 py-0.5 rounded bg-black/70 text-[10px] font-mono text-zinc-300">
-                  Preview
-                </div>
               </div>
             )}
           </div>
@@ -207,6 +221,11 @@ export const AdminCertificates = ({ triggerToast }) => {
                     date: new Date().getFullYear().toString(),
                     credentialUrl: '',
                     media: '',
+                    mediaScale: 100,
+                    mediaX: 0,
+                    mediaY: 0,
+                    mediaFit: 'contain',
+                    mediaRatio: '16/9',
                     skills: '',
                   });
                 }}
@@ -258,6 +277,11 @@ export const AdminCertificates = ({ triggerToast }) => {
                   setCertForm({
                     ...c,
                     media: c.media || '',
+                    mediaScale: c.mediaScale ?? 100,
+                    mediaX: c.mediaX ?? 0,
+                    mediaY: c.mediaY ?? 0,
+                    mediaFit: c.mediaFit || 'contain',
+                    mediaRatio: c.mediaRatio || '16/9',
                     skills: Array.isArray(c.skills) ? c.skills.join(', ') : c.skills,
                   });
                 }}

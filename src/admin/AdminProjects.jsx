@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
 import { Plus, Trash2, Edit2, Image as ImageIcon, Upload, X } from 'lucide-react';
+import { MediaAlignmentStudio } from './MediaAlignmentStudio';
 
 export const AdminProjects = ({ triggerToast }) => {
   const { data, addProject, updateProject, deleteProject } = usePortfolio();
@@ -13,6 +14,11 @@ export const AdminProjects = ({ triggerToast }) => {
     github: '',
     live: '',
     media: '',
+    mediaScale: 100,
+    mediaX: 0,
+    mediaY: 0,
+    mediaFit: 'cover',
+    mediaRatio: '16/9',
     featured: false,
   });
 
@@ -48,6 +54,11 @@ export const AdminProjects = ({ triggerToast }) => {
       github: '',
       live: '',
       media: '',
+      mediaScale: 100,
+      mediaX: 0,
+      mediaY: 0,
+      mediaFit: 'cover',
+      mediaRatio: '16/9',
       featured: false,
     });
     triggerToast();
@@ -156,17 +167,20 @@ export const AdminProjects = ({ triggerToast }) => {
               </div>
             </div>
 
-            {/* Media Preview */}
+            {/* Interactive Image Framing & Alignment Studio */}
             {projectForm.media && (
-              <div className="relative mt-2 rounded-lg overflow-hidden border border-white/10 bg-zinc-950 h-32 w-full max-w-sm">
-                <img
-                  src={projectForm.media}
-                  alt="Project Media Preview"
-                  className="w-full h-full object-cover"
+              <div className="pt-2">
+                <MediaAlignmentStudio
+                  media={projectForm.media}
+                  mediaScale={projectForm.mediaScale || 100}
+                  mediaX={projectForm.mediaX || 0}
+                  mediaY={projectForm.mediaY || 0}
+                  mediaFit={projectForm.mediaFit || 'cover'}
+                  mediaRatio={projectForm.mediaRatio || '16/9'}
+                  onChange={(alignData) => setProjectForm((prev) => ({ ...prev, ...alignData }))}
+                  title="Project Media Framing Studio"
+                  subtitle="Preview how your project screenshot appears in 16:9 widescreen or original ratio. Click and drag or use sliders to zoom and position."
                 />
-                <div className="absolute top-2 right-2 px-2 py-0.5 rounded bg-black/70 text-[10px] font-mono text-zinc-300">
-                  Preview
-                </div>
               </div>
             )}
           </div>
@@ -228,6 +242,11 @@ export const AdminProjects = ({ triggerToast }) => {
                     github: '',
                     live: '',
                     media: '',
+                    mediaScale: 100,
+                    mediaX: 0,
+                    mediaY: 0,
+                    mediaFit: 'cover',
+                    mediaRatio: '16/9',
                     featured: false,
                   });
                 }}
@@ -282,6 +301,11 @@ export const AdminProjects = ({ triggerToast }) => {
                   setProjectForm({
                     ...p,
                     media: p.media || '',
+                    mediaScale: p.mediaScale ?? 100,
+                    mediaX: p.mediaX ?? 0,
+                    mediaY: p.mediaY ?? 0,
+                    mediaFit: p.mediaFit || 'cover',
+                    mediaRatio: p.mediaRatio || '16/9',
                     tags: Array.isArray(p.tags) ? p.tags.join(', ') : p.tags,
                   });
                 }}
