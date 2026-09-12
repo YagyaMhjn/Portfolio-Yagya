@@ -522,6 +522,13 @@ export const PortfolioProvider = ({ children }) => {
     }));
   };
 
+  const reorderSkills = (newSkillsList) => {
+    saveData((prev) => ({
+      ...prev,
+      skills: newSkillsList
+    }));
+  };
+
   const addCategory = (categoryName) => {
     if (!categoryName || data.categories.includes(categoryName)) return;
     saveData((prev) => ({
@@ -706,6 +713,7 @@ export const PortfolioProvider = ({ children }) => {
         addSkill,
         updateSkill,
         deleteSkill,
+        reorderSkills,
         addCategory,
         deleteCategory,
         addTimeline,
